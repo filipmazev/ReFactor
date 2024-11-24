@@ -37,6 +37,8 @@ void get_transmission(const cv::Mat *p_src, cv::Mat *p_tran, cv::Vec3d *p_Alight
 
 void guided_filter(const cv::Mat *p_src, const cv::Mat *p_tran, cv::Mat *p_gtran, int r, double eps);
 
+void get_fog(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_fog, int rows, int cols, int channels);
+
 void recover(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_dst, cv::Vec3d *p_Alight, int rows, int cols, int channels, double t0);
 
 void assign_data(unsigned char *outdata, const cv::Mat *p_dst, int rows, int cols, int channels);

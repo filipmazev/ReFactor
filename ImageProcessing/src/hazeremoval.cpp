@@ -2,9 +2,6 @@
 #include <iostream>
 
 using namespace cv;
-using namespace std;
-
-const string BASE_PATH = "/Users/filipmazev/Documents/Code/ReFactor/ImageProcessing/";
 
 CHazeRemoval::CHazeRemoval() {
 	rows = 0;
@@ -41,7 +38,7 @@ bool CHazeRemoval::Process(const unsigned char* indata, unsigned char* outdata, 
     int r = 60;
     double eps = 0.001;
 
-    vector<Pixel> tmp_vec; 
+    std::vector<Pixel> tmp_vec; 
 
     Mat * p_src = new Mat(rows, cols, CV_8UC3, (void *)indata);
     Mat * p_dst = new Mat(rows, cols, CV_64FC3);
@@ -54,20 +51,12 @@ bool CHazeRemoval::Process(const unsigned char* indata, unsigned char* outdata, 
     get_air_light(p_src, tmp_vec, p_Alight, rows, cols, channels);
     get_transmission(p_src, p_tran, p_Alight, rows, cols, channels, radius, omega);
     guided_filter(p_src, p_tran, p_gtran, r, eps);
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            for (int c = 0; c < channels; c++) {
-                double fog_val = double(p_src->ptr<cv::Vec3b>(i)[j][c]) * (1.0 - p_gtran->ptr<double>(i)[j]);
-                p_fog->ptr<cv::Vec3d>(i)[j][c] = fog_val;
-            }
-        }
-    }
+    get_fog(p_src, p_gtran, p_fog, rows, cols, channels);
 
     recover(p_src, p_gtran, p_dst, p_Alight, rows, cols, channels, t0);
 
-    assign_data(outdata, p_dst, rows, cols, channels);
-    assign_data(fogdata, p_fog, rows, cols, channels); 
+	assign_data(outdata, p_dst, rows, cols, channels);
+	assign_data(fogdata, p_fog, rows, cols, channels);
 
     return ret;
 }
@@ -94,7 +83,6 @@ void get_dark_channel(const cv::Mat *p_src, std::vector<Pixel> &tmp_vec, int row
 					min_val = cv::min((double)minpixel, min_val);
 				}
 			}
-			//p_dark->ptr<double>(i)[j] = min_val;
 			tmp_vec.push_back(Pixel(i, j, uchar(min_val)));
 		}
 	}
@@ -159,5 +147,16 @@ void recover(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_dst, cv::V
 void assign_data(unsigned char *outdata, const cv::Mat *p_dst, int rows, int cols, int channels) {
 	for (int i = 0; i < rows*cols*channels; i++) {
 		*(outdata + i) = (unsigned char)(*((double*)(p_dst->data) + i));
+	}
+}
+
+void get_fog(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_fog, int rows, int cols, int channels) {
+	for (int i = 0; i < rows; i++) {
+		for (int j = 0; j < cols; j++) {
+			for (int c = 0; c < channels; c++) {
+				double fog_val = double(p_src->ptr<cv::Vec3b>(i)[j][c]) * (1.0 - p_gtran->ptr<double>(i)[j]);
+				p_fog->ptr<cv::Vec3d>(i)[j][c] = fog_val;
+			}
+		}
 	}
 }
