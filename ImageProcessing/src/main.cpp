@@ -201,7 +201,8 @@ bool process(std::string INPUT_IMAGE_PATH)
 	return true;
 }
 
-int main(int argc, char **args) {
+int main(int argc, char **args) 
+{
 	if (argc < 2) {
 		std::cerr << "Usage: " << args[0] << " <images_folder>" << std::endl;
 		return -1;
