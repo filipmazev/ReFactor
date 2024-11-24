@@ -1,9 +1,9 @@
 #include "hazeremoval.h"
 #include "other/arr.h"
+#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <iostream>
 #include <filesystem>
 
 using namespace cv;
@@ -55,7 +55,7 @@ std::oth::arr<int> calculateHistograms(const Mat& image) {
 	return histograms;
 }
 
-void processHistogram(const Mat& image, std::string folderPath, std::string IMAGE_NAME, std::string IMAGE_TYPE)
+void processHistogram(const Mat& image, std::string saveLocation)
 {
 	std::vector<Mat> bgr_planes;
 	split(image, bgr_planes);
@@ -81,7 +81,7 @@ void processHistogram(const Mat& image, std::string folderPath, std::string IMAG
 			 Scalar(0, 0, 255), 2, 8, 0);
 	}
 
-	imwrite(folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE, histImage);
+	imwrite(saveLocation, histImage);
 }
 
 bool process(std::string INPUT_IMAGE_PATH)
@@ -119,11 +119,17 @@ bool process(std::string INPUT_IMAGE_PATH)
 		return false;
 	}
 
-	imwrite(folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original" + IMAGE_TYPE, in_img);
-	imwrite(folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "dehaze" + IMAGE_TYPE, out_img);
-	imwrite(folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "fog" + IMAGE_TYPE, fog_image);
+	const std::string original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original";
+	const std::string dehaze_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "dehaze";
+	const std::string fog_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "fog";
 
-	processHistogram(in_img, folderPath, IMAGE_NAME, IMAGE_TYPE);
+	imwrite(original_image_location + IMAGE_TYPE, in_img);
+	imwrite(dehaze_image_location + IMAGE_TYPE, out_img);
+	imwrite(fog_image_location + IMAGE_TYPE, fog_image);
+
+	processHistogram(in_img, original_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
+	processHistogram(out_img, dehaze_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
+	processHistogram(fog_image, fog_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
 
 	return true;
 }
