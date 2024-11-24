@@ -20,7 +20,7 @@ const std::string FOLDER_SPLITTER = "/";
 const std::string FOLDER_PATH_SPLITTER = "/\\";
 const std::string FILE_NAME_SPACE_DIVIDER = "_";
 
-const int blackPixelValueUpperBound = 16;
+const int blackPixelValueUpperBound = 30;
 
 const int histSize = 64;
 
