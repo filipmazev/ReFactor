@@ -21,6 +21,7 @@ const std::string FOLDER_PATH_SPLITTER = "/\\";
 const std::string FILE_NAME_SPACE_DIVIDER = "_";
 
 const int blackPixelValueUpperBound = 30;
+const int blurKernelSize = 25; // Must be an odd number for GaussianBlur
 
 const int histSize = 64;
 
@@ -151,54 +152,60 @@ Mat combineLuminosityOverlay(const Mat& fogImage, const Mat& originalImage, cons
 
 bool process(std::string INPUT_IMAGE_PATH)
 {
-	std::string IMAGE_NAME = INPUT_IMAGE_PATH.substr(INPUT_IMAGE_PATH.find_last_of(FOLDER_PATH_SPLITTER) + 1);
-	std::string IMAGE_TYPE = IMAGE_NAME.substr(IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
-	
-	IMAGE_NAME = IMAGE_NAME.substr(0, IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
-	const std::string IMAGE_PATH = INPUT_IMAGE_PATH;
-	
-	Mat in_img = loadImage(IMAGE_PATH);
-	
-	int rows = in_img.rows;
-	int cols = in_img.cols;
+    std::string IMAGE_NAME = INPUT_IMAGE_PATH.substr(INPUT_IMAGE_PATH.find_last_of(FOLDER_PATH_SPLITTER) + 1);
+    std::string IMAGE_TYPE = IMAGE_NAME.substr(IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
+    
+    IMAGE_NAME = IMAGE_NAME.substr(0, IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
+    const std::string IMAGE_PATH = INPUT_IMAGE_PATH;
+    
+    Mat in_img = loadImage(IMAGE_PATH);
+    
+    int rows = in_img.rows;
+    int cols = in_img.cols;
 
-	Mat out_img(rows, cols, CV_8UC3);
-	Mat fog_image(rows, cols, CV_8UC3);
-	
-	unsigned char * indata = in_img.data;
-	unsigned char * outdata = out_img.data;
-	unsigned char * fogData = fog_image.data;
+    Mat fog_image(rows, cols, CV_8UC3);
+    
+    unsigned char * indata = in_img.data;
+    unsigned char * fogData = fog_image.data;
 
-	CHazeRemoval hr;
-	hr.InitProc(cols, rows, in_img.channels());
-	bool result = hr.Process(indata, outdata, fogData, cols, rows, in_img.channels());
+    CHazeRemoval hr;
+    hr.InitProc(cols, rows, in_img.channels());
+    bool result = hr.Process(indata, fogData, cols, rows, in_img.channels());
 
-	if (!result) {
-		return false;
-	}
+    if (!result) {
+        return false;
+    }
 
-	auto t = std::time(nullptr);
-	auto tm = *std::localtime(&t);
-	std::ostringstream oss;
-	oss << std::put_time(&tm, "%Y%m%d_%H%M%S");
-	std::string date_time = oss.str();
-	std::string folderPath = BASE_PATH + OUTPUT_FOLDER_DESTINATION + IMAGE_FOLDER_PREFIX + "[" + IMAGE_NAME + "]" + FILE_NAME_SPACE_DIVIDER + date_time;
+    auto t = std::time(nullptr);
+    auto tm = *std::localtime(&t);
+    std::ostringstream oss;
+    oss << std::put_time(&tm, "%Y%m%d_%H%M%S");
+    std::string date_time = oss.str();
+    std::string folderPath = BASE_PATH + OUTPUT_FOLDER_DESTINATION + IMAGE_FOLDER_PREFIX + "[" + IMAGE_NAME + "]" + FILE_NAME_SPACE_DIVIDER + date_time;
 
-	if (mkdir(folderPath.c_str(), 0777) == -1) {
-		return false;
-	}
+    if (mkdir(folderPath.c_str(), 0777) == -1) {
+        return false;
+    }
 
     const std::string original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original";
-	imwrite(original_image_location + IMAGE_TYPE, in_img);
-	processHistogram(in_img, original_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
+    imwrite(original_image_location + IMAGE_TYPE, in_img);
+    processHistogram(in_img, original_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
 
     const Mat alphaAdjustedFogImage = alphaAdjustedImage(fog_image, rows, cols, blackPixelValueUpperBound);
     Mat finalImage = combineLuminosityOverlay(fog_image, in_img, alphaAdjustedFogImage);
 
+    Mat blurredImage;
+    GaussianBlur(finalImage, blurredImage, Size(blurKernelSize, blurKernelSize), 0);
+
     const std::string final_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "final";
     imwrite(final_image_location + IMAGE_TYPE, finalImage);
     processHistogram(finalImage, final_image_location + "_histogram" + IMAGE_TYPE);
-	return true;
+
+    const std::string blurred_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "final_blurred";
+    imwrite(blurred_image_location + IMAGE_TYPE, blurredImage);
+    processHistogram(blurredImage, blurred_image_location + "_histogram" + IMAGE_TYPE);
+
+    return true;
 }
 
 int main(int argc, char **args) 

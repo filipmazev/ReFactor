@@ -23,9 +23,9 @@ bool CHazeRemoval::InitProc(int width, int height, int nChannels) {
 	return ret;
 }
 
-bool CHazeRemoval::Process(const unsigned char* indata, unsigned char* outdata, unsigned char* fogdata, int width, int height, int nChannels) {
+bool CHazeRemoval::Process(const unsigned char* indata, unsigned char* fogdata, int width, int height, int nChannels) {
     bool ret = true;
-    if (!indata || !outdata || !fogdata) {
+    if (!indata || !fogdata) {
         ret = false;
     }
     rows = height;
@@ -53,9 +53,6 @@ bool CHazeRemoval::Process(const unsigned char* indata, unsigned char* outdata, 
     guided_filter(p_src, p_tran, p_gtran, r, eps);
     get_fog(p_src, p_gtran, p_fog, rows, cols, channels);
 
-    recover(p_src, p_gtran, p_dst, p_Alight, rows, cols, channels, t0);
-
-	assign_data(outdata, p_dst, rows, cols, channels);
 	assign_data(fogdata, p_fog, rows, cols, channels);
 
     return ret;

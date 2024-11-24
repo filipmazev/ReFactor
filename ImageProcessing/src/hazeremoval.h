@@ -20,7 +20,7 @@ public:
 
 public:
 	bool InitProc(int width, int height, int nChannels);
-	bool Process(const unsigned char* indata, unsigned char* outdata, unsigned char* fogdata, int width, int height, int nChannels);
+	bool Process(const unsigned char* indata, unsigned char* fogdata, int width, int height, int nChannels);
 
 private:
 	int rows;
