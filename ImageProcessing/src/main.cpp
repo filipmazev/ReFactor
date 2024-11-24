@@ -20,7 +20,9 @@ const std::string FOLDER_SPLITTER = "/";
 const std::string FOLDER_PATH_SPLITTER = "/\\";
 const std::string FILE_NAME_SPACE_DIVIDER = "_";
 
-const int histSize = 256;
+const int blackPixelValueUpperBound = 16;
+
+const int histSize = 64;
 
 Mat loadImage(const std::string& path) {
     Mat image = imread(path, IMREAD_COLOR);
@@ -103,7 +105,7 @@ void processHistogram(const Mat& image, std::string savePath)
 	drawHistogram(b_hist, g_hist, r_hist, savePath);
 }
 
-Mat alphaAdjustedImage(std::string SAVE_LOCATION, Mat fog_image, int rows, int cols, int pixelValueAverageUpperBound) 
+Mat alphaAdjustedImage(Mat fog_image, int rows, int cols, int pixelValueAverageUpperBound) 
 {
 	Mat outputWithAlpha(rows, cols, CV_8UC4); 
     cvtColor(fog_image, outputWithAlpha, COLOR_BGR2BGRA); 
@@ -120,42 +122,31 @@ Mat alphaAdjustedImage(std::string SAVE_LOCATION, Mat fog_image, int rows, int c
         }
     }
 
-	imwrite(SAVE_LOCATION, outputWithAlpha);
-
 	return outputWithAlpha;
 }
 
-Mat applyAlphaMask(const Mat& originalImage, const Mat& alphaImage) {
-    // Ensure both images have the same dimensions
-    if (originalImage.rows != alphaImage.rows || originalImage.cols != alphaImage.cols) {
-        std::cerr << "Error: Image dimensions do not match!" << std::endl;
-        return Mat();
+Mat combineLuminosityOverlay(const Mat& fogImage, const Mat& originalImage, const Mat& alphaMask) {
+    Mat luminosity;
+    cvtColor(originalImage, luminosity, COLOR_BGR2GRAY); 
+
+    Mat result = fogImage.clone();
+
+    for (int i = 0; i < fogImage.rows; i++) {
+        for (int j = 0; j < fogImage.cols; j++) {
+            uchar alpha = alphaMask.at<Vec4b>(i, j)[3]; 
+            if (alpha > 0) {
+                Vec3b& fogPixel = result.at<Vec3b>(i, j);
+                uchar fogLuminosity = static_cast<uchar>(0.3 * fogPixel[2] + 0.59 * fogPixel[1] + 0.11 * fogPixel[0]);
+                uchar newLuminosity = luminosity.at<uchar>(i, j);
+
+                float luminosityFactor = (float)newLuminosity / std::max((float)fogLuminosity, 1.0f);
+                fogPixel[0] = cv::saturate_cast<uchar>(fogPixel[0] * luminosityFactor); 
+                fogPixel[1] = cv::saturate_cast<uchar>(fogPixel[1] * luminosityFactor); 
+                fogPixel[2] = cv::saturate_cast<uchar>(fogPixel[2] * luminosityFactor);
+            }
+        }
     }
-
-    // Convert the original image to BGRA if it isn't already
-    Mat originalWithAlpha;
-    cvtColor(originalImage, originalWithAlpha, COLOR_BGR2BGRA);
-
-    // Extract the alpha channel from alphaImage
-    std::vector<Mat> alphaChannels;
-    split(alphaImage, alphaChannels); // alphaChannels[3] contains the alpha channel
-
-    if (alphaChannels.size() < 4) {
-        std::cerr << "Error: Alpha image is not in BGRA format!" << std::endl;
-        return Mat();
-    }
-
-    // Replace the alpha channel in original image with the alpha channel from alphaImage
-    std::vector<Mat> originalChannels;
-    split(originalWithAlpha, originalChannels); // [B, G, R, A]
-
-    // Set the alpha channel
-    originalChannels[3] = alphaChannels[3];
-
-    // Merge back to create the final RGBA image
-    merge(originalChannels, originalWithAlpha);
-
-    return originalWithAlpha;
+    return result;
 }
 
 bool process(std::string INPUT_IMAGE_PATH)
@@ -197,25 +188,16 @@ bool process(std::string INPUT_IMAGE_PATH)
 		return false;
 	}
 
-	const std::string original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original";
-	const std::string dehaze_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "dehaze";
-	const std::string fog_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "fog";
-	const std::string alpha_adjusted_fog_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "fog_w_alpha";
-	const std::string alpha_masked_original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original_w_alpha";
-
-	const Mat alphaAdjustedFogImage = alphaAdjustedImage(alpha_adjusted_fog_image_location + ".png", fog_image, rows, cols, 30);
-	const Mat alphaMaskedOriginal = applyAlphaMask(in_img, alphaAdjustedFogImage);
-
+    const std::string original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original";
 	imwrite(original_image_location + IMAGE_TYPE, in_img);
-	imwrite(dehaze_image_location + IMAGE_TYPE, out_img);
-	imwrite(fog_image_location + IMAGE_TYPE, fog_image);
-	imwrite(alpha_masked_original_image_location + ".png", alphaMaskedOriginal);
-
 	processHistogram(in_img, original_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
-	processHistogram(out_img, dehaze_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
-	processHistogram(fog_image, fog_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
-	processHistogram(alphaMaskedOriginal, alpha_masked_original_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE);
 
+    const Mat alphaAdjustedFogImage = alphaAdjustedImage(fog_image, rows, cols, blackPixelValueUpperBound);
+    Mat finalImage = combineLuminosityOverlay(fog_image, in_img, alphaAdjustedFogImage);
+
+    const std::string final_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "final";
+    imwrite(final_image_location + IMAGE_TYPE, finalImage);
+    processHistogram(finalImage, final_image_location + "_histogram" + IMAGE_TYPE);
 	return true;
 }
 
