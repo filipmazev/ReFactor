@@ -90,7 +90,7 @@ double calc_contrast_delta(const Mat image_1, const Mat image_2);
 Scalar calc_pixel_intensity_delta(const Mat image_1, const Mat image_2);
 
 int calc_alpha_255_ammount(const Mat image);
-#pragma region 
+#pragma endregion 
 
 #pragma region Data Functions
 std::vector<double> extract_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios);
