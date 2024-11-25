@@ -5,11 +5,22 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
-typedef struct _pixel {
+#pragma region Common Constants
+const int CHANNEL_REQUIREMENT = 3;
+
+const int radius = 7;
+const double omega = 0.95;
+const double t0 = 0.1;
+const int r = 60;
+const double eps = 0.001;
+#pragma endregion 
+
+typedef struct _pixel
+{
 	int i;
 	int j;
 	uchar val;
-	_pixel(int _i, int _j, uchar _val) :i(_i), j(_j), val((uchar)_val) {}
+	_pixel(int _i, int _j, uchar _val) : i(_i), j(_j), val((uchar)_val) {}
 } Pixel;
 
 class CHazeRemoval
@@ -19,14 +30,13 @@ public:
 	~CHazeRemoval();
 
 public:
-	bool InitProc(int width, int height, int nChannels);
-	bool Process(const unsigned char* indata, unsigned char* fogdata, int width, int height, int nChannels);
+	bool Init(int width, int height, int nChannels);
+	bool Process(const unsigned char *indata, unsigned char *fogdata, int width, int height, int nChannels);
 
 private:
 	int rows;
 	int cols;
 	int channels;
-
 };
 
 void get_dark_channel(const cv::Mat *p_src, std::vector<Pixel> &tmp_vec, int rows, int cols, int channels, int radius);

@@ -23,6 +23,6 @@ private:
 // -regularization parameter : eps
 cv::Mat guidedFilter(const cv::Mat &I, const cv::Mat &p, int r, double eps, int depth = -1);
 
-//cv::Mat guidedFilterSrc(const cv::Mat & I, const cv::Mat & p, int r, double eps, int depth = -1);
+// cv::Mat guidedFilterSrc(const cv::Mat & I, const cv::Mat & p, int r, double eps, int depth = -1);
 
 #endif

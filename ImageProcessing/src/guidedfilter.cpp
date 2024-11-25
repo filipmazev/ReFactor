@@ -178,10 +178,7 @@ cv::Mat GuidedFilterColor::filterSingleChannel(const cv::Mat &p) const
 
 	cv::Mat b = mean_p - a_r.mul(mean_I_r) - a_g.mul(mean_I_g) - a_b.mul(mean_I_b); // Eqn. (15) in the paper;
 
-	return (boxfilter(a_r, r).mul(Ichannels[0])
-		+ boxfilter(a_g, r).mul(Ichannels[1])
-		+ boxfilter(a_b, r).mul(Ichannels[2])
-		+ boxfilter(b, r));  // Eqn. (16) in the paper;
+	return (boxfilter(a_r, r).mul(Ichannels[0]) + boxfilter(a_g, r).mul(Ichannels[1]) + boxfilter(a_b, r).mul(Ichannels[2]) + boxfilter(b, r)); // Eqn. (16) in the paper;
 }
 
 GuidedFilter::GuidedFilter(const cv::Mat &I, int r, double eps)
