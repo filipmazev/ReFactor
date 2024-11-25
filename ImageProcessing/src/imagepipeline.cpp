@@ -2,18 +2,21 @@
 #include "hazeremoval.h"
 #include <sys/stat.h>
 #include <filesystem>
+#include <cstddef>
 
 using namespace cv;
 
 namespace fs = std::filesystem;
 
 // <summary>
+// output_folder | The output folder where the processed images will be saved.
 // pixel_lower_bound | Pixel lower bound is the minimum pixel value that will be considered in the image processing.
 // histogram_size | Histogram size is the number of bins in the histogram.
 // histogram_range | Histogram range is the range of the histogram.
 // </summary>
-ImagePipeline::ImagePipeline(int pixel_lower_bound, int histogram_size, float *histogram_range)
+ImagePipeline::ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range)
 {
+    this->output_folder = output_folder;
     this->pixel_lower_bound = pixel_lower_bound;
     this->histogram_size = histogram_size;
 
@@ -26,7 +29,14 @@ ImagePipeline::~ImagePipeline()
     delete[] this->histogram_range;
 }
 
-bool ImagePipeline::ProcessImage(std::string INPUT_IMAGE_PATH, bool saveHistograms, bool saveOriginal, bool saveFogImage)
+// <summary>
+// INPUT_IMAGE_PATH | The path of the input image.
+// writeHistograms | If true, histograms will be written to the output folder.
+// writeOriginal | If true, the original image will be written to the output folder.
+// writeFogImage | If true, the fog image will be written to the output folder.
+// writeFinalImage | If true, the final image will be written to the output folder.
+// </summary>
+std::vector<unsigned char> ImagePipeline::ProcessImage(std::string INPUT_IMAGE_PATH, bool writeHistograms, bool writeOriginal, bool writeFogImage, bool writeFinalImage)
 {
     std::string IMAGE_NAME = INPUT_IMAGE_PATH.substr(INPUT_IMAGE_PATH.find_last_of(FOLDER_PATH_SPLITTER) + 1);
     std::string IMAGE_TYPE = IMAGE_NAME.substr(IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
@@ -51,38 +61,46 @@ bool ImagePipeline::ProcessImage(std::string INPUT_IMAGE_PATH, bool saveHistogra
 
     if (!result)
     {
-        return false;
+        std::cerr << "Error processing image!" << std::endl;
+        return std::vector<unsigned char>();
     }
 
-    auto t = std::time(nullptr);
-    auto tm = *std::localtime(&t);
-    std::ostringstream oss;
-    oss << std::put_time(&tm, "%Y%m%d_%H%M%S");
-    std::string date_time = oss.str();
-    std::string folderPath = BASE_PATH + OUTPUT_FOLDER_DESTINATION + IMAGE_FOLDER_PREFIX + "[" + IMAGE_NAME + "]" + FILE_NAME_SPACE_DIVIDER + date_time;
+    std::string folderPath = "";
 
-    if (mkdir(folderPath.c_str(), 0777) == -1)
+    if(this->output_folder != "")
     {
-        return false;
+        auto t = std::time(nullptr);
+        auto tm = *std::localtime(&t);
+        std::ostringstream oss;
+        oss << std::put_time(&tm, "%Y%m%d_%H%M%S");
+        std::string date_time = oss.str();
+    
+        folderPath = this->output_folder + IMAGE_FOLDER_PREFIX + "[" + IMAGE_NAME + "]" + FILE_NAME_SPACE_DIVIDER + date_time;
+
+        if (mkdir(folderPath.c_str(), 0777) == -1)
+        {
+            std::cerr << "Error creating output folder!" << std::endl;
+            return std::vector<unsigned char>();
+        }
     }
 
-    if(saveOriginal)
+    if(writeOriginal && folderPath != "")
     {
         const std::string original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original";
         imwrite(original_image_location + IMAGE_TYPE, in_img);
         
-        if(saveHistograms)
+        if(writeHistograms && folderPath != "")
         {
             histogram_process(in_img, original_image_location + FILE_NAME_SPACE_DIVIDER + "histogram" + IMAGE_TYPE, this->histogram_size, this->histogram_range);
         }
     }
 
-    if(saveFogImage) 
+    if(writeFogImage && folderPath != "") 
     {
         const std::string fog_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "fog";
         imwrite(fog_image_location + IMAGE_TYPE, fog_image);
 
-        if(saveHistograms)
+        if(writeHistograms)
         {
             histogram_process(fog_image, fog_image_location + "_histogram" + IMAGE_TYPE, this->histogram_size, this->histogram_range);
         }
@@ -91,15 +109,20 @@ bool ImagePipeline::ProcessImage(std::string INPUT_IMAGE_PATH, bool saveHistogra
     const Mat alphaAdjustedFogImage = ipp_alpha_adjust(fog_image, rows, cols, this->pixel_lower_bound);
     Mat finalImage = ipp_combine_luminosity_overlay(fog_image, in_img, alphaAdjustedFogImage);
 
-    const std::string final_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "final";
-    imwrite(final_image_location + IMAGE_TYPE, finalImage);
-
-    if(saveHistograms)
+    if(writeFinalImage && folderPath != "")
     {
-        histogram_process(finalImage, final_image_location + "_histogram" + IMAGE_TYPE, this->histogram_size, this->histogram_range);
+        const std::string final_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "final";
+        imwrite(final_image_location + IMAGE_TYPE, finalImage);
+
+        if(writeHistograms)
+        {
+            histogram_process(finalImage, final_image_location + "_histogram" + IMAGE_TYPE, this->histogram_size, this->histogram_range);
+        }
     }
 
-    return true;
+    std::vector<uchar> buf;
+    imencode(IMAGE_TYPE, finalImage, buf);
+    return std::vector<unsigned char>(buf.begin(), buf.end());
 }
 
 #pragma region File System
@@ -122,7 +145,7 @@ std::vector<std::string> fs_get_image_paths_from_folder(const std::string &folde
         if (entry.is_regular_file())
         {
             std::string path = entry.path().string();
-            if (path.find(".jpg") != std::string::npos || path.find(".png") != std::string::npos)
+            if (path.find(".jpg") != std::string::npos || path.find(".png") != std::string::npos || path.find(".jpeg") != std::string::npos || path.find(".bmp") != std::string::npos || path.find(".JPEG") != std::string::npos)
             {
                 imagePaths.push_back(path);
             }

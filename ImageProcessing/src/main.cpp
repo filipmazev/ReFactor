@@ -1,5 +1,7 @@
 #include "imagepipeline.h"
 
+const std::string OUTPUT_FOLDER_DESTINATION = "/Users/filipmazev/Documents/Code/ReFactor/ImageProcessing/output/";
+
 int main(int argc, char **args) 
 {
 	if (argc < 2) {
@@ -14,11 +16,11 @@ int main(int argc, char **args)
     int histogram_size = 64;
     float histogram_range[2] = {0, 256};
 
-    ImagePipeline pipeline = ImagePipeline(pixel_lower_bound, histogram_size, histogram_range);
+    ImagePipeline pipeline = ImagePipeline(OUTPUT_FOLDER_DESTINATION, pixel_lower_bound, histogram_size, histogram_range);
 
 	for (const auto& INPUT_IMAGE_PATH : imagePaths) {
-		bool result = pipeline.ProcessImage(INPUT_IMAGE_PATH, true, true, true);
-		if(!result) {
+		std::vector<unsigned char> result = pipeline.ProcessImage(INPUT_IMAGE_PATH, true, true, true, true);
+		if(result.empty()) {
 			std::cerr << "Error processing image: " << INPUT_IMAGE_PATH << std::endl;
 		} else {
 			std::cout << "Image processed successfully: " << INPUT_IMAGE_PATH << std::endl;

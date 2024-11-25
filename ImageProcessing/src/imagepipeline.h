@@ -3,14 +3,13 @@
 
 #include <opencv2/opencv.hpp>
 #include <vector>
+#include <cstddef>
 
 using namespace cv;
 using std::cout;
 using std::endl;
 
 #pragma region Common Constants
-const std::string BASE_PATH = "/Users/filipmazev/Documents/Code/ReFactor/ImageProcessing/";
-const std::string OUTPUT_FOLDER_DESTINATION = "output/";
 const std::string IMAGE_FOLDER_PREFIX = "ouput_";
 const std::string FILE_TYPE_SPLITTER = ".";
 const std::string FOLDER_SPLITTER = "/";
@@ -21,13 +20,15 @@ const std::string FILE_NAME_SPACE_DIVIDER = "_";
 class ImagePipeline
 {
 public:
-    ImagePipeline(int pixel_lower_bound, int histogram_size, float *histogram_range);
+    ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range);
     ~ImagePipeline();
 
 public:
-    bool ProcessImage(std::string INPUT_IMAGE_PATH, bool saveHistograms, bool saveOriginal, bool saveFogImage);
+    std::vector<unsigned char> ProcessImage(std::string INPUT_IMAGE_PATH, bool writeHistograms, bool writeOriginal, bool writeFogImage, bool writeFinalImage);
 
 private:
+    std::string output_folder {""};
+
     int pixel_lower_bound{0};
     int histogram_size{0};
     float *histogram_range{nullptr};
