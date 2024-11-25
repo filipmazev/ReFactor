@@ -17,6 +17,24 @@ const std::string FOLDER_PATH_SPLITTER = "/\\";
 const std::string FILE_NAME_SPACE_DIVIDER = "_";
 #pragma endregion
 
+typedef struct _per_channel_histogram_metrics {
+    double mean;
+    double variance;
+    double skewness;
+} PerChannelHistogramMetrics;
+
+typedef struct _image_histogram_metrics {
+    PerChannelHistogramMetrics R;
+    PerChannelHistogramMetrics G;
+    PerChannelHistogramMetrics B;
+} ImageHistogramMetrics;
+
+typedef struct _channel_intensity_ratio {
+    double R2G;
+    double R2B;
+    double G2B;
+} ChannelIntensityRatio;
+
 class ImagePipeline
 {
 public:
@@ -24,7 +42,7 @@ public:
     ~ImagePipeline();
 
 public:
-    std::vector<unsigned char> ProcessImage(std::string INPUT_IMAGE_PATH, bool writeHistograms, bool writeOriginal, bool writeFogImage, bool writeFinalImage);
+    std::vector<double> ExtractEnhancedMetadata(std::string INPUT_IMAGE_PATH);
 
 private:
     std::string output_folder {""};
@@ -50,6 +68,32 @@ void histogram_process(const Mat &image, std::string savePath, int histogram_siz
 Mat ipp_alpha_adjust(Mat image, int rows, int cols, int pixelValueAverageUpperBound);
 
 Mat ipp_combine_luminosity_overlay(const Mat &fogImage, const Mat &originalImage, const Mat &alphaMask);
+#pragma endregion
+
+#pragma region Enhanced Metadata Functions
+double calc_fog_impact_index(const Mat &in_img, const Mat &dehazed_image, const Mat &alpha_adjusted_image, int rows, int cols);
+
+PerChannelHistogramMetrics calc_per_channel_histogram_metrics(const Mat& hist, int histogram_size, float histogram_range[]);
+
+ImageHistogramMetrics calc_image_histogram_metrics(const Mat& image, int histogram_size, float histogram_range[]);
+
+ChannelIntensityRatio calc_channel_intensity_ratios(const Mat& image);
+#pragma endregion
+
+#pragma region Calculation Functions
+double calc_luminosity_delta(const Mat &image_1, const Mat &image_2);
+
+double cal_luminosity(const Mat &image);
+
+double calc_contrast_delta(const Mat image_1, const Mat image_2);
+
+Scalar calc_pixel_intensity_delta(const Mat image_1, const Mat image_2);
+
+int calc_alpha_255_ammount(const Mat image);
+#pragma region 
+
+#pragma region Data Functions
+std::vector<double> extract_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios);
 #pragma endregion
 
 #endif // !IMAGE_PIPELINE_H

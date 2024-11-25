@@ -1,6 +1,11 @@
 #include "imagepipeline.h"
 
-const std::string OUTPUT_FOLDER_DESTINATION = "/Users/filipmazev/Documents/Code/ReFactor/ImageProcessing/output/";
+const std::string OUTPUT_FOLDER_DESTINATION = 
+#if DEBUG
+	"/Users/filipmazev/Documents/Code/ReFactor/ImageProcessing/output/";
+#else 
+	"";
+#endif
 
 int main(int argc, char **args) 
 {
@@ -19,11 +24,15 @@ int main(int argc, char **args)
     ImagePipeline pipeline = ImagePipeline(OUTPUT_FOLDER_DESTINATION, pixel_lower_bound, histogram_size, histogram_range);
 
 	for (const auto& INPUT_IMAGE_PATH : imagePaths) {
-		std::vector<unsigned char> result = pipeline.ProcessImage(INPUT_IMAGE_PATH, true, true, true, true);
+		std::vector<double> result = pipeline.ExtractEnhancedMetadata(INPUT_IMAGE_PATH);
 		if(result.empty()) {
 			std::cerr << "Error processing image: " << INPUT_IMAGE_PATH << std::endl;
 		} else {
 			std::cout << "Image processed successfully: " << INPUT_IMAGE_PATH << std::endl;
+			for(const auto& feature : result) {
+				std::cout << feature << " ";
+			}
+			std::cout << std::endl;
 		}
 	}
 	
