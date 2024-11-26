@@ -21,7 +21,8 @@ const std::vector<std::string> NEW_COLUMN_NAMES = {
     "hour",
     "fog_impact_index", 
 
-    "glcm_energy", "glcm_contrast", "glcm_homogenity", "glcm_entropy",
+    "o_glcm_energy", "o_glcm_contrast", "o_glcm_homogenity", "o_glcm_entropy",
+    "glcm_energy_delta", "glcm_contrast_delta", "glcm_homogenity_delta", "glcm_entropy_delta",
     
     "airligh_r", "airlight_g", "airlight_b", 
     
@@ -89,9 +90,6 @@ int main(int argc, char** args)
     std::string line;
     std::getline(inputCsv, line);
 
-    
-    std::cout << "Processing complete. Output saved to 'processed_features.csv'." << std::endl;
-    
     std::ostringstream oss;
     
     auto t = std::time(nullptr);

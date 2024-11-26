@@ -99,13 +99,24 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
     ImageHistogramMetrics dehaze_image_histogram_metrics = calc_image_histogram_metrics(dehazed_image, this->histogram_size, this->histogram_range);
     std::vector<double> dehazed_histogram_metrics = extract_histogram_metrics(dehaze_image_histogram_metrics);
 
-    GLCMFeatures glcm = calc_GLCM_parallel(in_img, this->grayLevels);
-    std::vector<double> texture_eigenvalues = {glcm.energy, glcm.contrast, glcm.homogenity, glcm.entropy};
+    GLCMFeatures original_glcm = calc_GLCM_parallel(in_img, this->grayLevels);
+    std::vector<double> original_texture_eigenvalues = {original_glcm.energy, original_glcm.contrast, original_glcm.homogenity, original_glcm.entropy};
+
+    GLCMFeatures fog_glcm = calc_GLCM_parallel(fog_image, this->grayLevels);
+    std::vector<double> fog_texture_eigenvalues = {fog_glcm.energy, fog_glcm.contrast, fog_glcm.homogenity, fog_glcm.entropy};
+
+    double energy_delta = fog_glcm.energy - original_glcm.energy;
+    double contrast_delta = fog_glcm.contrast - original_glcm.contrast;
+    double homogenity_delta = fog_glcm.homogenity - original_glcm.homogenity;
+    double entropy_delta = fog_glcm.entropy - original_glcm.entropy;
+
+    std::vector<double> texture_eigenvalues_delta = {energy_delta, contrast_delta, homogenity_delta, entropy_delta};
 
     std::vector<double> concatenated_features;
     concatenated_features.push_back(fog_impact_index);
 
-    concatenated_features.insert(concatenated_features.end(), texture_eigenvalues.begin(), texture_eigenvalues.end());
+    concatenated_features.insert(concatenated_features.end(), original_texture_eigenvalues.begin(), original_texture_eigenvalues.end());
+    concatenated_features.insert(concatenated_features.end(), texture_eigenvalues_delta.begin(), texture_eigenvalues_delta.end());
 
     concatenated_features.insert(concatenated_features.end(), airlightValues.begin(), airlightValues.end());
 
@@ -120,8 +131,11 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
 
     std::cout << "Fog Impact Index: " << fog_impact_index << std::endl;
     
-    std::cout << "Texture Eigenvalues: " << std::endl;
-    std::cout << "Energy: " << glcm.energy << " Contrast: " << glcm.contrast << " Homogenity: " << glcm.homogenity << " Entropy: " << glcm.entropy << std::endl;
+    std::cout << "Initial Image Texture Eigenvalues: " << std::endl;
+    std::cout << "Energy: " << original_glcm.energy << " Contrast: " << original_glcm.contrast << " Homogenity: " << original_glcm.homogenity << " Entropy: " << original_glcm.entropy << std::endl;
+
+    std::cout << "Texture Eigenvalues Delta: " << std::endl;
+    std::cout << "Energy: " << energy_delta << " Contrast: " << contrast_delta << " Homogenity: " << homogenity_delta << " Entropy: " << entropy_delta << std::endl;
 
     std::cout << "Air Light R: " << airlightR << " Air Light G: " << airlightG <<  " Air Light B: " << airlightB << std::endl;
 
@@ -492,30 +506,5 @@ std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics& hist_
     features.push_back(hist_metrics.B.skewness);
 
     return features;
-}
-
-void z_score_normalization(std::__1::vector<double> &concatenated_features)
-{
-    double mean = 0.0;
-    double stddev = 0.0;
-
-    for (const double &feature : concatenated_features)
-    {
-        mean += feature;
-    }
-
-    mean /= concatenated_features.size();
-
-    for (const double &feature : concatenated_features)
-    {
-        stddev += std::pow(feature - mean, 2);
-    }
-
-    stddev = std::sqrt(stddev / concatenated_features.size());
-
-    for (double &feature : concatenated_features)
-    {
-        feature = (feature - mean) / stddev;
-    }
 }
 #pragma endregion
