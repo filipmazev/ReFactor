@@ -46,6 +46,8 @@ public:
 public:
     std::vector<double> ExtractEnhancedMetadata(std::string INPUT_IMAGE_PATH);
 
+    void z_score_normalization(std::__1::vector<double> &concatenated_features);
+
 private:
     std::string output_folder {""};
 
@@ -96,7 +98,11 @@ int calc_alpha_255_ammount(const Mat image);
 #pragma endregion 
 
 #pragma region Data Functions
-std::vector<double> extract_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios);
+std::vector<double> extract_all_histogram_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios);
+
+std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics& hist_metrics);
+
+void z_score_normalization(std::__1::vector<double> &concatenated_features);
 #pragma endregion
 
 #endif // !IMAGE_PIPELINE_H

@@ -84,7 +84,10 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
 
     ImageHistogramMetrics original_image_histogram_metrics = calc_image_histogram_metrics(in_img, this->histogram_size, this->histogram_range);
     ChannelIntensityRatio original_channel_intensity_ratios = calc_channel_intensity_ratios(in_img);
-    std::vector<double> original_features = extract_features(original_image_histogram_metrics, original_channel_intensity_ratios);
+    std::vector<double> original_features = extract_all_histogram_features(original_image_histogram_metrics, original_channel_intensity_ratios);
+
+    ImageHistogramMetrics dehaze_image_histogram_metrics = calc_image_histogram_metrics(dehazed_image, this->histogram_size, this->histogram_range);
+    std::vector<double> dehazed_histogram_metrics = extract_histogram_metrics(dehaze_image_histogram_metrics);
 
     std::vector<double> contrast, energy;
     calc_GLCM_parallel(dehazed_image, grayLevels, contrast, energy);
@@ -98,8 +101,11 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
     concatenated_features.insert(concatenated_features.end(), energy.begin(), energy.end()); 
 
     concatenated_features.insert(concatenated_features.end(), original_features.begin(), original_features.end());
+    concatenated_features.insert(concatenated_features.end(), dehazed_histogram_metrics.begin(), dehazed_histogram_metrics.end());
   
-    #ifdef DEBUG
+    z_score_normalization(concatenated_features);
+
+#ifdef DEBUG
     std::string folderPath = "";
 
     if(this->output_folder != "")
@@ -427,7 +433,18 @@ int calc_alpha_255_ammount(const Mat image)
 #pragma endregion
 
 #pragma region Data Functions
-std::vector<double> extract_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios) 
+std::vector<double> extract_all_histogram_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios) 
+{
+    std::vector<double> features = extract_histogram_metrics(hist_metrics);
+
+    features.push_back(channel_ratios.R2G);
+    features.push_back(channel_ratios.R2B);
+    features.push_back(channel_ratios.G2B);
+
+    return features;
+}
+
+std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics& hist_metrics) 
 {
     std::vector<double> features;
 
@@ -441,10 +458,31 @@ std::vector<double> extract_features(const ImageHistogramMetrics& hist_metrics, 
     features.push_back(hist_metrics.B.variance);
     features.push_back(hist_metrics.B.skewness);
 
-    features.push_back(channel_ratios.R2G);
-    features.push_back(channel_ratios.R2B);
-    features.push_back(channel_ratios.G2B);
-
     return features;
+}
+
+void z_score_normalization(std::__1::vector<double> &concatenated_features)
+{
+    double mean = 0.0;
+    double stddev = 0.0;
+
+    for (const double &feature : concatenated_features)
+    {
+        mean += feature;
+    }
+
+    mean /= concatenated_features.size();
+
+    for (const double &feature : concatenated_features)
+    {
+        stddev += std::pow(feature - mean, 2);
+    }
+
+    stddev = std::sqrt(stddev / concatenated_features.size());
+
+    for (double &feature : concatenated_features)
+    {
+        feature = (feature - mean) / stddev;
+    }
 }
 #pragma endregion
