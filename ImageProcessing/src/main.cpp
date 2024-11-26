@@ -20,7 +20,7 @@ const std::vector<std::string> NEW_COLUMN_NAMES = {
     "AQI", "AQI_Class", "Hour",
     "fog_intensity_index", "o_r_mean", "o_r_variance", "o_r_skewness",
     "o_g_mean", "o_g_variance", "o_g_skewness", "o_b_mean", "o_b_variance",
-    "o_b_skewness", "o_r2g", "o_r2b", "o_rg2b", "d_r_mean", "d_r_variance",
+    "o_b_skewness", "o_r2g", "o_r2b", "o_g2b", "d_r_mean", "d_r_variance",
     "d_r_skewness", "d_g_mean", "d_g_variance", "d_g_skewness", "d_b_mean",
     "d_b_variance", "d_b_skewness", "d_r2g", "d_r2b", "d_g2b"
 };
@@ -44,8 +44,9 @@ int main(int argc, char** args) {
     int pixel_lower_bound = 30;
     int histogram_size = 64;
     float histogram_range[2] = {0, 256};
+    int grayLevels = 256;
 
-    ImagePipeline pipeline = ImagePipeline(OUTPUT_FOLDER_DESTINATION, pixel_lower_bound, histogram_size, histogram_range);
+    ImagePipeline pipeline = ImagePipeline(OUTPUT_FOLDER_DESTINATION, pixel_lower_bound, histogram_size, histogram_range, grayLevels);
 
     std::ifstream inputCsv(INPUT_CSV_PATH);
     if (!inputCsv.is_open()) {

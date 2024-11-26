@@ -17,6 +17,7 @@ const std::string FOLDER_PATH_SPLITTER = "/\\";
 const std::string FILE_NAME_SPACE_DIVIDER = "_";
 #pragma endregion
 
+#pragma region Structures
 typedef struct _per_channel_histogram_metrics {
     double mean;
     double variance;
@@ -34,11 +35,12 @@ typedef struct _channel_intensity_ratio {
     double R2B;
     double G2B;
 } ChannelIntensityRatio;
+#pragma endregion
 
 class ImagePipeline
 {
 public:
-    ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range);
+    ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels);
     ~ImagePipeline();
 
 public:
@@ -50,6 +52,7 @@ private:
     int pixel_lower_bound{0};
     int histogram_size{0};
     float *histogram_range{nullptr};
+    int grayLevels {256};  
 };
 
 #pragma region File System

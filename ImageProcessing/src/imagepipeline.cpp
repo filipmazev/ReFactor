@@ -1,5 +1,6 @@
 #include "imagepipeline.h"
 #include "hazeremoval.h"
+#include "glcm.h"
 #include <sys/stat.h>
 #include <filesystem>
 #include <cstddef>
@@ -17,7 +18,7 @@ namespace fs = std::filesystem;
 // histogram_size | Histogram size is the number of bins in the histogram.
 // histogram_range | Histogram range is the range of the histogram.
 // </summary>
-ImagePipeline::ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range)
+ImagePipeline::ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels)
 {
     this->output_folder = output_folder;
 
@@ -26,6 +27,8 @@ ImagePipeline::ImagePipeline(std::string output_folder, int pixel_lower_bound, i
 
     this->histogram_range = new float[histogram_size];
     std::copy(histogram_range, histogram_range + histogram_size, this->histogram_range);
+
+    this->grayLevels = grayLevels;
 }
 
 ImagePipeline::~ImagePipeline()
@@ -55,11 +58,13 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
     unsigned char *indata = in_img.data;
     unsigned char *outdata = dehazed_image.data;
     unsigned char *fogData = fog_image.data;
+    
+    Vec3d airlight;
 
     CHazeRemoval hr;
 
     hr.Init(cols, rows, in_img.channels());
-    bool result = hr.Process(indata, outdata, fogData, cols, rows, in_img.channels());
+    bool result = hr.Process(indata, outdata, fogData, airlight, cols, rows, in_img.channels());
 
     if (!result)
     {
@@ -71,19 +76,29 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
 
     double fog_impact_index = calc_fog_impact_index(in_img, dehazed_image, alpha_adjusted_image, rows, cols);
 
+    double airlightR = airlight[0];
+    double airlightG = airlight[1];
+    double airlightB = airlight[2];
+
+    std::vector<double> airlightValues = {airlightR, airlightG, airlightB};
+
     ImageHistogramMetrics original_image_histogram_metrics = calc_image_histogram_metrics(in_img, this->histogram_size, this->histogram_range);
     ChannelIntensityRatio original_channel_intensity_ratios = calc_channel_intensity_ratios(in_img);
     std::vector<double> original_features = extract_features(original_image_histogram_metrics, original_channel_intensity_ratios);
 
-    ImageHistogramMetrics dehazed_image_histogram_metrics = calc_image_histogram_metrics(dehazed_image, this->histogram_size, this->histogram_range);
-    ChannelIntensityRatio dehazed_channel_intensity_ratios = calc_channel_intensity_ratios(dehazed_image);
-    std::vector<double> dehazed_features = extract_features(dehazed_image_histogram_metrics, dehazed_channel_intensity_ratios);
+    std::vector<double> contrast, energy;
+    calc_GLCM_parallel(dehazed_image, grayLevels, contrast, energy);
 
     std::vector<double> concatenated_features;
     concatenated_features.push_back(fog_impact_index);
-    concatenated_features.insert(concatenated_features.end(), original_features.begin(), original_features.end());
-    concatenated_features.insert(concatenated_features.end(), dehazed_features.begin(), dehazed_features.end());
 
+    concatenated_features.insert(concatenated_features.end(), airlightValues.begin(), airlightValues.end());
+
+    concatenated_features.insert(concatenated_features.end(), contrast.begin(), contrast.end()); 
+    concatenated_features.insert(concatenated_features.end(), energy.begin(), energy.end()); 
+
+    concatenated_features.insert(concatenated_features.end(), original_features.begin(), original_features.end());
+  
     #ifdef DEBUG
     std::string folderPath = "";
 

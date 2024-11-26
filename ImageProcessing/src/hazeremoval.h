@@ -31,7 +31,7 @@ public:
 
 public:
 	bool Init(int width, int height, int nChannels);
-	bool Process(const unsigned char *indata, unsigned char *outdata, unsigned char *fogdata, int width, int height, int nChannels);
+	bool Process(const unsigned char *indata, unsigned char *outdata, unsigned char *fogdata, cv::Vec3d &airlight, int width, int height, int nChannels);
 
 private:
 	int rows;

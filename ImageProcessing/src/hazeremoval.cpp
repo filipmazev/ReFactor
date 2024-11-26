@@ -30,7 +30,7 @@ bool CHazeRemoval::Init(int width, int height, int nChannels)
 	return result;
 }
 
-bool CHazeRemoval::Process(const unsigned char *indata, unsigned char *outdata, unsigned char *fogdata, int width, int height, int nChannels)
+bool CHazeRemoval::Process(const unsigned char *indata, unsigned char *outdata, unsigned char *fogdata, cv::Vec3d &airlight, int width, int height, int nChannels)
 {
 	bool result = true;
 	if (!indata || !outdata || !fogdata)
@@ -60,6 +60,8 @@ bool CHazeRemoval::Process(const unsigned char *indata, unsigned char *outdata, 
 	get_transmission(p_src, p_tran, p_Alight, rows, cols, channels, radius, omega);
 	guided_filter(p_src, p_tran, p_gtran, r, eps);
 	get_fog(p_src, p_gtran, p_fog, rows, cols, channels);
+
+	airlight = *p_Alight;
 
 	recover(p_src, p_gtran, p_dst, p_Alight, rows, cols, channels, t0);
 
