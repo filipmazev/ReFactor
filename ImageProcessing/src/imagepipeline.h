@@ -40,16 +40,16 @@ typedef struct _channel_intensity_ratio {
 class ImagePipeline
 {
 public:
-    ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels);
+    ImagePipeline(std::string output_folder, int image_pixels_w_max, int image_pixels_h_max, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels);
     ~ImagePipeline();
 
 public:
     std::vector<double> ExtractEnhancedMetadata(std::string INPUT_IMAGE_PATH);
-
-    void z_score_normalization(std::__1::vector<double> &concatenated_features);
-
 private:
     std::string output_folder {""};
+
+    int image_pixels_w_max{0};
+    int image_pixels_h_max{0};
 
     int pixel_lower_bound{0};
     int histogram_size{0};

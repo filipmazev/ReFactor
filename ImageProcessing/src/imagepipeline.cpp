@@ -18,9 +18,12 @@ namespace fs = std::filesystem;
 // histogram_size | Histogram size is the number of bins in the histogram.
 // histogram_range | Histogram range is the range of the histogram.
 // </summary>
-ImagePipeline::ImagePipeline(std::string output_folder, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels)
+ImagePipeline::ImagePipeline(std::string output_folder, int image_pixels_w_max, int image_pixels_h_max, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels)
 {
     this->output_folder = output_folder;
+
+    this->image_pixels_w_max = image_pixels_w_max;
+    this->image_pixels_h_max = image_pixels_h_max;
 
     this->pixel_lower_bound = pixel_lower_bound;
     this->histogram_size = histogram_size;
@@ -51,6 +54,13 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
     
     int rows = in_img.rows;
     int cols = in_img.cols;
+
+    if(rows > this->image_pixels_h_max || cols > this->image_pixels_w_max)
+    {
+        resize(in_img, in_img, Size(std::min(this->image_pixels_w_max, in_img.rows), std::min(this->image_pixels_h_max, in_img.cols)));
+        rows = in_img.rows;
+        cols = in_img.cols;
+    }
 
     Mat dehazed_image(rows, cols, CV_8UC3);
     Mat fog_image(rows, cols, CV_8UC3);
@@ -89,23 +99,46 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
     ImageHistogramMetrics dehaze_image_histogram_metrics = calc_image_histogram_metrics(dehazed_image, this->histogram_size, this->histogram_range);
     std::vector<double> dehazed_histogram_metrics = extract_histogram_metrics(dehaze_image_histogram_metrics);
 
-    std::vector<double> contrast, energy;
-    calc_GLCM_parallel(dehazed_image, grayLevels, contrast, energy);
+    GLCMFeatures glcm = calc_GLCM_parallel(in_img, this->grayLevels);
+    std::vector<double> texture_eigenvalues = {glcm.energy, glcm.contrast, glcm.homogenity, glcm.entropy};
 
     std::vector<double> concatenated_features;
     concatenated_features.push_back(fog_impact_index);
 
-    concatenated_features.insert(concatenated_features.end(), airlightValues.begin(), airlightValues.end());
+    concatenated_features.insert(concatenated_features.end(), texture_eigenvalues.begin(), texture_eigenvalues.end());
 
-    concatenated_features.insert(concatenated_features.end(), contrast.begin(), contrast.end()); 
-    concatenated_features.insert(concatenated_features.end(), energy.begin(), energy.end()); 
+    concatenated_features.insert(concatenated_features.end(), airlightValues.begin(), airlightValues.end());
 
     concatenated_features.insert(concatenated_features.end(), original_features.begin(), original_features.end());
     concatenated_features.insert(concatenated_features.end(), dehazed_histogram_metrics.begin(), dehazed_histogram_metrics.end());
   
-    z_score_normalization(concatenated_features);
-
 #ifdef DEBUG
+
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+
+    std::cout << "Image Name: " << IMAGE_NAME << std::endl << std::endl;
+
+    std::cout << "Fog Impact Index: " << fog_impact_index << std::endl;
+    
+    std::cout << "Texture Eigenvalues: " << std::endl;
+    std::cout << "Energy: " << glcm.energy << " Contrast: " << glcm.contrast << " Homogenity: " << glcm.homogenity << " Entropy: " << glcm.entropy << std::endl;
+
+    std::cout << "Air Light R: " << airlightR << " Air Light G: " << airlightG <<  " Air Light B: " << airlightB << std::endl;
+
+    std::cout << "Original Image Metrics: " << std::endl; 
+    std::cout << "Red Mean: " << original_features[0] << " Red Variance: " << original_features[1] << " Red Skewness: " << original_features[2] << std::endl;
+    std::cout << "Green Mean: " << original_features[3] << " Green Variance: " << original_features[4] << " Green Skewness: " << original_features[5] << std::endl;
+    std::cout << "Blue Mean: " << original_features[6] << " Blue Variance: " << original_features[7] << " Blue Skewness: " << original_features[8] << std::endl;
+
+    std::cout << "Red to Green: " << original_features[9] << " Red to Blue: " << original_features[10] << " Green to Blue: " << original_features[11] << std::endl;
+   
+    std::cout << "Dehazed Image Metrics: " << std::endl;
+    std::cout << "Red Mean: " << dehazed_histogram_metrics[0] << " Red Variance: " << dehazed_histogram_metrics[1] << " Red Skewness: " << dehazed_histogram_metrics[2] << std::endl;
+    std::cout << "Green Mean: " << dehazed_histogram_metrics[3] << " Green Variance: " << dehazed_histogram_metrics[4] << " Green Skewness: " << dehazed_histogram_metrics[5] << std::endl;
+    std::cout << "Blue Mean: " << dehazed_histogram_metrics[6] << " Blue Variance: " << dehazed_histogram_metrics[7] << " Blue Skewness: " << dehazed_histogram_metrics[8] << std::endl;
+
+    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+
     std::string folderPath = "";
 
     if(this->output_folder != "")

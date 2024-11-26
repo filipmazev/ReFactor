@@ -1,13 +1,18 @@
 #include "glcm.h"
+#include <numeric>
 
-void calc_GLCM_parallel(const cv::Mat &image, int grayLevels, std::vector<double> &contrast, std::vector<double> &energy)
+GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels)
 {
+    std::vector<double> contrast, energy, homogenity, entropy;
+
     const int rows = image.rows;
     const int cols = image.cols;
     const size_t numDirections = directions.size();
 
-    contrast.resize(numDirections, 0.0);
     energy.resize(numDirections, 0.0);
+    contrast.resize(numDirections, 0.0);
+    homogenity.resize(numDirections, 0.0);
+    entropy.resize(numDirections, 0.0);
 
     std::vector<cv::Mat> threadLocalGLCMs(numDirections, cv::Mat::zeros(grayLevels, grayLevels, CV_32F));
 
@@ -39,21 +44,40 @@ void calc_GLCM_parallel(const cv::Mat &image, int grayLevels, std::vector<double
         {
             cv::Mat glcm = threadLocalGLCMs[i];
             double glcmSum = cv::sum(glcm)[0];
-            glcm /= glcmSum; // Normalize the GLCM
+            glcm /= glcmSum; 
 
-            double localContrast = 0.0, localEnergy = 0.0;
+            double localContrast = 0.0, localEnergy = 0.0, localhomogenity = 0.0, localEntropy = 0.0;
             for (int j = 0; j < grayLevels; ++j)
             {
                 for (int k = 0; k < grayLevels; ++k)
                 {
                     double val = glcm.at<float>(j, k);
-                    localContrast += (j - k) * (j - k) * val;
+                    double diff = (j - k) * (j - k);
+                    localContrast += diff * val;
                     localEnergy += val * val;
+                    
+                    localhomogenity += val / (1 + std::abs(j - k));
+
+                    if (val > 0)
+                    {
+                        localEntropy += val * std::log(val);
+                    }
                 }
             }
 
-            contrast[i] = localContrast;
             energy[i] = localEnergy;
+            contrast[i] = localContrast;
+            homogenity[i] = localhomogenity;
+            entropy[i] = -localEntropy; 
         }
     }
+
+    GLCMFeatures result;
+
+    result.energy = std::accumulate(energy.begin(), energy.end(), 0.0) / numDirections;
+    result.contrast = std::accumulate(contrast.begin(), contrast.end(), 0.0) / numDirections;
+    result.homogenity = std::accumulate(homogenity.begin(), homogenity.end(), 0.0) / numDirections;
+    result.entropy = std::accumulate(entropy.begin(), entropy.end(), 0.0) / numDirections;
+
+    return result;
 }

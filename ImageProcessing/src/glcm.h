@@ -4,6 +4,14 @@
 #include "opencv2/opencv.hpp"
 #include <vector>
 
+typedef struct GLCMFeatures
+{
+    double energy;
+    double contrast;
+    double homogenity;
+    double entropy;
+} GLCMFeatures;
+
 const std::vector<std::pair<int, int>> directions = {
     {0, 1},  // 0 degrees (horizontal)
     {-1, 1}, // 45 degrees
@@ -11,6 +19,6 @@ const std::vector<std::pair<int, int>> directions = {
     {-1, -1} // 135 degrees
 };
 
-void calc_GLCM_parallel(const cv::Mat &image, int grayLevels, std::vector<double> &contrast, std::vector<double> &energy);
+GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels);
 
 #endif // GLCM_H
