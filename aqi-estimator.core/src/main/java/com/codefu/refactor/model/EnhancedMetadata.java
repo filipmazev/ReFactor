@@ -55,6 +55,15 @@ public class EnhancedMetadata {
   private Double originalBlueSkewness;
 
   @Column(nullable = false)
+  private Double originalRedToGreen;
+
+  @Column(nullable = false)
+  private Double originalRedToBlue;
+
+  @Column(nullable = false)
+  private Double originalGreenToBlue;
+
+  @Column(nullable = false)
   private Double deHazedRedMean;
 
   @Column(nullable = false)
