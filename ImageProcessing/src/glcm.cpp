@@ -1,5 +1,4 @@
 #include "glcm.h"
-#include <numeric>
 
 GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels)
 {
@@ -18,7 +17,7 @@ GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels)
 
 #pragma omp parallel
     {
-        #pragma omp for
+#pragma omp for
         for (int y = 0; y < rows; ++y)
         {
             for (int x = 0; x < cols; ++x)
@@ -39,12 +38,12 @@ GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels)
             }
         }
 
-        #pragma omp for
+#pragma omp for
         for (size_t i = 0; i < numDirections; ++i)
         {
             cv::Mat glcm = threadLocalGLCMs[i];
             double glcmSum = cv::sum(glcm)[0];
-            glcm /= glcmSum; 
+            glcm /= glcmSum;
 
             double localContrast = 0.0, localEnergy = 0.0, localhomogenity = 0.0, localEntropy = 0.0;
             for (int j = 0; j < grayLevels; ++j)
@@ -55,7 +54,7 @@ GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels)
                     double diff = (j - k) * (j - k);
                     localContrast += diff * val;
                     localEnergy += val * val;
-                    
+
                     localhomogenity += val / (1 + std::abs(j - k));
 
                     if (val > 0)
@@ -68,7 +67,7 @@ GLCMFeatures calc_GLCM_parallel(const cv::Mat &image, int grayLevels)
             energy[i] = localEnergy;
             contrast[i] = localContrast;
             homogenity[i] = localhomogenity;
-            entropy[i] = -localEntropy; 
+            entropy[i] = -localEntropy;
         }
     }
 

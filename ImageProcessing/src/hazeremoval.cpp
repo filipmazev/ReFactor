@@ -1,7 +1,4 @@
 #include "hazeremoval.h"
-#include <iostream>
-
-using namespace cv;
 
 CHazeRemoval::CHazeRemoval()
 {
@@ -39,10 +36,10 @@ bool CHazeRemoval::Process(const unsigned char *indata, unsigned char *outdata, 
 	}
 
 	result = Init(width, height, nChannels);
-	
-	if(!result)
+
+	if (!result)
 	{
-		std::cerr << "Error initializing the Haze Removal process! Please provide valid values for width, height and nChannels" << std::endl;
+		cerr << "Error initializing the Haze Removal process! Please provide valid values for width, height and nChannels" << endl;
 		return result;
 	}
 
@@ -71,6 +68,7 @@ bool CHazeRemoval::Process(const unsigned char *indata, unsigned char *outdata, 
 	return result;
 }
 
+#pragma region Dark Channel Prior Calculations
 bool sort_asc(const Pixel &a, const Pixel &b)
 {
 	return a.val > b.val;
@@ -196,3 +194,4 @@ void get_fog(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_fog, int r
 		}
 	}
 }
+#pragma endregion

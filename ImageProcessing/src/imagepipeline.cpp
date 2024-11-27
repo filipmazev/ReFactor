@@ -1,16 +1,4 @@
 #include "imagepipeline.h"
-#include "hazeremoval.h"
-#include "glcm.h"
-#include <sys/stat.h>
-#include <filesystem>
-#include <cstddef>
-#include <opencv2/core.hpp>
-#include <opencv2/ml.hpp>
-#include <opencv2/face.hpp>
-
-using namespace cv;
-
-namespace fs = std::filesystem;
 
 // <summary>
 // output_folder | The output folder where the processed images will be saved.
@@ -42,20 +30,12 @@ ImagePipeline::~ImagePipeline()
 // <summary>
 // INPUT_IMAGE_PATH | The path of the input image.
 // </summary>
-std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMAGE_PATH)
+std::vector<double> ImagePipeline::ExtractEnhancedMetadata(cv::Mat &in_img)
 {
-    std::string IMAGE_NAME = INPUT_IMAGE_PATH.substr(INPUT_IMAGE_PATH.find_last_of(FOLDER_PATH_SPLITTER) + 1);
-    std::string IMAGE_TYPE = IMAGE_NAME.substr(IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
-
-    IMAGE_NAME = IMAGE_NAME.substr(0, IMAGE_NAME.find_last_of(FILE_TYPE_SPLITTER));
-    const std::string IMAGE_PATH = INPUT_IMAGE_PATH;
-
-    Mat in_img = fs_load_image(IMAGE_PATH);
-    
     int rows = in_img.rows;
     int cols = in_img.cols;
 
-    if(rows > this->image_pixels_h_max || cols > this->image_pixels_w_max)
+    if (rows > this->image_pixels_h_max || cols > this->image_pixels_w_max)
     {
         resize(in_img, in_img, Size(std::min(this->image_pixels_w_max, in_img.rows), std::min(this->image_pixels_h_max, in_img.cols)));
         rows = in_img.rows;
@@ -68,7 +48,7 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
     unsigned char *indata = in_img.data;
     unsigned char *outdata = dehazed_image.data;
     unsigned char *fogData = fog_image.data;
-    
+
     Vec3d airlight;
 
     CHazeRemoval hr;
@@ -78,7 +58,7 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
 
     if (!result)
     {
-        std::cerr << "Error processing image!" << std::endl;
+        cerr << "Error processing image!" << endl;
         return std::vector<double>();
     }
 
@@ -122,103 +102,37 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(std::string INPUT_IMA
 
     concatenated_features.insert(concatenated_features.end(), original_features.begin(), original_features.end());
     concatenated_features.insert(concatenated_features.end(), dehazed_histogram_metrics.begin(), dehazed_histogram_metrics.end());
-  
+
 #ifdef DEBUG
+    cout << "----------------------------------------------------------------------------------------------------------------" << endl;
 
-    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+    cout << "Fog Impact Index: " << fog_impact_index << endl;
 
-    std::cout << "Image Name: " << IMAGE_NAME << std::endl << std::endl;
+    cout << "Initial Image Texture Eigenvalues: " << endl;
+    cout << "Energy: " << original_glcm.energy << " Contrast: " << original_glcm.contrast << " Homogenity: " << original_glcm.homogenity << " Entropy: " << original_glcm.entropy << endl;
 
-    std::cout << "Fog Impact Index: " << fog_impact_index << std::endl;
-    
-    std::cout << "Initial Image Texture Eigenvalues: " << std::endl;
-    std::cout << "Energy: " << original_glcm.energy << " Contrast: " << original_glcm.contrast << " Homogenity: " << original_glcm.homogenity << " Entropy: " << original_glcm.entropy << std::endl;
+    cout << "Texture Eigenvalues Delta: " << endl;
+    cout << "Energy: " << energy_delta << " Contrast: " << contrast_delta << " Homogenity: " << homogenity_delta << " Entropy: " << entropy_delta << endl;
 
-    std::cout << "Texture Eigenvalues Delta: " << std::endl;
-    std::cout << "Energy: " << energy_delta << " Contrast: " << contrast_delta << " Homogenity: " << homogenity_delta << " Entropy: " << entropy_delta << std::endl;
+    cout << "Air Light R: " << airlightR << " Air Light G: " << airlightG << " Air Light B: " << airlightB << endl;
 
-    std::cout << "Air Light R: " << airlightR << " Air Light G: " << airlightG <<  " Air Light B: " << airlightB << std::endl;
+    cout << "Original Image Metrics: " << endl;
+    cout << "Red Mean: " << original_features[0] << " Red Variance: " << original_features[1] << " Red Skewness: " << original_features[2] << endl;
+    cout << "Green Mean: " << original_features[3] << " Green Variance: " << original_features[4] << " Green Skewness: " << original_features[5] << endl;
+    cout << "Blue Mean: " << original_features[6] << " Blue Variance: " << original_features[7] << " Blue Skewness: " << original_features[8] << endl;
 
-    std::cout << "Original Image Metrics: " << std::endl; 
-    std::cout << "Red Mean: " << original_features[0] << " Red Variance: " << original_features[1] << " Red Skewness: " << original_features[2] << std::endl;
-    std::cout << "Green Mean: " << original_features[3] << " Green Variance: " << original_features[4] << " Green Skewness: " << original_features[5] << std::endl;
-    std::cout << "Blue Mean: " << original_features[6] << " Blue Variance: " << original_features[7] << " Blue Skewness: " << original_features[8] << std::endl;
+    cout << "Red to Green: " << original_features[9] << " Red to Blue: " << original_features[10] << " Green to Blue: " << original_features[11] << endl;
 
-    std::cout << "Red to Green: " << original_features[9] << " Red to Blue: " << original_features[10] << " Green to Blue: " << original_features[11] << std::endl;
-   
-    std::cout << "Dehazed Image Metrics: " << std::endl;
-    std::cout << "Red Mean: " << dehazed_histogram_metrics[0] << " Red Variance: " << dehazed_histogram_metrics[1] << " Red Skewness: " << dehazed_histogram_metrics[2] << std::endl;
-    std::cout << "Green Mean: " << dehazed_histogram_metrics[3] << " Green Variance: " << dehazed_histogram_metrics[4] << " Green Skewness: " << dehazed_histogram_metrics[5] << std::endl;
-    std::cout << "Blue Mean: " << dehazed_histogram_metrics[6] << " Blue Variance: " << dehazed_histogram_metrics[7] << " Blue Skewness: " << dehazed_histogram_metrics[8] << std::endl;
+    cout << "Dehazed Image Metrics: " << endl;
+    cout << "Red Mean: " << dehazed_histogram_metrics[0] << " Red Variance: " << dehazed_histogram_metrics[1] << " Red Skewness: " << dehazed_histogram_metrics[2] << endl;
+    cout << "Green Mean: " << dehazed_histogram_metrics[3] << " Green Variance: " << dehazed_histogram_metrics[4] << " Green Skewness: " << dehazed_histogram_metrics[5] << endl;
+    cout << "Blue Mean: " << dehazed_histogram_metrics[6] << " Blue Variance: " << dehazed_histogram_metrics[7] << " Blue Skewness: " << dehazed_histogram_metrics[8] << endl;
 
-    std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
-
-    std::string folderPath = "";
-
-    if(this->output_folder != "")
-    {
-        auto t = std::time(nullptr);
-        auto tm = *std::localtime(&t);
-        std::ostringstream oss;
-        oss << std::put_time(&tm, "%Y%m%d_%H%M%S");
-        std::string date_time = oss.str();
-    
-        folderPath = this->output_folder + IMAGE_FOLDER_PREFIX + "[" + IMAGE_NAME + "]" + FILE_NAME_SPACE_DIVIDER + date_time;
-
-        if (mkdir(folderPath.c_str(), 0777) == -1)
-        {
-            std::cerr << "Error creating output folder!" << std::endl;
-            return std::vector<double>();
-        }
-    }
-
-    const std::string original_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "original";
-    imwrite(original_image_location + IMAGE_TYPE, in_img);
-
-    const std::string dehazed_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "dehazed";
-    imwrite(dehazed_image_location + IMAGE_TYPE, dehazed_image);
-
-    const std::string fog_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "fog";
-    imwrite(fog_image_location + IMAGE_TYPE, fog_image);
-
-    Mat finalImage = ipp_combine_luminosity_overlay(fog_image, in_img, alpha_adjusted_image);
-
-    const std::string final_image_location = folderPath + FOLDER_SPLITTER + IMAGE_NAME + FILE_NAME_SPACE_DIVIDER + "final";
-    imwrite(final_image_location + IMAGE_TYPE, finalImage);
-    #endif
+    cout << "----------------------------------------------------------------------------------------------------------------" << endl;
+#endif
 
     return concatenated_features;
 }
-
-#pragma region File System
-Mat fs_load_image(const std::string &path)
-{
-    Mat image = imread(path, IMREAD_COLOR);
-    if (image.empty())
-    {
-        std::cerr << "Error loading image!" << std::endl;
-        exit(-1);
-    }
-    return image;
-}
-
-std::vector<std::string> fs_get_image_paths_from_folder(const std::string &folderPath)
-{
-    std::vector<std::string> imagePaths;
-    for (const auto &entry : fs::directory_iterator(folderPath))
-    {
-        if (entry.is_regular_file())
-        {
-            std::string path = entry.path().string();
-            if (path.find(".jpg") != std::string::npos || path.find(".png") != std::string::npos || path.find(".jpeg") != std::string::npos || path.find(".bmp") != std::string::npos || path.find(".JPEG") != std::string::npos)
-            {
-                imagePaths.push_back(path);
-            }
-        }
-    }
-    return imagePaths;
-}
-#pragma endregion
 
 #pragma region Histogram
 void histogram_draw(Mat &b_hist, Mat &g_hist, Mat &r_hist, std::string savePath, int histogram_size)
@@ -303,7 +217,7 @@ Mat ipp_alpha_adjust(Mat image, int rows, int cols, int pixelValueAverageUpperBo
             }
         }
     }
-    
+
     return outputWithAlpha;
 }
 
@@ -346,19 +260,21 @@ double calc_fog_impact_index(const Mat &in_img, const Mat &dehazed_image, const 
     Scalar pixel_intesity_delta = calc_pixel_intensity_delta(in_img, dehazed_image);
 
     double normalized_intensity_change = (pixel_intesity_delta[0] + pixel_intesity_delta[1] + pixel_intesity_delta[2]) / (255.0 * 3 * rows * cols);
-    
+
     double fog_impact_index = normalized_intensity_change + normalized_contrast_improvement + fog_coverage;
 
     return fog_impact_index;
 }
 
-PerChannelHistogramMetrics calc_per_channel_histogram_metrics(const Mat& hist, int histogram_size, float histogram_range[]) {
+PerChannelHistogramMetrics calc_per_channel_histogram_metrics(const Mat &hist, int histogram_size, float histogram_range[])
+{
     double sum = 0.0, sum_squared = 0.0, sum_cubed = 0.0;
     double total_pixels = 0.0;
 
     float bin_width = (histogram_range[1] - histogram_range[0]) / histogram_size;
 
-    for (int i = 0; i < histogram_size; i++) {
+    for (int i = 0; i < histogram_size; i++)
+    {
         float bin_value = hist.at<float>(i);
         float intensity = histogram_range[0] + i * bin_width;
 
@@ -372,18 +288,18 @@ PerChannelHistogramMetrics calc_per_channel_histogram_metrics(const Mat& hist, i
 
     result.mean = sum / total_pixels;
 
-    result.variance = (sum_squared / total_pixels) - (result.mean  * result.mean );
-    result.skewness = ((sum_cubed / total_pixels) - 3 * result.mean  * result.variance - (result.mean  * result.mean  * result.mean )) / std::pow(std::sqrt(result.variance), 3);
+    result.variance = (sum_squared / total_pixels) - (result.mean * result.mean);
+    result.skewness = ((sum_cubed / total_pixels) - 3 * result.mean * result.variance - (result.mean * result.mean * result.mean)) / std::pow(std::sqrt(result.variance), 3);
 
     return result;
 }
 
-ImageHistogramMetrics calc_image_histogram_metrics(const Mat& image, int histogram_size, float histogram_range[]) 
+ImageHistogramMetrics calc_image_histogram_metrics(const Mat &image, int histogram_size, float histogram_range[])
 {
     std::vector<Mat> bgr_planes;
     split(image, bgr_planes);
 
-    const float* histRange = {histogram_range};
+    const float *histRange = {histogram_range};
     bool uniform = true, accumulate = false;
 
     Mat b_hist, g_hist, r_hist;
@@ -401,7 +317,8 @@ ImageHistogramMetrics calc_image_histogram_metrics(const Mat& image, int histogr
     return result;
 }
 
-ChannelIntensityRatio calc_channel_intensity_ratios(const Mat& image) {
+ChannelIntensityRatio calc_channel_intensity_ratios(const Mat &image)
+{
     std::vector<Mat> bgr_planes;
     split(image, bgr_planes);
 
@@ -462,13 +379,13 @@ Scalar calc_pixel_intensity_delta(const Mat image_1, const Mat image_2)
     return totalDiff;
 }
 
-int calc_alpha_255_ammount(const Mat image) 
+int calc_alpha_255_ammount(const Mat image)
 {
-    if (image.channels() != CHANNEL_REQUIREMENT + 1) 
+    if (image.channels() != CHANNEL_REQUIREMENT + 1)
     {
-        std::cerr << "Image does not have an alpha channel!" << std::endl;
+        cerr << "Image does not have an alpha channel!" << endl;
     }
- 
+
     std::vector<Mat> channels;
     split(image, channels);
     Mat alphaChannel = channels[3];
@@ -480,7 +397,7 @@ int calc_alpha_255_ammount(const Mat image)
 #pragma endregion
 
 #pragma region Data Functions
-std::vector<double> extract_all_histogram_features(const ImageHistogramMetrics& hist_metrics, const ChannelIntensityRatio& channel_ratios) 
+std::vector<double> extract_all_histogram_features(const ImageHistogramMetrics &hist_metrics, const ChannelIntensityRatio &channel_ratios)
 {
     std::vector<double> features = extract_histogram_metrics(hist_metrics);
 
@@ -491,7 +408,7 @@ std::vector<double> extract_all_histogram_features(const ImageHistogramMetrics& 
     return features;
 }
 
-std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics& hist_metrics) 
+std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics &hist_metrics)
 {
     std::vector<double> features;
 

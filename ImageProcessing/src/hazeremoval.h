@@ -5,6 +5,11 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
+using namespace cv;
+using std::cout;
+using std::cerr;
+using std::endl;
+
 #pragma region Common Constants
 const int CHANNEL_REQUIREMENT = 3;
 
@@ -39,6 +44,7 @@ private:
 	int channels;
 };
 
+#pragma region Dark Channel Prior Calculations
 void get_dark_channel(const cv::Mat *p_src, std::vector<Pixel> &tmp_vec, int rows, int cols, int channels, int radius);
 
 void get_air_light(const cv::Mat *p_src, std::vector<Pixel> &tmp_vec, cv::Vec3d *p_Alight, int rows, int cols, int channels);
@@ -52,5 +58,6 @@ void get_fog(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_fog, int r
 void recover(const cv::Mat *p_src, const cv::Mat *p_gtran, cv::Mat *p_dst, cv::Vec3d *p_Alight, int rows, int cols, int channels, double t0);
 
 void assign_data(unsigned char *outdata, const cv::Mat *p_dst, int rows, int cols, int channels);
+#pragma endregion
 
 #endif // !HAZE_REMOVAL_H
