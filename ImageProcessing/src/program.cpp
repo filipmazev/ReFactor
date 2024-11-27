@@ -1,5 +1,9 @@
 #include "program.h"
 
+/// @brief Create a CSV of enhanced metadata from a dataset (requires a csv (that has Filepaths), the full path to your images, a full path to the output folder)
+/// @param argc | needs 3 arguments
+/// @param args | <input_csv> <images_folder_full_path> <output_folder_full_path>
+/// @return 
 bool process_CSV_to_enhanced_metadata(int argc, char **args)
 {
     if (argc < 3)
