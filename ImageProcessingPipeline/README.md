@@ -21,7 +21,7 @@ g++ -std=c++17 -shared -fpic \
 -I<path_to_java_headers_darwin> \
 -I<path_to_open_cv_headers> \
 Java/Java_ImagePipeline_ExtractEnhachedMetadata.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp \
--o libImagePipeline.so \
+-o Java/libImagePipeline.so \
 `pkg-config --cflags --libs opencv4`
 
 g++ -std=c++17 -shared -fpic -I<path_to_java_headers> -I<path_to_open_cv_headers> -o \ 
