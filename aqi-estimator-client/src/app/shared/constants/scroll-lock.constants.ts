@@ -1,0 +1,1 @@
+export const SCROLL_LOCK_INSTANCE_IDENTIFIER = 'scroll_lock_instance_';

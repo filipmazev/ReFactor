@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     colors: {
+      'primary': 'var(--primary)',
+      'secondary': 'var(--secondary)',
+      'accent': 'var(--accent)',
     },
     screens: {
       'xs': {'raw': '(max-width: 350px)'},
@@ -18,10 +21,18 @@ module.exports = {
     },
     extend: {
       backgroundColor: {
+        'primary': 'var(--bg_primary)',
+        'secondary': 'var(--bg_secondary)',
+        'accent': 'var(--bg_accent)',
+        'accent_alt': 'var(--bg_accent_alt)',
       },
       backgroundImage: {
       },
       textColor: {
+        'primary': 'var(--text_primary)',
+        'secondary': 'var(--text_secondary)',
+        'accent': 'var(--text_accent)',
+        'accent_alt': 'var(--text_accent_alt)',
       },
       fontFamily: {
         'inter': 'Inter',

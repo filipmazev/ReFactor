@@ -9,7 +9,37 @@
 
 // Themeing Start
 @layer base {
-    :root {}
+    :root {
+        --primary: #ffffff;
+        --secondary: #000000;
+        --accent: #169568;
+        --accent_alt: #169568;
+
+        --bg_primary: #ffffff;
+        --bg_secondary: #ffffff;
+        --bg_accent: #169568;
+
+        --text_primary: #000000;
+        --text_secondary: #ffffff;
+        --text_accent: #169568;
+        --text_accent_alt: #169568;
+    }
+}
+
+.dark-theme {
+    --primary: #ffffff;
+    --secondary: #000000;
+    --accent: #169568;
+    --accent_alt: #169568;
+
+    --bg_primary: #ffffff;
+    --bg_secondary: #ffffff;
+    --bg_accent: #169568;
+
+    --text_primary: #000000;
+    --text_secondary: #ffffff;
+    --text_accent: #169568;
+    --text_accent_alt: #169568;
 }
 
 body {
