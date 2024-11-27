@@ -36,7 +36,6 @@ module.exports = {
       },
       fontFamily: {
         'inter': 'Inter',
-        'alegreya': 'Alegreya',
       }
     },
   },
