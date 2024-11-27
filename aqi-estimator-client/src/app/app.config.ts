@@ -28,7 +28,10 @@ export const appConfig: ApplicationConfig = {
                 deps: [HttpClient]
            }
         }),
-    ), provideAnimationsAsync(),
+    ), provideAnimationsAsync(), provideServiceWorker('ngsw-worker.js', {
+            enabled: !isDevMode(),
+            registrationStrategy: 'registerWhenStable:30000'
+          }),
   ],
 };
 
