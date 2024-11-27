@@ -77,7 +77,7 @@ body {
 }
 
 body nav {
-    position: sticky;
+    height: 4rem;
     top: 0;
 }
 
@@ -314,16 +314,6 @@ mat-dialog-container {
     background-repeat: no-repeat;
     width: 3.75em;
     height: 1.75rem;
-}
-
-.sticky-element {
-    position: fixed;
-    top: 0;
-    width: 100%;
-}
-
-.sticky-element+.content {
-    padding-top: 60px;
 }
 
 .not-selectable {
