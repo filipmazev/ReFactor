@@ -1,8 +1,5 @@
 
 *.jpg
-*.csv
 *.xlsx
 *.docx
 *.png
-
-/AQI Dataset
