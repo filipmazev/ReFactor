@@ -1,8 +1,8 @@
 #ifndef IMAGE_PIPELINE_H
 #define IMAGE_PIPELINE_H
 
-#include "hazeremoval.h"
-#include "glcm.h"
+#include "DCP/hazeremoval.h"
+#include "GLCM/glcm.h"
 
 #include <opencv2/opencv.hpp>
 
