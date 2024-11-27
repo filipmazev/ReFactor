@@ -1,3 +1,12 @@
+///
+// Written in 2024 by Filip Mazev (@filipmazev)
+//
+// To the extent possible under law, the author(s) have dedicated all
+// copyright and related and neighboring rights to this software to the
+// public domain worldwide. This software is distributed without any warranty.
+//
+// CC0 Public Domain Dedication <http://creativecommons.org/publicdomain/zero/1.0/>.
+///
 #include "imagepipeline.h"
 
 // <summary>
@@ -338,5 +347,67 @@ std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics &hist_
     features.push_back(hist_metrics.B.skewness);
 
     return features;
+}
+#pragma endregion
+
+#pragma region Helper Functions
+std::string base64_encode(const std::vector<uchar>& input) 
+{
+    static const char* base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    std::string output;
+    int val = 0, valb = -6;
+    
+    for (uchar c : input) 
+    {
+        val = (val << 8) + c;
+        valb += 8;
+
+        while (valb >= 0) 
+        {
+            output.push_back(base64_chars[(val >> valb) & 0x3F]);
+            valb -= 6;
+        }
+    }
+    
+    if (valb > -6) 
+    {
+        output.push_back(base64_chars[((val << 8) >> (valb + 8)) & 0x3F]);
+    }
+
+    while (output.size() % 4) 
+    {
+        output.push_back('=');
+    }
+    
+    return output;
+}
+
+std::vector<uchar> base64_decode(const std::string& input) 
+{
+    static const char* base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    std::vector<uchar> output;
+    std::vector<int> T(256, -1);
+
+    for (int i = 0; i < 64; i++) 
+    {
+        T[base64_chars[i]] = i;
+    }
+    
+    int val = 0, valb = -8;
+
+    for (uchar c : input) 
+    {
+        if (T[c] == -1) break;
+
+        val = (val << 6) + T[c];
+        valb += 6;
+        if (valb >= 0) 
+        {
+            output.push_back((val >> valb) & 0xFF);
+            valb -= 8;
+        }
+    }
+    
+    return output;
 }
 #pragma endregion

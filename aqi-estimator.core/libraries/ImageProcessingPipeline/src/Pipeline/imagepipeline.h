@@ -1,3 +1,12 @@
+///
+// Written in 2024 by Filip Mazev (@filipmazev)
+//
+// To the extent possible under law, the author(s) have dedicated all
+// copyright and related and neighboring rights to this software to the
+// public domain worldwide. This software is distributed without any warranty.
+//
+// CC0 Public Domain Dedication <http://creativecommons.org/publicdomain/zero/1.0/>.
+///
 #ifndef IMAGE_PIPELINE_H
 #define IMAGE_PIPELINE_H
 
@@ -91,6 +100,12 @@ int calc_alpha_255_ammount(const Mat image);
 std::vector<double> extract_all_histogram_features(const ImageHistogramMetrics &hist_metrics, const ChannelIntensityRatio &channel_ratios);
 
 std::vector<double> extract_histogram_metrics(const ImageHistogramMetrics &hist_metrics);
+#pragma endregion
+
+#pragma region Helper Functions
+std::string base64_encode(const std::vector<uchar>& input);
+
+std::vector<uchar> base64_decode(const std::string& input);
 #pragma endregion
 
 #endif // !IMAGE_PIPELINE_H
