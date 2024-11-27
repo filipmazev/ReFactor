@@ -15,9 +15,9 @@ g++ -DDEBUG -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/H
 ```
 
 ## Compile for Function | Process Image Into Byte Array
-# This function will convert your image into a byte array and save that result to a given folder. It requires 2 arguments:
-# 1. full image path
-# 2. full output path (where you want to save the result)
+### This function will convert your image into a byte array and save that result to a given folder. It requires 2 arguments:
+#### 1. full image path
+#### 2. full output path (where you want to save the result)
 
 ```bash
 g++ -DIMAGE_TO_BYTE_ARRAY -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
@@ -30,8 +30,8 @@ g++ -DIMAGE_TO_BYTE_ARRAY -std=c++17 -fpic -I. -I/System/Library/Frameworks/Java
 ```
 
 ## Compile for Function | Enhanced Metadata from Byte Array
-# This function will extract enhanced metadata from a given byte array. The byte array is taken from a provided .txt file, the function required 1 argument:
-# 1. byte array text file full path
+### This function will extract enhanced metadata from a given byte array. The byte array is taken from a provided .txt file, the function required 1 argument:
+#### 1. byte array text file full path
 
 ```bash
 g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
@@ -44,10 +44,10 @@ g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Fra
 ```
 
 ## Compile for Function | CSV Dataset to Enhanced Metadata CSV dataset
-# This function will extract enhanced metadata for all images in a dataset. Please follow the exact structure of the CSV you provide from Mock_Dataset.csv or IND_and_Nep_AQI_Dataset.csv (Found in the data folder). The function requires 3 arguments:
-# 1. full path to input csv
-# 2. full path to folder containing images of dataset
-# 3. full path of ouput csv (where you want to save the result)
+### This function will extract enhanced metadata for all images in a dataset. Please follow the exact structure of the CSV you provide from Mock_Dataset.csv or IND_and_Nep_AQI_Dataset.csv (Found in the data folder). The function requires 3 arguments:
+#### 1. full path to input csv
+#### 2. full path to folder containing images of dataset
+#### 3. full path of ouput csv (where you want to save the result)
 
 ```bash
 g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
