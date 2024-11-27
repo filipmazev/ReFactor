@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { WebcamImage, WebcamModule } from 'ngx-webcam';
+import { EMPTY_STRING } from '../../shared/constants/common.constants';
 
 @Component({
   selector: 'app-image-capture',
@@ -12,13 +13,24 @@ import { WebcamImage, WebcamModule } from 'ngx-webcam';
   styleUrl: './image-capture.component.scss'
 })
 export class ImageCaptureComponent {
-  permissionStatus: boolean = false;
-  camData?: MediaStream;
-  capturedImage?: string;
-  trigger: Subject<void> = new Subject<void>();
+  protected permissionStatus: boolean = false;
+  protected camData?: MediaStream;
+  protected capturedImage?: string;
 
-  get $trigger(): Observable<void> {
+  protected trigger: Subject<void> = new Subject<void>();
+
+  private facingMode: string = 'environment';
+
+  protected get $trigger(): Observable<void> {
     return this.trigger.asObservable();
+  }
+
+  protected get videoOptions(): MediaTrackConstraints {
+    const result: MediaTrackConstraints = {};
+    if (this.facingMode && this.facingMode !== EMPTY_STRING) {
+        result.facingMode = { ideal: this.facingMode };
+    }
+    return result;
   }
 
   checkPermission(): void {

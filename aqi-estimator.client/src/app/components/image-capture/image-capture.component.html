@@ -1,6 +1,11 @@
 @if(camData) {
     <div>
-        <webcam [trigger]="$trigger" (imageCapture)="handleImage($event)"></webcam>
+        <webcam 
+            [trigger]="$trigger" 
+            (imageCapture)="handleImage($event)"
+            [videoOptions]="videoOptions" 
+            [allowCameraSwitch]="true">
+        </webcam>
         <button (click)="captureImage()">Capture</button>
     </div>
 } @else {
