@@ -2,8 +2,6 @@
 #define IMAGE_PIPELINE_H
 
 #include "DCP/hazeremoval.h"
-#include "GLCM/glcm.h"
-
 #include <opencv2/opencv.hpp>
 
 using namespace cv;
@@ -45,15 +43,13 @@ typedef struct _channel_intensity_ratio
 class ImagePipeline
 {
 public:
-    ImagePipeline(std::string output_folder, int image_pixels_w_max, int image_pixels_h_max, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels);
+    ImagePipeline(int image_pixels_w_max, int image_pixels_h_max, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels);
     ~ImagePipeline();
 
 public:
     std::vector<double> ExtractEnhancedMetadata(cv::Mat &in_img);
 
 private:
-    std::string output_folder{""};
-
     int image_pixels_w_max{0};
     int image_pixels_h_max{0};
 

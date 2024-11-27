@@ -6,10 +6,8 @@
 // histogram_size | Histogram size is the number of bins in the histogram.
 // histogram_range | Histogram range is the range of the histogram.
 // </summary>
-ImagePipeline::ImagePipeline(std::string output_folder, int image_pixels_w_max, int image_pixels_h_max, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels)
+ImagePipeline::ImagePipeline(int image_pixels_w_max, int image_pixels_h_max, int pixel_lower_bound, int histogram_size, float *histogram_range, int grayLevels)
 {
-    this->output_folder = output_folder;
-
     this->image_pixels_w_max = image_pixels_w_max;
     this->image_pixels_h_max = image_pixels_h_max;
 
@@ -79,24 +77,8 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(cv::Mat &in_img)
     ImageHistogramMetrics dehaze_image_histogram_metrics = calc_image_histogram_metrics(dehazed_image, this->histogram_size, this->histogram_range);
     std::vector<double> dehazed_histogram_metrics = extract_histogram_metrics(dehaze_image_histogram_metrics);
 
-    GLCMFeatures original_glcm = calc_GLCM_parallel(in_img, this->grayLevels);
-    std::vector<double> original_texture_eigenvalues = {original_glcm.energy, original_glcm.contrast, original_glcm.homogenity, original_glcm.entropy};
-
-    GLCMFeatures fog_glcm = calc_GLCM_parallel(fog_image, this->grayLevels);
-    std::vector<double> fog_texture_eigenvalues = {fog_glcm.energy, fog_glcm.contrast, fog_glcm.homogenity, fog_glcm.entropy};
-
-    double energy_delta = fog_glcm.energy - original_glcm.energy;
-    double contrast_delta = fog_glcm.contrast - original_glcm.contrast;
-    double homogenity_delta = fog_glcm.homogenity - original_glcm.homogenity;
-    double entropy_delta = fog_glcm.entropy - original_glcm.entropy;
-
-    std::vector<double> texture_eigenvalues_delta = {energy_delta, contrast_delta, homogenity_delta, entropy_delta};
-
     std::vector<double> concatenated_features;
     concatenated_features.push_back(fog_impact_index);
-
-    concatenated_features.insert(concatenated_features.end(), original_texture_eigenvalues.begin(), original_texture_eigenvalues.end());
-    concatenated_features.insert(concatenated_features.end(), texture_eigenvalues_delta.begin(), texture_eigenvalues_delta.end());
 
     concatenated_features.insert(concatenated_features.end(), airlightValues.begin(), airlightValues.end());
 
@@ -107,12 +89,6 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(cv::Mat &in_img)
     cout << "----------------------------------------------------------------------------------------------------------------" << endl;
 
     cout << "Fog Impact Index: " << fog_impact_index << endl;
-
-    cout << "Initial Image Texture Eigenvalues: " << endl;
-    cout << "Energy: " << original_glcm.energy << " Contrast: " << original_glcm.contrast << " Homogenity: " << original_glcm.homogenity << " Entropy: " << original_glcm.entropy << endl;
-
-    cout << "Texture Eigenvalues Delta: " << endl;
-    cout << "Energy: " << energy_delta << " Contrast: " << contrast_delta << " Homogenity: " << homogenity_delta << " Entropy: " << entropy_delta << endl;
 
     cout << "Air Light R: " << airlightR << " Air Light G: " << airlightG << " Air Light B: " << airlightB << endl;
 

@@ -18,9 +18,6 @@ const std::vector<std::string> OUTPUT_COLUMN_NAMES = {
     "hour",
     "fog_impact_index",
 
-    "o_glcm_energy", "o_glcm_contrast", "o_glcm_homogenity", "o_glcm_entropy",
-    "glcm_energy_delta", "glcm_contrast_delta", "glcm_homogenity_delta", "glcm_entropy_delta",
-
     "airligh_r", "airlight_g", "airlight_b",
 
     "o_r_mean", "o_r_variance", "o_r_skewness",

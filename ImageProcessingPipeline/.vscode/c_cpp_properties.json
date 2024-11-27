@@ -4,7 +4,8 @@
             "name": "Mac",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/opt/homebrew/opt/opencv/include/opencv4"
+                "/opt/homebrew/opt/opencv/include/opencv4",
+                "/Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include/jni.h",
             ],
             "defines": [],
             "macFrameworkPath": [

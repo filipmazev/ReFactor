@@ -24,7 +24,7 @@ bool process_CSV_to_enhanced_metadata(int argc, char **args)
     float histogram_range[2] = {0, 256};
     int grayLevels = 256;
 
-    ImagePipeline pipeline = ImagePipeline(OUTPUT_FOLDER_DESTINATION, image_pixels_w_max, image_pixels_h_max, pixel_lower_bound, histogram_size, histogram_range, grayLevels);
+    ImagePipeline pipeline = ImagePipeline(image_pixels_w_max, image_pixels_h_max, pixel_lower_bound, histogram_size, histogram_range, grayLevels);
 
     std::ifstream inputCsv(INPUT_CSV_PATH);
 
