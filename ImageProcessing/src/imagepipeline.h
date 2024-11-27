@@ -63,12 +63,6 @@ private:
     int grayLevels{256};
 };
 
-#pragma region Histogram
-void histogram_draw(Mat &b_hist, Mat &g_hist, Mat &r_hist, std::string savePath, int histogram_size);
-
-void histogram_process(const Mat &image, std::string savePath, int histogram_size, float histogram_range[]);
-#pragma endregion
-
 #pragma region Image Processing Pipeline
 Mat ipp_alpha_adjust(Mat image, int rows, int cols, int pixelValueAverageUpperBound);
 

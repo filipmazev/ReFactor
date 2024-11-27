@@ -134,67 +134,6 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(cv::Mat &in_img)
     return concatenated_features;
 }
 
-#pragma region Histogram
-void histogram_draw(Mat &b_hist, Mat &g_hist, Mat &r_hist, std::string savePath, int histogram_size)
-{
-    int hist_w = 512;
-    int hist_h = 400;
-    int bin_w = cvRound((double)hist_w / histogram_size);
-
-    Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
-
-    normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1,
-              Mat());
-    normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1,
-              Mat());
-    normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1,
-              Mat());
-
-    for (int i = 1; i < histogram_size; i++)
-    {
-        line(
-            histImage,
-            Point(bin_w * (i - 1), hist_h - cvRound(b_hist.at<float>(i - 1))),
-            Point(bin_w * (i), hist_h - cvRound(b_hist.at<float>(i))),
-            Scalar(255, 0, 0), 2, 8, 0);
-        line(
-            histImage,
-            Point(bin_w * (i - 1), hist_h - cvRound(g_hist.at<float>(i - 1))),
-            Point(bin_w * (i), hist_h - cvRound(g_hist.at<float>(i))),
-            Scalar(0, 255, 0), 2, 8, 0);
-        line(
-            histImage,
-            Point(bin_w * (i - 1), hist_h - cvRound(r_hist.at<float>(i - 1))),
-            Point(bin_w * (i), hist_h - cvRound(r_hist.at<float>(i))),
-            Scalar(0, 0, 255), 2, 8, 0);
-    }
-
-    imwrite(savePath, histImage);
-}
-
-void histogram_process(const Mat &image, std::string savePath, int histogram_size, float histogram_range[])
-{
-    std::vector<Mat> bgr_planes;
-    split(image, bgr_planes);
-
-    const float *histRange = {histogram_range};
-
-    bool uniform = true;
-    bool accumulate = false;
-
-    Mat b_hist, g_hist, r_hist;
-
-    calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histogram_size,
-             &histRange, uniform, accumulate);
-    calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histogram_size,
-             &histRange, uniform, accumulate);
-    calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histogram_size,
-             &histRange, uniform, accumulate);
-
-    histogram_draw(b_hist, g_hist, r_hist, savePath, histogram_size);
-}
-#pragma endregion
-
 #pragma region Image Processing Pipeline
 Mat ipp_alpha_adjust(Mat image, int rows, int cols, int pixelValueAverageUpperBound)
 {
