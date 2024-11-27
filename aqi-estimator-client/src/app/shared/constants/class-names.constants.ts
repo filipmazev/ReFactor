@@ -1,0 +1,1 @@
+export const NAV_BAR_IDENTITY_CLASS_NAME = 'nav-bar';
