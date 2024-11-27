@@ -1,0 +1,21 @@
+{
+  "name": "aqi-pulse-eco",
+  "short_name": "AQI Pulse Eco",
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "https://ecolens.mk/",
+  "start_url": "https://ecolens.mk/",
+  "icons": [
+    {
+        "src": "assets/icons/android-chrome-192x192.png",
+        "sizes": "32x32",
+        "type": "image/ico"
+    },
+    {
+        "src": "assets/icons/apple-touch-icon.png",
+        "sizes": "72x72",
+        "type": "image/png"
+    }
+  ]
+}
