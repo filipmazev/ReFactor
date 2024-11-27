@@ -1,3 +1,12 @@
+///
+// Written in 2024 by Filip Mazev (@filipmazev)
+//
+// To the extent possible under law, the author(s) have dedicated all
+// copyright and related and neighboring rights to this software to the
+// public domain worldwide. This software is distributed without any warranty.
+//
+// CC0 Public Domain Dedication <http://creativecommons.org/publicdomain/zero/1.0/>.
+///
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
@@ -31,6 +40,10 @@ const std::vector<std::string> OUTPUT_COLUMN_NAMES = {
 #pragma endregion
 
 bool process_CSV_to_enhanced_metadata(int argc, char **args);
+
+bool process_byteArray_to_enhanced_metadata(int argc, char **args);
+
+bool process_image_into_byte_array(int argc, char **args);
 
 #pragma region File System
 std::string h_clean_string(const std::string &input);
