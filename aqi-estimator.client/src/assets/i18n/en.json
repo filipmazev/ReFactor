@@ -1,5 +1,6 @@
 {
     "footer": {
-        "logo_name": "pulse.eco"
+        "version": "PRE-ALPHA",
+        "caution": "This Application is in a pre-alpha build, we cannot guarantee the validity of the results for AQI estimation with full confidence. We are constantly improving the application to ensure the most accurate results. Any results from this application should be taken with a grain of salt."
     }
 }

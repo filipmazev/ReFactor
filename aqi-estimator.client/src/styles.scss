@@ -12,48 +12,46 @@
     :root {
         --primary: #ffffff;
         --secondary: #000000;
-        --accent: #169568;
-        --accent_alt: #169568;
+        --accent: #34327C;
+        --accent_alt: #211F5E;
 
         --bg_primary: #ffffff;
-        --bg_secondary: #ffffff;
-        --bg_accent: #169568;
+        --bg_secondary: #34327C;
+        --bg_accent: #211F5E;
 
         --text_primary: #000000;
         --text_secondary: #ffffff;
-        --text_accent: #169568;
-        --text_accent_alt: #169568;
+        --text_accent: #34327C;
+        --text_accent_alt: #211F5E;
 
-        --scroll_bg: #b8d9c1;
-        --scroll_thumb: linear-gradient(278deg, #5fab92 -10.44%, #0d835a 100%);
-        --scroll_thumb_highlighted: linear-gradient(278deg, #63af95 -10.44%, #127d57 100%);
+        --scroll_bg: #706dc4;
+        --scroll_thumb: linear-gradient(278deg, #5d59c1 -10.44%, #34327C 100%);
+        --scroll_thumb_highlighted: linear-gradient(278deg, #5d59c1 -10.44%, #34327C 100%);
 
-        --logo_path: url(./assets/svg/logo_dark.svg);
-        --logo_path_alt: url(./assets/svg/logo_dark.svg);
+        --logo_path: url(./assets/svg/logo.svg);
     }
 }
 
 .dark-theme {
-    --primary: #ffffff;
-    --secondary: #000000;
-    --accent: #169568;
-    --accent_alt: #169568;
+    --primary: #000000;
+    --secondary: #ffffff;
+    --accent: #211F5E;
+    --accent_alt: #34327C;
 
-    --bg_primary: #ffffff;
-    --bg_secondary: #ffffff;
-    --bg_accent: #169568;
+    --bg_primary: #000000;
+    --bg_secondary: #211F5E;
+    --bg_accent: #34327C;
 
-    --text_primary: #000000;
-    --text_secondary: #ffffff;
-    --text_accent: #169568;
-    --text_accent_alt: #169568;
+    --text_primary: #ffffff;
+    --text_secondary: #000000;
+    --text_accent: #211F5E;
+    --text_accent_alt: #34327C;
 
-    --scroll_bg: #b8d9c1;
-    --scroll_thumb: linear-gradient(278deg, #5fab92 -10.44%, #0d835a 100%);
-    --scroll_thumb_highlighted: linear-gradient(278deg, #63af95 -10.44%, #127d57 100%);
+    --scroll_bg: #34327C;
+    --scroll_thumb: linear-gradient(278deg, #211F5E -10.44%, #5d59c1 100%);
+    --scroll_thumb_highlighted: linear-gradient(278deg, #211F5E -10.44%, #5d59c1 100%);
 
-    --logo_path: url(./assets/svg/logo_dark.svg);
-    --logo_path_alt: url(./assets/svg/logo_dark.svg);
+    --logo_path: url(./assets/svg/logo.svg);
 }
 
 body {
@@ -66,7 +64,11 @@ body.dark-theme {
 
 html,
 body {
-    height: 100%;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 body {
@@ -77,8 +79,23 @@ body {
 }
 
 body nav {
-    height: 4rem;
     top: 0;
+    width: 100%;
+    z-index: 100; 
+    height: 2.5rem;
+}
+
+body footer {
+    bottom: 0;
+    width: 100%;
+    z-index: 50; 
+}
+
+.content_container  {
+    flex: 1 1 auto; 
+    overflow-y: auto; 
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 // Themeing End
@@ -312,8 +329,8 @@ mat-dialog-container {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    width: 3.75em;
-    height: 1.75rem;
+    width: 2.75em;
+    height: 1.25rem;
 }
 
 .not-selectable {

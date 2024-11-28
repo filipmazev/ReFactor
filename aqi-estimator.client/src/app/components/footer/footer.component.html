@@ -1,9 +1,10 @@
-<div class="relative lg:px-[15rem] md:px-[10rem] px-4 w-full flex flex-col py-[2.25rem] bg-accent text-secondary mt-[10rem]">
-    <div class="flex flex-row gap-5 md:gap-[2rem] items-center align-middle">
-        <!-- Site Logo -->
-        <a href="/" class="logo"> </a>
-        <!-- Site Logo -->
-
-        <div class="max-w-[13rem] md:max-w-[20rem] text-wrap text-[.75rem] md:text-[1rem]"> {{ "footer.logo_name" | translate }} </div>
+<div class="bottom-0 select-none lg:px-[15rem] md:px-[10rem] px-4 w-full flex flex-col justify-center text-center align-middle py-[2.25rem] text-secondary bg-primary opacity-90 backdrop-blur-md">
+    <div class="flex flex-col justify-center gap-[0.65rem]">
+        <div class="px-[0.65rem] self-center text-[0.6rem] font-semibold rounded-full pt-[0.25rem] w-fit bg-[#F5F5F5] text-[#9F9F9F]">
+            {{ "footer.version" | translate }}
+        </div>
+        <div class="text-primary opacity-60 text-[0.65rem] sm:text-xs">
+            {{ "footer.caution" | translate }}
+        </div>
     </div>
 </div>
