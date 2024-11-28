@@ -61,16 +61,16 @@ export class ImageCaptureComponent {
     const [header, data] = base64.split(',');
     const mimeMatch = header.match(/data:(.*?);base64/);  // Updated regular expression to correctly match mime type
     const mime = mimeMatch ? mimeMatch[1] : 'application/octet-stream';  // Default to 'application/octet-stream' if no mime type found
-    
+
     const binary = atob(data); // Decode base64 data
     const length = binary.length;
     const buffer = new ArrayBuffer(length);
     const view = new Uint8Array(buffer);
-  
+
     for (let i = 0; i < length; i++) {
       view[i] = binary.charCodeAt(i);
     }
-  
+
     return new Blob([view], { type: mime });
   }
 
@@ -86,7 +86,7 @@ export class ImageCaptureComponent {
       formData.append('image', imageBlob, 'captured-image.jpg');
 
       // Send the image via HTTP POST request
-      this.httpClient.post("http://localhost:8080/predict", formData).subscribe(
+      this.httpClient.post("http://localhost:8080/api/aqi/process", formData).subscribe(
         (response) => {
           console.log('Image uploaded successfully:', response);
         },
