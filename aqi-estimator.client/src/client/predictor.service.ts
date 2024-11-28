@@ -11,10 +11,10 @@ export class PredictorService {
 
     }
 
-    public predict(data: Blob): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
+    public predict(data: Blob): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
             try {
-                this.httpClient.post("http://localhost:8080/predict", data).pipe(take(1))
+                this.httpClient.post("http://localhost:8080/api/aqi/process", data).pipe(take(1))
                 .subscribe((response: any) => {
                     resolve(response);
                 });

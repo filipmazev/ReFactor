@@ -48,7 +48,7 @@ public class AQIController {
 
   @PostMapping("/process")
   public ResponseEntity<?> processAQI(
-          @RequestParam("photo") MultipartFile file,
+          @RequestParam("image") MultipartFile file,
           @RequestParam(value = "lat", required = false) Double lat,
           @RequestParam(value = "lon", required = false) Double lon
   ) {
