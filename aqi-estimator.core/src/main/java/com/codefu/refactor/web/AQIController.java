@@ -1,30 +1,172 @@
 package com.codefu.refactor.web;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.async.DeferredResult;
+import com.codefu.refactor.Calculator.AQICalculator;
+import com.codefu.refactor.imgProcessingInterpreter.ImagePipelineClass;
+import com.codefu.refactor.model.Responses.SensorData;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
+import java.util.stream.Collectors;
+
+
 
 @RestController
+@RequestMapping("/api/aqi")
 public class AQIController {
 
-  private final ExecutorService bakers = Executors.newFixedThreadPool(5);
+  private final RestTemplate restTemplate;
+  private final double LOCATION_RADIUS = 5.0;
 
-  @GetMapping("/bake")
-  public DeferredResult<String> publisher() {
-    DeferredResult<String> output = new DeferredResult<>();
-    bakers.execute(() -> {
-      try {
-        Thread.sleep(3000L);
-        output.setResult("Result 1");
-        Thread.sleep(2000L);
-        output.setResult("Result 2");
-      } catch (Exception e) {
-        // ...
+  public AQIController(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
+
+  @GetMapping("/test")
+  public ResponseEntity<String> test(){
+    return ResponseEntity.ok("Hello World");
+  }
+
+  @PostMapping("/process")
+  public ResponseEntity<?> processAQI(
+          @RequestParam("photo") byte[] photo,
+          @RequestParam(value = "lat", required = false) Double lat,
+          @RequestParam(value = "lon", required = false) Double lon
+  ) {
+    try {
+      Map<String, Double> calculatedAQI = null;
+
+      // Step 1: If location is provided, fetch sensor data
+      if (lat != null && lon != null) {
+        SensorData[] sensors = fetchSensorsWithAuth();
+        if (sensors != null) {
+          // Filter sensors within a 5 km radius and calculate averages
+          Map<String, Double> sensorAverages = calculateSensorAverages(sensors, lat, lon);
+          calculatedAQI = calculateAQI(sensorAverages);
+        }
       }
-    });
-    return output;
+
+      // Step 2: Call Flask app for AQI prediction
+      String flaskApiUrl = "http://127.0.0.1:5000/predict";
+      double[] imageFeatures = ImagePipelineClass.ProcessImage(photo); // Custom logic to extract features
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.APPLICATION_JSON);
+      HttpEntity<double[]> requestEntity = new HttpEntity<>(imageFeatures, headers);
+
+      ResponseEntity<Double> flaskResponse = restTemplate.exchange(
+              flaskApiUrl,
+              HttpMethod.POST,
+              requestEntity,
+              Double.class
+      );
+
+      Double predictedAQI = flaskResponse.getBody();
+
+      // Step 3: Combine results
+      Map<String, Object> response = new HashMap<>();
+      if (predictedAQI != null) {
+        response.put("predictedAQI", predictedAQI);
+      }
+      if (calculatedAQI != null) {
+        response.put("calculatedSensorAQI", calculatedAQI);
+      }
+
+      return ResponseEntity.ok(response);
+
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing AQI: " + e.getMessage());
+    }
+  }
+
+  private SensorData[] fetchSensorsWithAuth() {
+    // Use java.util.Base64 to encode credentials
+    String plainCreds = "userName" + ":" + "userPassword";
+    byte[] plainCredsBytes = plainCreds.getBytes(StandardCharsets.UTF_8);
+    String base64Creds = Base64.getEncoder().encodeToString(plainCredsBytes);
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Basic " + base64Creds);
+
+    HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+    String sensorApiUrl = "https://skopje.pulse.eco/rest/current";
+
+    ResponseEntity<SensorData[]> responseEntity = restTemplate.exchange(
+            sensorApiUrl,
+            HttpMethod.GET,
+            requestEntity,
+            SensorData[].class
+    );
+
+    return responseEntity.getBody();
+  }
+
+  private Map<String, Double> calculateSensorAverages(SensorData[] sensors, double userLat, double userLon) {
+    // Group sensors by type after filtering by distance
+    Map<String, List<SensorData>> sensorGroups = Arrays.stream(sensors)
+            .filter(sensor -> isWithinRadius(userLat, userLon, parsePosition(sensor.getPosition()), LOCATION_RADIUS))
+            .collect(Collectors.groupingBy(SensorData::getType));
+
+    Map<String, Double> sensorAverages = new HashMap<>();
+    for (String type : sensorGroups.keySet()) {
+      // Sort sensors by proximity and take the closest 3
+      List<SensorData> sensorList = sensorGroups.get(type).stream()
+              .sorted(Comparator.comparingDouble(sensor ->
+                      calculateDistance(userLat, userLon, parsePosition(sensor.getPosition()))))
+              .limit(3)
+              .collect(Collectors.toList());
+
+      // Calculate the average of the sensor values
+      double average = sensorList.stream()
+              .mapToDouble(sensor -> Double.parseDouble(sensor.getValue()))
+              .average()
+              .orElse(0.0);
+
+      sensorAverages.put(type, average);
+    }
+
+    return sensorAverages;
+  }
+
+  // Update the isWithinRadius method to use the parsed position
+  private boolean isWithinRadius(double userLat, double userLon, double[] sensorPosition, double radiusKm) {
+    double distance = calculateDistance(userLat, userLon, sensorPosition);
+    return distance <= radiusKm;
+  }
+
+  // Calculate the distance between two lat/lon points
+  private double calculateDistance(double lat1, double lon1, double[] sensorPosition) {
+    double lat2 = sensorPosition[0];
+    double lon2 = sensorPosition[1];
+    double earthRadiusKm = 6371;
+
+    double dLat = Math.toRadians(lat2 - lat1);
+    double dLon = Math.toRadians(lon2 - lon1);
+    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+            + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+            * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return earthRadiusKm * c;
+  }
+
+  private Map<String, Double> calculateAQI(Map<String, Double> sensorAverages) {
+    return AQICalculator.calculateAQI(sensorAverages);
+  }
+
+  public static class AQIPrediction {
+    private double predictedAqi;
+
+    // Getters and setters
+  }
+
+  private double[] parsePosition(String position) {
+    String[] parts = position.split(",");
+    if (parts.length != 2) {
+      throw new IllegalArgumentException("Invalid position format: " + position);
+    }
+    return new double[]{Double.parseDouble(parts[0]), Double.parseDouble(parts[1])};
   }
 }

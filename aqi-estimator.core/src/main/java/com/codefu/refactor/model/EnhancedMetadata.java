@@ -1,10 +1,12 @@
 package com.codefu.refactor.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Entity
+
+
 @SequenceGenerator(name = "ENHANCED_METADATA_SEQUENCE", sequenceName = "ENHANCED_METADATA_SEQUENCE", allocationSize = 1)
 public class EnhancedMetadata {
 
