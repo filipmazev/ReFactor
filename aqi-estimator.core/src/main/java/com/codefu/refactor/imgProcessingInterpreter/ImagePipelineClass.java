@@ -1,8 +1,5 @@
 package com.codefu.refactor.imgProcessingInterpreter;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 public class ImagePipelineClass {
     static {
         System.loadLibrary("libImagePipeline.so"); 

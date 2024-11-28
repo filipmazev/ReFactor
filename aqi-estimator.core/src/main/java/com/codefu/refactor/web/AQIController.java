@@ -9,10 +9,16 @@ import org.springframework.web.client.RestTemplate;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.stream.Collectors;
 
 
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/aqi")
@@ -30,9 +36,19 @@ public class AQIController {
     return ResponseEntity.ok("Hello World");
   }
 
+    @PostMapping("/predict")
+    public ResponseEntity<Void> predictAQI(@RequestParam("image") MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            System.out.println("File is empty");
+        }
+        byte[] imageBytes = file.getBytes();
+        double[] processedImage = ImagePipelineClass.ProcessImage(imageBytes);
+        return ResponseEntity.ok().build();
+    }
+
   @PostMapping("/process")
   public ResponseEntity<?> processAQI(
-          @RequestParam("photo") byte[] photo,
+          @RequestParam("photo") MultipartFile file,
           @RequestParam(value = "lat", required = false) Double lat,
           @RequestParam(value = "lon", required = false) Double lon
   ) {
@@ -49,9 +65,11 @@ public class AQIController {
         }
       }
 
+      byte[] imageBytes = file.getBytes();
+
       // Step 2: Call Flask app for AQI prediction
       String flaskApiUrl = "http://127.0.0.1:5000/predict";
-      double[] imageFeatures = ImagePipelineClass.ProcessImage(photo); // Custom logic to extract features
+      double[] imageFeatures = ImagePipelineClass.ProcessImage(imageBytes); // Custom logic to extract features
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.APPLICATION_JSON);
       HttpEntity<double[]> requestEntity = new HttpEntity<>(imageFeatures, headers);
