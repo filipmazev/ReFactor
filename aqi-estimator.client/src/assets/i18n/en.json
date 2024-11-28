@@ -2,5 +2,10 @@
     "footer": {
         "version": "PRE-ALPHA",
         "caution": "This Application is in a pre-alpha build, we cannot guarantee the validity of the results for AQI estimation with full confidence. We are constantly improving the application to ensure the most accurate results. Any results from this application should be taken with a grain of salt."
+    },
+    "landing": {
+        "hero_subtext": "CLICK TO FIND OUT",
+        "hero_text": "How Bad is The Air Today?",
+        "camera_feed_tutorial_text": "Take a Picture Where The Sky Is Clearly Visible"
     }
 }

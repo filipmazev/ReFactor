@@ -32,6 +32,6 @@ export class AppComponent {
     public dbService: DbService,
     private translate: TranslateService,
   ) {
-    this.translate.setDefaultLang('mk');
+    this.translate.setDefaultLang('en');
   }
 }
