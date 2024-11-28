@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Entity
 @SequenceGenerator(name = "AQI_SEQUENCE", sequenceName = "AQI_SEQUENCE", allocationSize = 1)
 @Data
 public class AQIModel {
