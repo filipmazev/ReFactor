@@ -1,0 +1,3 @@
+export const CAPTURE_BUTTON_SIZE = 4;
+export const CAPTURE_BUTTON_MIN_SIZE = 3.35;
+export const CAPTURE_BUTTON_SHRINK_SPEED = 0.125;

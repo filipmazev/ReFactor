@@ -1,6 +1,92 @@
-<div class="w-full h-full p-5">
-    <section class="w-full overflow-hidden flex flex-col justify-between pt-[2rem] lg:pt-[2rem]
-    lg:px-[15rem] md:px-[10rem] px-5 pb-52 xl:pt-20 align-middle relative text-primary h-screen">
-    <app-image-capture />
-    </section>
-</div>
+<section class="w-full flex flex-col min-h-[70vh] xs:min-h-[65vh] sm:min-h-[75vh] justify-center align-middle items-center
+lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20 relative text-primary select-none">
+
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
+        flex flex-col justify-center align-middle items-center"
+        [ngClass]="{ 
+            'fade-in-2': !capturing_status,
+            'fade-out-2': capturing_status
+        }">
+            <div class="font-bold text-[3rem] max-w-[25rem] text-center text-wrap leading-[3.5rem]">
+                {{ "landing.hero_text" | translate }}
+            </div>
+    
+    </div>
+    
+    <div class="flex flex-col justify-between align-middle w-full sm:w-fit sm:p-5 h-[65dvh]  gap-5
+    sm:bg-[transparent] rounded-md sm:rounded-none transition-colors duration-500 ease-in-out"
+    [ngClass]="{
+        'bg-[#000000]': capturing_status,
+        'max-h-[65vh] sm:max-h-[60dvh]': capturedImage
+    }">
+        @if(live_camera_feed || capturedImage) {
+            <div class="fade-in-2 w-full h-full flex flex-col justify-center align-middle">
+                @if(capturedImage) {
+                    <img class="sm:rounded-md sm:w-full sm:h-full" 
+                    [src]="capturedImage" alt="Captured Image">
+                } @else {
+                    <div class="relative">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-full h-full
+                        flex flex-col justify-center align-middle items-center text-center
+                        font-semibold text-[1.15rem] text-secondary capture_display_tutorial_message"
+                        [ngClass]="{
+                            'fade-in-anim': capture_display_tutorial_message,
+                            'fade-out-anim': !capture_display_tutorial_message
+                        }">
+                            <div class="h-full pb-[5rem] flex flex-col justify-end w-[70%]">
+                                {{ "landing.camera_feed_tutorial_text" | translate }}
+                            </div>
+                        </div>
+                        <webcam 
+                            [trigger]="$capturing_trigger" 
+                            (imageCapture)="capture_handleImage($event)"
+                            [videoOptions]="videoOptions" 
+                            [allowCameraSwitch]="true">
+                        </webcam>
+                    </div>
+                }
+            </div>
+        } @else {
+            <div> </div>
+        }
+        
+        <div class="flex flex-col gap-5 justify-center align-middle items-center mb-[2rem]">
+            @if(!capturing_status) {
+                <div class="text-[0.8rem] font-semibold">
+                    {{ "landing.hero_subtext" | translate }}
+                </div>
+            }
+        
+            <div class="transition-colors duration-500 ease-in-out
+            w-full sm:w-fit h-full rounded-md rounded-t-none sm:rounded-t-md flex flex-col justify-center align-middle items-center px-[1rem] py-[1rem]"
+            [ngClass]="{
+                'bg-[#000000]': capturing_status,
+            }">
+                <button 
+                    (click)="!live_camera_feed ? capture_requestCapture() : capture_takeImage()"
+                    [style.--capture_button_initial_size]="capture_button_initial_size"
+                    [ngClass]="{
+                        'capturing': capturing_status,
+                        'pointer-events-none cursor-wait': capturing_status && !live_camera_feed
+                    }"
+                    class="capture_button" 
+                    (mousedown)="ui_startCaptureButtonShrink()" 
+                    (touchstart)="ui_startCaptureButtonShrink()" 
+                    (mouseup)="ui_stopCaptureButtonShrink()" 
+                    (mouseleave)="ui_stopCaptureButtonShrink()" 
+                    (touchend)="ui_stopCaptureButtonShrink()">
+                    <div class="capture_button_center_circle z-[500]" 
+                        [ngClass]="{
+                            'bg-capture_button_primary hover:bg-capture_button_primary_hover': !capturing_status,
+                            'bg-capture_button_secondary hover:bg-capture_button_secondary_hover': capturing_status
+                        }"
+                        [ngStyle]="{'width': capture_button_center_circle_size, 'height': capture_button_center_circle_size}">
+                    </div>
+                </button>
+            </div>
+    
+        </div>
+    </div>
+
+    
+</section>

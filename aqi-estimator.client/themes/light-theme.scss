@@ -1,25 +1,32 @@
 @use "@angular/material" as mat;
 
 $custom-primary-light-palette: (
-    50: #e8f5e9,
-    100: #c8e6c9,
-    200: #a5d6a7,
-    300: #81c784,
-    400: #66bb6a,
-    500: #4caf50,
-    600: #43a047,
-    700: #388e3c,
-    800: #2e7d32,
-    900: #1b5e20,
-    A100: #b9f6ca,
-    A200: #53e97e,
-    A400: #00e676,
-    A700: #00c853,
-    contrast: (
-        50: #000000,
-        100: #000000,
-        200: #000000,
-    )
+  50: #e6e6f1,
+  100: #bfbfe0,
+  200: #9a99cf,
+  300: #7574bf,
+  400: #5856b3,
+  500: #34327c,
+  600: #2f2d70,
+  700: #282563,
+  800: #211e55,
+  900: #16143d,
+  A100: #c8c6f9,
+  A200: #8a87e9,
+  A400: #5c58e0,
+  A700: #4a46c3,
+  contrast: (
+      50: #000000,
+      100: #000000,
+      200: #000000,
+      300: #ffffff,
+      400: #ffffff,
+      500: #ffffff,
+      600: #ffffff,
+      700: #ffffff,
+      800: #ffffff,
+      900: #ffffff,
+  )
 );
 
 $theme-primary-light: mat.m2-define-palette($custom-primary-light-palette);

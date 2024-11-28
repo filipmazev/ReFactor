@@ -25,6 +25,10 @@ module.exports = {
         'secondary': 'var(--bg_secondary)',
         'accent': 'var(--bg_accent)',
         'accent_alt': 'var(--bg_accent_alt)',
+        'capture_button_primary': 'var(--capture_button_primary)',
+        'capture_button_primary_hover': 'var(--capture_button_primary_hover)',
+        'capture_button_secondary': 'var(--capture_button_secondary)',
+        'capture_button_secondary_hover': 'var(--capture_button_secondary_hover)',
       },
       backgroundImage: {
       },
