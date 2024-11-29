@@ -1,0 +1,12 @@
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\Application.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\AQICalculator\AQICalculator.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\controller\AQIController.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\DTO\clientResponses\AQIPredictionResponse.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\DTO\clientResponses\SensorCalculatedAqiAverages.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\DTO\SensorData.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\enums\SensorType.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\imageProcessor\ImagePipelineClass.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\service\AqiPredictionService.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\service\inter\IAqiPredictionService.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\service\inter\IPulseEcoService.java
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.server\src\main\java\com\codefu\refactor\api\aqiestimatorserver\service\PulseEcoService.java
