@@ -59,7 +59,7 @@ g++ -DCSV_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks
 ./ImageProcessingPipeline <input_csv_full_path> <images_folder_full_path> <output_folder_full_path>
 ```
 
-## Compile .so Library
+## Compile .so Library MacOS
 ```bash
 g++ -std=c++17 -shared -fpic \
 -I<path_to_java_headers_jni> \
@@ -76,3 +76,19 @@ g++ -std=c++17 -shared -fpic \
 #### path_to_java_headers_jni = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include 
 #### path_to_java_headers_darwin = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include/darwin
 #### path_to_open_cv_headers = /opt/homebrew/Cellar/opencv/4.10.0_12/include/opencv4/
+
+## Compile .dll Library Windows
+```bash
+cl /LD /std:c++17 ^
+   /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" ^
+   /IC:\opencv\build\include ^
+   /Fe:.\build\java\windows\libImagePipeline.dll .\build\native\Java_ImagePipeline_ExtractEnhencedMetadata.cpp ^
+   .\src\dcp\hazeremoval.cpp .\src\dcp\guidedfilter.cpp .\src\pipeline\imagepipeline.cpp ^
+   /link /LIBPATH:C:\opencv\build\x64\vc16\lib opencv_world4100.lib
+```
+
+### Windows
+
+### Make sure you have the Java JDK installed
+### Make sure you have OpenCV installed, replace the opencv file paths if they differ on your system
+### Add c:\opencv\build\x64\vc16\bin in environment variables -> paths | replace vc16 with the version of your opencv (should match the one in the bash command at opencv\build\x64\<version>\lib)

@@ -1,0 +1,20 @@
+﻿  pch.cpp
+  dllmain.cpp
+  guidedfilter.cpp
+  hazeremoval.cpp
+  imagepipeline.cpp
+  Java_ImagePipeline_ExtractEnhachedMetadata.cpp
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(31,78): warning C4267: 'argument': conversion from 'size_t' to 'jsize', possible loss of data
+  (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
+  
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(32,73): warning C4267: 'argument': conversion from 'size_t' to 'jsize', possible loss of data
+  (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
+  
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9): warning C4297: 'Java_ImagePipelineClass_ExtractEnhancedMetadata': function assumed not to throw an exception but does
+  (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
+      C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9):
+      The function is extern "C" and /EHc was specified
+  
+  Generating Code...
+     Creating library C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\x64\Debug\ImageProcessingPipeline.lib and object C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\x64\Debug\ImageProcessingPipeline.exp
+  ImageProcessingPipeline.vcxproj -> C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\build\java\windows\ImageProcessingPipeline\x64\Debug\ImageProcessingPipeline.dll
