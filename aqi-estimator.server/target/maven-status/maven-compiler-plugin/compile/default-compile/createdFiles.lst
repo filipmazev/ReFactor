@@ -1,0 +1,13 @@
+com\codefu\refactor\api\aqiestimatorserver\imageProcessor\ImagePipelineClass.class
+com\codefu\refactor\api\aqiestimatorserver\service\inter\IPulseEcoService.class
+com\codefu\refactor\api\aqiestimatorserver\AQICalculator\AQICalculator.class
+com\codefu\refactor\api\aqiestimatorserver\service\PulseEcoService.class
+com\codefu\refactor\api\aqiestimatorserver\DTO\clientResponses\AQIPredictionResponse.class
+com\codefu\refactor\api\aqiestimatorserver\service\PulseEcoService$CachedSensorData.class
+com\codefu\refactor\api\aqiestimatorserver\DTO\clientResponses\SensorCalculatedAqiAverages.class
+com\codefu\refactor\api\aqiestimatorserver\service\inter\IAqiPredictionService.class
+com\codefu\refactor\api\aqiestimatorserver\DTO\SensorData.class
+com\codefu\refactor\api\aqiestimatorserver\Application.class
+com\codefu\refactor\api\aqiestimatorserver\controller\AQIController.class
+com\codefu\refactor\api\aqiestimatorserver\service\AqiPredictionService.class
+com\codefu\refactor\api\aqiestimatorserver\enums\SensorType.class

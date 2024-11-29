@@ -5,10 +5,10 @@ import java.nio.file.Paths;
 
 public class ImagePipelineClass {
     static {
-        System.loadLibrary("D:/ReFactor_CodeFu/ReFactor/aqi-estimator.server/src/main/java/com/codefu/refactor/api/aqiestimatorserver/imageProcessor/libImagePipeline.so");
+        System.loadLibrary("ImageProcessingPipeline");
     }
 
-    public native double[] ExtractEnhancedMetadata(byte[] inputImageBytes);
+    public static native double[] ExtractEnhancedMetadata(byte[] imageBytes);
 
     public static double[] ProcessImage(byte[] imageBytes) {
         try {

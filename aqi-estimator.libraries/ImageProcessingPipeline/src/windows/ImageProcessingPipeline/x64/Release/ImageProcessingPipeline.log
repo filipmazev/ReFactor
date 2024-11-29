@@ -1,0 +1,23 @@
+﻿  pch.cpp
+  dllmain.cpp
+  guidedfilter.cpp
+  hazeremoval.cpp
+  imagepipeline.cpp
+  Java_ImagePipeline_ExtractEnhachedMetadata.cpp
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(31,78): warning C4267: 'argument': conversion from 'size_t' to 'jsize', possible loss of data
+  (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
+  
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(32,73): warning C4267: 'argument': conversion from 'size_t' to 'jsize', possible loss of data
+  (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
+  
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9): warning C4297: 'Java_com_codefu_refactor_api_aqiestimatorserver_imageProcessor_ImagePipelineClass_ExtractEnhancedMetadata': function assumed not to throw an exception but does
+  (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
+      C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9):
+      The function is extern "C" and /EHc was specified
+  
+     Creating library C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\x64\Release\ImageProcessingPipeline.lib and object C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\x64\Release\ImageProcessingPipeline.exp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 587 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  ImageProcessingPipeline.vcxproj -> C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\x64\Release\ImageProcessingPipeline.dll

@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\pch.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\pch.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
@@ -11,8 +15,8 @@
       "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\pch.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+      "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\imagepipeline.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
@@ -41,10 +45,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\imagepipeline.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\imagepipeline.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
-      "RelativeMoniker": "D:0:0:{45735A30-C929-4A88-B5F9-EE8FF1F54E76}|ImageProcessingPipeline\\ImageProcessingPipeline.vcxproj|solutionrelative:ImageProcessingPipeline\\dllmain.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,23 +54,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "framework.h",
-              "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\framework.h",
-              "RelativeDocumentMoniker": "ImageProcessingPipeline\\framework.h",
-              "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\framework.h",
-              "RelativeToolTip": "ImageProcessingPipeline\\framework.h",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-29T15:42:32.684Z"
+              "DocumentIndex": 0,
+              "Title": "Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
+              "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
+              "RelativeDocumentMoniker": "ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
+              "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
+              "RelativeToolTip": "ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-29T15:48:55.778Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "guidedfilter.cpp",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\guidedfilter.cpp",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\guidedfilter.cpp",
@@ -82,7 +83,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "hazeremoval.cpp",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\hazeremoval.cpp",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\hazeremoval.cpp",
@@ -94,7 +95,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "imagepipeline.cpp",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\imagepipeline.cpp",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\imagepipeline.cpp",
@@ -107,18 +108,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
-              "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
-              "RelativeDocumentMoniker": "ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
-              "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
-              "RelativeToolTip": "ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-29T15:48:55.778Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "pch.cpp",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\pch.cpp",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\pch.cpp",
@@ -130,20 +119,43 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "pch.h",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\pch.h",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\pch.h",
               "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\pch.h",
               "RelativeToolTip": "ImageProcessingPipeline\\pch.h",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAqwAoAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-29T15:43:31.607Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T15:43:31.607Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "dllmain.cpp",
+              "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\dllmain.cpp",
+              "RelativeDocumentMoniker": "ImageProcessingPipeline\\dllmain.cpp",
+              "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\dllmain.cpp",
+              "RelativeToolTip": "ImageProcessingPipeline\\dllmain.cpp",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2024-11-29T15:37:48.384Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
+              "Title": "framework.h",
+              "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\framework.h",
+              "RelativeDocumentMoniker": "ImageProcessingPipeline\\framework.h",
+              "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\framework.h",
+              "RelativeToolTip": "ImageProcessingPipeline\\framework.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2024-11-29T15:42:32.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
               "Title": "guidedfilter.h",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\guidedfilter.h",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\guidedfilter.h",
@@ -155,7 +167,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "hazeremoval.h",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\hazeremoval.h",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\hazeremoval.h",
@@ -167,7 +179,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "imagepipeline.h",
               "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\imagepipeline.h",
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\imagepipeline.h",
@@ -176,18 +188,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-11-29T15:41:03.463Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "dllmain.cpp",
-              "DocumentMoniker": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\dllmain.cpp",
-              "RelativeDocumentMoniker": "ImageProcessingPipeline\\dllmain.cpp",
-              "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\dllmain.cpp",
-              "RelativeToolTip": "ImageProcessingPipeline\\dllmain.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-29T15:37:48.384Z"
             }
           ]
         }
