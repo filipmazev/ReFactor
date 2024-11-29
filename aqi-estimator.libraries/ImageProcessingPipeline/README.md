@@ -77,7 +77,8 @@ g++ -std=c++17 -shared -fpic \
 #### path_to_java_headers_darwin = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include/darwin
 #### path_to_open_cv_headers = /opt/homebrew/Cellar/opencv/4.10.0_12/include/opencv4/
 
-## Compile .dll Library Windows
+## Compile .dll Library Windows 
+### Try the following command bellow or build from the windows VS solution
 ```bash
 cl /LD /std:c++17 ^
    /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" ^
