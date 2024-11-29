@@ -2,6 +2,7 @@ package com.codefu.refactor.api.aqiestimatorserver.controller;
 import com.codefu.refactor.api.aqiestimatorserver.DTO.SensorData;
 import com.codefu.refactor.api.aqiestimatorserver.DTO.clientResponses.AQIPredictionResponse;
 import com.codefu.refactor.api.aqiestimatorserver.DTO.clientResponses.SensorCalculatedAqiAverages;
+import com.codefu.refactor.api.aqiestimatorserver.enums.AQICategory;
 import com.codefu.refactor.api.aqiestimatorserver.imageProcessor.ImagePipelineClass;
 import com.codefu.refactor.api.aqiestimatorserver.service.inter.IAqiPredictionService;
 import com.codefu.refactor.api.aqiestimatorserver.service.inter.IPulseEcoService;
@@ -94,6 +95,10 @@ public class AQIController {
         // Predict AQI using the model
         Integer modelPrediction = this.aqiPredictionService.predict(imageFeatures);
         result.setModelPredictionValue(modelPrediction);
+
+        // Map AQI value to category using enum
+        AQICategory aqiCategory = AQICategory.fromValue(modelPrediction);
+        result.setAqiCategory(aqiCategory);
 
         // Return the response
         return ResponseEntity.ok(result);
