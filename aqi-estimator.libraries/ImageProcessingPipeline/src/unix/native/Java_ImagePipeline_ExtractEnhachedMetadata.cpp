@@ -1,4 +1,4 @@
-#include "../../includes/pipeline/imagepipeline.h"
+#include "../includes/pipeline/imagepipeline.h"
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include <jni.h>
