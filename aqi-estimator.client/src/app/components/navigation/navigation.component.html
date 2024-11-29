@@ -3,7 +3,12 @@ flex flex-row justify-between align-middle items-center
 gap-3 lg:px-[15rem] md:px-[10rem] px-5 py-2 select-none"
 [class]="classNames.NAV_BAR_IDENTITY_CLASS_NAME"> 
     <!-- Site Logo -->
-    <a href="/" class="logo"> </a>
+     <div class="flex flex-row gap-[.65rem] justify-center align-middle items-center text-center">
+         <a href="/" class="logo"> </a>
+         <div class="text-[#ffffff] text-[.75rem]">  
+            {{ "nav.logo_name" | translate }}
+         </div>
+     </div>
     <!-- Site Logo -->
 
     <div class="flex flex-row gap-10 justify-end">

@@ -29,6 +29,8 @@ module.exports = {
         'capture_button_primary_hover': 'var(--capture_button_primary_hover)',
         'capture_button_secondary': 'var(--capture_button_secondary)',
         'capture_button_secondary_hover': 'var(--capture_button_secondary_hover)',
+        'capture_button_cancel': 'var(--capture_button_cancel)',
+        'capture_button_save': 'var(--capture_button_save)',
       },
       backgroundImage: {
       },
@@ -37,6 +39,7 @@ module.exports = {
         'secondary': 'var(--text_secondary)',
         'accent': 'var(--text_accent)',
         'accent_alt': 'var(--text_accent_alt)',
+        'capture_button_text': 'var(--capture_button_text)',
       },
       fontFamily: {
         'inter': 'Inter',

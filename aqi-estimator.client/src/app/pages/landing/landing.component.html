@@ -1,41 +1,61 @@
 <section class="w-full flex flex-col min-h-[70vh] xs:min-h-[65vh] sm:min-h-[75vh] justify-center align-middle items-center
-lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20 relative text-primary select-none">
+relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
 
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
-        flex flex-col justify-center align-middle items-center"
+        flex flex-col justify-center align-middle items-center z-[-1]"
         [ngClass]="{ 
-            'fade-in-2': !capturing_status,
+            'fade-in-anim': !capturing_status,
             'fade-out-2': capturing_status
         }">
-            <div class="font-bold text-[3rem] max-w-[25rem] text-center text-wrap leading-[3.5rem]">
+            <div class="font-bold text-[2.7rem] max-w-[28rem] text-center text-wrap leading-[3.5rem]">
                 {{ "landing.hero_text" | translate }}
             </div>
     
     </div>
     
-    <div class="flex flex-col justify-between align-middle w-full sm:w-fit sm:p-5 h-[65dvh] gap-5
-    sm:bg-[transparent] rounded-md transition-colors duration-500 ease-in-out"
-    [ngClass]="{
-        'max-h-[65vh] sm:max-h-[60dvh]': capturedImage
-    }">
+    <div class="flex flex-col justify-between align-middle w-full sm:w-fit h-[70vh] min-h-[70vh] gap-5">
+
+        @if(windowDimensions.width <= windowDimensions.threshold_sm) {
+            <div class="flex flex-row justify-between w-full align-middle items-center mt-10 opacity-0 transition-opacity duration-500 ease-in-out sm:min-w-[30vw]"
+                [ngClass]="{
+                    'opacity-100 delay-1000': capturing_status,
+                    'opacity-0 pointer-events-none touch-none select-none': !capturing_status
+                }">
+                <button 
+                    (click)="capturing_status ? capture_cancelCapture() : null"
+                    class="flex flex-col justify-center align-middle items-center text-center bg-capture_button_cancel text-capture_button_text text-[.85rem] px-3 w-[4rem] rounded-full sm:hover:scale-[1.015]">
+                    {{ "landing.buttons.cancel_capture" | translate }}
+                </button> 
+    
+                <button 
+                    (click)="capturing_status ? capture_saveResult() : null"
+                    class="flex flex-col justify-center align-middle items-center text-center bg-capture_button_save text-capture_button_text text-[.85rem] px-3 w-[4rem] rounded-full sm:hover:scale-[1.015]">
+                    {{ "landing.buttons.save" | translate }}
+                </button> 
+            </div>
+        } @else {
+            <div> </div>
+        }
+
         @if(live_camera_feed || capturedImage) {
-            <div class="fade-in-2 w-full h-full flex flex-col justify-center align-middle">
-                @if(capturedImage) {
-                    <img class="rounded-md sm:w-full sm:h-full" 
+            <div class="fade-in-anim w-full flex flex-col justify-center align-middle">
+                @if(capturedImage || !live_camera_feed) {
+                    <img class="rounded-md sm:w-full h-full sm:h-[40vh]" 
                     [src]="capturedImage" alt="Captured Image">
                 } @else {
                     <div class="relative">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[100] w-full h-full
-                        flex flex-col justify-center align-middle items-center text-center
-                        font-semibold text-[1.15rem] text-[#ffffff] capture_display_tutorial_message"
-                        [ngClass]="{
-                            'fade-in-anim': capture_display_tutorial_message,
-                            'fade-out-anim': !capture_display_tutorial_message
-                        }">
+                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
+                            flex flex-col justify-center align-middle items-center text-center opacity-0 transition-opacity duration-500 ease-in-out
+                            font-semibold text-[1.15rem] rounded-md z-[500] text-[#ffffff] capture_display_tutorial_message"
+                            [ngClass]="{
+                                'opacity-100 delay-500': capture_display_tutorial_message && initial_capture,
+                                'opacity-0': !capture_display_tutorial_message || !initial_capture
+                            }">
                             <div class="h-full pb-[5rem] flex flex-col justify-end w-[70%]">
                                 {{ "landing.camera_feed_tutorial_text" | translate }}
                             </div>
                         </div>
+                        
                         <webcam 
                             [trigger]="$capturing_trigger" 
                             (imageCapture)="capture_handleImage($event)"
@@ -45,8 +65,6 @@ lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20 relative text-primary select-none">
                     </div>
                 }
             </div>
-        } @else {
-            <div> </div>
         }
         
         <div class="flex flex-col justify-center align-middle items-center">
@@ -57,9 +75,9 @@ lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20 relative text-primary select-none">
             }
         
             <div class="transition-colors duration-500 ease-in-out
-            w-full sm:w-fit h-full rounded-md rounded-t-none sm:rounded-t-md flex flex-col justify-center align-middle items-center px-[1rem] py-[1rem]">
+            w-full sm:w-fit h-full rounded-md rounded-t-none sm:rounded-t-md flex flex-col justify-center align-middle items-center px-[1rem] py-[1rem]">   
                 <button 
-                    (click)="!live_camera_feed ? capture_requestCapture() : capture_takeImage()"
+                    (click)="!live_camera_feed ? capture_requestCapture() : !capturedImage ? capture_takeImage() : capture_resetCapture()"
                     [style.--capture_button_initial_size]="capture_button_initial_size"
                     [ngClass]="{
                         'capturing': capturing_status,
@@ -71,14 +89,25 @@ lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20 relative text-primary select-none">
                     (mouseup)="ui_stopCaptureButtonShrink()" 
                     (mouseleave)="ui_stopCaptureButtonShrink()" 
                     (touchend)="ui_stopCaptureButtonShrink()">
-                    <div class="capture_button_center_circle z-[500]" 
-                        [ngClass]="{
-                            'bg-capture_button_primary hover:bg-capture_button_primary_hover': !capturing_status,
-                            'bg-capture_button_secondary hover:bg-capture_button_secondary_hover': capturing_status
-                        }"
-                        [ngStyle]="{'width': capture_button_center_circle_size, 'height': capture_button_center_circle_size}">
-                    </div>
+                    @if(!capturedImage)  {
+                        <div class="capture_button_center_circle" 
+                            [ngClass]="{
+                                'bg-capture_button_primary hover:bg-capture_button_primary_hover': !capturing_status,
+                                'bg-capture_button_secondary hover:bg-capture_button_secondary_hover': capturing_status
+                            }"
+                            [ngStyle]="{'width': capture_button_center_circle_size, 'height': capture_button_center_circle_size}">
+                        </div>
+                    } @else {
+                        <div [ngStyle]="{'width': capture_button_center_circle_size, 'height': capture_button_center_circle_size}"
+                            class="cursor-pointer rounded-full p-[1rem] bg-[#ffffffdb] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                            <svg viewBox="0 0 67 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M63.1102 34.8918C65.4 35.2271 66.992 37.4105 66.6667 39.7686C65.6709 46.9788 62.485 53.68 57.5656 58.9119C52.6457 64.1434 46.2447 67.6378 39.2787 68.8941C32.3128 70.1503 25.1396 69.1041 18.7864 65.9051C15.8009 64.4021 13.0684 62.4598 10.6664 60.1552L7.14852 63.7781C4.51052 66.495 0 64.5708 0 60.7288V43.536H16.6944C20.4251 43.536 22.2934 48.1811 19.6554 50.898L16.5934 54.0513C18.3415 55.6892 20.3158 57.0748 22.4649 58.1568C27.2298 60.5558 32.6097 61.3403 37.8341 60.3984C43.0584 59.4561 47.8594 56.8354 51.549 52.9115C55.239 48.9876 57.6284 43.9622 58.375 38.5542C58.7008 36.1962 60.8209 34.5565 63.1102 34.8918ZM48.2136 3.91709C51.2043 5.4229 53.9409 7.36931 56.3462 9.67891L59.8515 6.06883C62.4896 3.35209 67 5.27619 67 9.11824V26.2862H50.3296C46.5989 26.2862 44.7305 21.641 47.3686 18.9243L50.4192 15.7826C48.668 14.1398 46.6894 12.7503 44.5353 11.6656C39.7702 9.26651 34.3903 8.4818 29.1659 9.424C23.9415 10.3661 19.1406 12.9869 15.4509 16.9107C11.7611 20.8345 9.37171 25.8603 8.62495 31.2681C8.29933 33.6261 6.17924 35.2658 3.88959 34.9304C1.59994 34.5951 0.00777137 32.4117 0.333386 30.0537C1.32907 22.8433 4.51488 16.1424 9.43456 10.9106C14.3542 5.67876 20.7554 2.18451 27.7213 0.928272C34.6872 -0.327959 41.8604 0.71826 48.2136 3.91709Z" 
+                                fill="#000000"/>
+                            </svg>
+                        </div>
+                    }
                 </button>
+            
             </div>
     
         </div>

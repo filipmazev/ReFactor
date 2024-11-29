@@ -30,6 +30,8 @@ export class LandingComponent implements OnInit {
     protected windowDimensions: WindowDimensions = {} as WindowDimensions;
 
     protected readonly animation = animConsts;
+
+    private sm_screen: boolean = false;
     //#endregion
 
     //#region Subscription Variables
@@ -40,6 +42,8 @@ export class LandingComponent implements OnInit {
     protected capturing_status: boolean = false;
     protected live_camera_feed?: MediaStream;
     protected capturedImage?: string;
+
+    protected initial_capture: boolean = true;
 
     protected capturing_trigger: Subject<void> = new Subject<void>();
 
@@ -120,6 +124,22 @@ export class LandingComponent implements OnInit {
                 : '2x-large';
 
             this.current_requested_capture_size = this.requested_capture_sizes[screenSize];
+
+            if(this.windowDimensions.width <= this.windowDimensions.threshold_sm) {
+                if(!this.sm_screen) {
+                    this.sm_screen = true;
+                    if(this.capturedImage === undefined) {
+                        this.capture_resetCapture();
+                    }
+                }
+            } else {
+                if(this.sm_screen) {
+                    this.sm_screen = false;
+                    if(this.capturedImage === undefined) {
+                        this.capture_resetCapture();
+                    }
+                }
+            }
         });
     }
 
@@ -144,13 +164,16 @@ export class LandingComponent implements OnInit {
 
     protected capture_handleImage(event: WebcamImage): void {
         this.capturedImage = event.imageAsDataUrl;
+        if(this.initial_capture) {
+            this.initial_capture = false;
+        }
     }
 
     protected capture_takeImage(): void {
         this.capturing_trigger.next();
     }
 
-    async sendImage() {
+    protected async capture_sendImage() {
         if (this.capturedImage) {
             const formData = new FormData();
 
@@ -162,6 +185,28 @@ export class LandingComponent implements OnInit {
                 console.log(result);
             });
         }
+    }
+
+    protected capture_cancelCapture(softCancel?: boolean): void {
+        this.live_camera_feed?.getTracks().forEach((track: MediaStreamTrack) => {
+            track.stop();
+        });
+        this.live_camera_feed = undefined;
+        if(!softCancel) {
+            this.capturedImage = undefined;
+            this.capturing_status = false;
+            this.ui_toggleBlackedOutMode(false);
+        }
+    }
+
+    protected capture_saveResult(): void {
+        
+    }
+
+    protected capture_resetCapture(): void {
+        this.capture_cancelCapture(true);
+        this.capturedImage = undefined;
+        this.capture_requestCapture();
     }
     //#endregion
 

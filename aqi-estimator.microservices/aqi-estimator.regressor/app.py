@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 # Load the saved model and scaler
-with open('xgb_model_and_scaler_improved_dataset_015_400_final.pkl', 'rb') as file:
+with open('prediction_model_xgb_regressor.pkl', 'rb') as file:
     saved_data = pkl.load(file)
 
 model = saved_data['model']
@@ -14,7 +14,7 @@ scaler = saved_data['scaler']
 
 # Desired feature names
 FEATURE_NAMES = [
-    "hour", "fogImpactIndex", "airLightRed", "airLightGreen", "airLightBlue",
+    "fogImpactIndex", "airLightRed", "airLightGreen", "airLightBlue",
     "originalRedMean", "originalRedVariance", "originalRedSkewness",
     "originalGreenMean", "originalGreenVariance", "originalGreenSkewness",
     "originalBlueMean", "originalBlueVariance", "originalBlueSkewness",

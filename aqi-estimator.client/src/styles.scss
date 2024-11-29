@@ -24,6 +24,10 @@
         --capture_button_secondary: #ffffff;
         --capture_button_secondary_hover: #cfcfcf;
 
+        --capture_button_text: #000000;
+        --capture_button_cancel: #FFFFFF;
+        --capture_button_save: #FFC72C;
+
         --text_primary: #000000;
         --text_secondary: #ffffff;
         --text_accent: #34327C;
@@ -54,11 +58,16 @@
     --capture_button_primary_hover: #211F5E;
     --capture_button_secondary: #ffffff;
     --capture_button_secondary_hover: #cfcfcf;
+   
+    --capture_button_text: #000000;
+    --capture_button_cancel: #FFFFFF;
+    --capture_button_save: #FFC72C;
 
     --text_primary: #ffffff;
     --text_secondary: #000000;
     --text_accent: #211F5E;
     --text_accent_alt: #34327C;
+
 
     --scroll_bg: #34327C;
     --scroll_thumb: linear-gradient(278deg, #211F5E -10.44%, #5d59c1 100%);
