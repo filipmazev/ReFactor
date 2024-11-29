@@ -1,3 +1,4 @@
 export enum DbStores {
-    STORE = 'store',
+    ACCESSIBILITY_SETTINGS = 'accessibility-settings',
+    THEME_SETTINGS = 'theme-settings',
 }   

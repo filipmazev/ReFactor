@@ -33,11 +33,14 @@
         --scroll_thumb: linear-gradient(278deg, #5d59c1 -10.44%, #34327C 100%);
         --scroll_thumb_highlighted: linear-gradient(278deg, #5d59c1 -10.44%, #34327C 100%);
 
+        --menu_item_text: #ffffff;
+        --menu_bg: #34327C;
+
         --logo_path: url(./assets/svg/logo.svg);
     }
 }
 
-.dark-theme {
+.dark-theme-smog {
     --primary: #000000;
     --secondary: #ffffff;
     --accent: #211F5E;
@@ -61,6 +64,9 @@
     --scroll_thumb: linear-gradient(278deg, #211F5E -10.44%, #5d59c1 100%);
     --scroll_thumb_highlighted: linear-gradient(278deg, #211F5E -10.44%, #5d59c1 100%);
 
+    --menu_item_text: #ffffff;
+    --menu_bg: #211F5E;
+
     --logo_path: url(./assets/svg/logo.svg);
 }
 
@@ -68,7 +74,7 @@ body {
     @include mat.all-component-themes($theme-light);
 }
 
-body.dark-theme {
+body.dark-theme-smog {
     @include mat.all-component-colors($theme-dark);
 }
 
@@ -86,6 +92,11 @@ body {
     box-sizing: border-box;
     font-family: "Inter", serif;
     overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+.body-bg-black {
+    background-color: #000000;
 }
 
 body nav {
@@ -101,13 +112,20 @@ body footer {
     z-index: 50; 
 }
 
+footer {
+    color: var(--text_primary);
+}
+
+.footer-bg-black > * {
+    color: #ffffff !important;
+}
+
 .content_container  {
     flex: 1 1 auto; 
     overflow-y: auto; 
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
-
 // Themeing End
 
 // Fonts Start
@@ -924,11 +942,48 @@ webcam {
     width: 100%;
 }
 
-@media (min-width: 640px) {
-    video {
-        position: relative;
-        border: 1px solid transparent;
-        border-radius: 0.375rem;
-    }
+video {
+    position: relative;
+    border: 1px solid transparent;
+    border-radius: 0.375rem;
 }
 // Custom End
+
+// Material Customization Start
+mat-dialog-container {
+    background-color: transparent !important;
+}
+
+.mat-mdc-dialog-container {
+    border-radius: 1rem !important;
+}
+
+.mdc-dialog__surface {
+    border-radius: 1rem !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+    border-radius: 1rem !important;
+    background-color: transparent !important;
+}
+
+.settings-menu-item.mat-mdc-menu-panel {
+    background-color: var(--menu_bg) !important;
+    color: var(--menu_item_text) !important
+}
+
+.settings-menu-item.mat-mdc-menu-item {
+    color: var(--menu_item_text) !important
+}
+
+.settings-menu-item.mat-icon-no-color {
+    color: var(--menu_item_text) !important
+}
+
+.mat-internal-form-field {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    justify-content: space-between;
+}
+// Material Customization End

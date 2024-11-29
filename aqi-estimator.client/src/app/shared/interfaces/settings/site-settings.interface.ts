@@ -1,7 +1,9 @@
-import { Language } from "../../enums/settings/languages.enum";
-import { DeviceTheme } from "../../types/device.types";
+import { IAccessibilitySettings } from "./accessibility-settings.interface";
+import { ILanguageSettings } from "./language-settings.interface";
+import { IThemeSettings } from "./theme-settings.interface";
 
 export interface ISiteSettings {
-    theme: DeviceTheme;
-    language: Language; 
+    theme: IThemeSettings;
+    accessibility: IAccessibilitySettings;
+    language: ILanguageSettings; 
 }

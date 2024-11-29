@@ -1,0 +1,1 @@
+export const REM_MULTIPLIER = 16;

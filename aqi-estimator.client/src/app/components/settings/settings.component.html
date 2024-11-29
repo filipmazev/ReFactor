@@ -1,0 +1,192 @@
+<!-- Site Settings -->
+@if(initialized) {
+    <div class="text-menu_item_text select-none">
+        <!-- Site Settings Button -->
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="settings_menu">
+            <mat-icon class="settings-menu-item settings-icon">settings</mat-icon>
+        </button>
+        <!-- Site Settings Button -->
+
+        <!-- Site Settings Menues Container -->
+        <mat-menu #menu="matMenu" class="settings-menu-item">
+            <!-- Site Language Options -->
+            <button (click)="$event.stopPropagation(); toggleLanguageSettingState()"
+            class="transition-all duration-300 ease-in-out w-full flex flex-row justify-start gap-3 align-middle items-center py-2 px-4
+            hover:bg-menu_item_hover active:bg-menu_item_hover" 
+            [ngClass]="{'bg-menu_item_hover': settings.language.state }">
+                <mat-icon class="settings-menu-item">{{MatIcons.Language}}</mat-icon>
+                <div class="flex flex-row gap-5 justify-between">                    
+                    <span class="select-none"> {{ 'ui.language_settings' | translate }} </span>
+                </div>
+            </button>
+
+            <div class="overflow-hidden">
+                <div class="transition-all duration-300 ease-in-out" 
+                    [ngClass]="{
+                        'mt-[-100%]': !settings.language.state,
+                        'mt-0 border-b-[1px] border-[rgba(255,255,255,0.15)] pb-3': settings.language.state 
+                    }
+                ">
+                    @for(item of settings.language.available; track item;) {
+                        <div class="flex flex-col p-3 pb-0 gap-2" (click)="$event.stopPropagation();"
+                        [ariaLabel]="'language_option' + item">
+                            <button (click)="$event.preventDefault(); $event.stopPropagation(); setLanguage(item)" 
+                            class="flex flex-row justify-between align-middle items-center">
+                        
+                                <span class="select-none">{{ ('ui.languages.' + item)  | translate }}</span>
+
+                                <mat-radio-button 
+                                    #matRadio 
+                                    [aria-label]="'language_option_' + item" 
+                                    [value]="item"
+                                    [checked]="settings.language.selected === item"
+                                    (click)="$event.stopPropagation(); setLanguage(item)">
+                                </mat-radio-button>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+            <!-- Site Language Options -->
+            
+            <!-- Site Theme Options -->
+            <button (click)="$event.stopPropagation(); toggleThemeSettingState()"
+                class="transition-all duration-300 ease-in-out w-full flex flex-row justify-start gap-3 align-middle items-center py-2 px-4
+                hover:bg-menu_item_hover active:bg-menu_item_hover" 
+                [ngClass]="{'bg-menu_item_hover': settings.theme.state }"
+            >
+                <mat-icon class="settings-menu-item">{{MatIcons.Theme}}</mat-icon>
+                <div class="flex flex-row gap-5 justify-between">                    
+                    <span class="select-none"> {{ 'ui.theme_settings' | translate }} </span>
+                </div>
+            </button>
+
+            <div class="overflow-hidden">
+                <div class="transition-all duration-300 ease-in-out mt-[-100%]" 
+                    [ngClass]="{
+                        'mt-[-100%]': !settings.theme.state,
+                        'mt-0 border-b-[1px] border-[rgba(255,255,255,0.15)] pb-3': settings.theme.state 
+                    }
+                ">
+                    <!-- Site Theme Toggles -->
+                    <button mat-menu-item (click)="$event.stopPropagation()" class="pointer-events-none settings-menu-item">
+                        <div class="flex flex-row gap-5 justify-between">
+                            <div class="flex flex-row gap-2 justify-between"> 
+                                <mat-icon class="settings-menu-item">{{MatIcons.DarkMode}}</mat-icon>      
+                                <span class="select-none"> {{ 'ui.dark_mode' | translate }} </span>
+                            </div>              
+                            <mat-slide-toggle 
+                                [aria-label]="'dark-theme'" 
+                                [disabled]="settings.theme.autoDarkMode" 
+                                [(ngModel)]="settings.theme.darkMode.state" 
+                                (change)="toggleDarkMode(); saveThemeSetting();"> 
+                            </mat-slide-toggle>
+                        </div>
+                    </button>
+                    
+                    <button mat-menu-item (click)="$event.stopPropagation()" class="pointer-events-none settings-menu-item"> 
+                        <div class="flex flex-row gap-5 justify-between">   
+                            <span> {{ 'ui.auto_theme' | translate }} </span>                 
+                            <mat-slide-toggle 
+                                [aria-label]="'auto-dark-theme'" 
+                                [(ngModel)]="settings.theme.autoDarkMode" 
+                                (change)="toggledAutoDarkTheme();"> 
+                            </mat-slide-toggle>
+                        </div>
+                    </button>
+                    <!-- Site Theme Toggles -->
+        
+                    <!-- Dark Theme Options -->
+                    <mat-radio-group [(ngModel)]="selectedThemeIndex" (ngModelChange)="onThemeChange($event)">
+                        @for (item of settings.theme.darkMode.theming; track item; let i = $index) {
+                            <div class="flex flex-col p-3 pb-0 gap-2 settings-menu-item" (click)="$event.stopPropagation();"
+                                [ngClass]="{'not-selectable': !settings.theme.darkMode.state}" 
+                                #tooltip="matTooltip"
+                                [matTooltip]="item.description ?? ''"
+                                [matTooltipPosition]="'left'"
+                                [ariaLabel]="'dark_theme_option' + i">
+                                <button (click)="$event.preventDefault(); $event.stopPropagation();" 
+                                        class="flex flex-row justify-between align-middle items-center">
+                                    
+                                    @if (item.translationKey) {
+                                        <span class="select-none">{{item.translationKey | translate}}</span>
+                                    }
+                    
+                                    <mat-radio-button 
+                                        #matRadio 
+                                        [aria-label]="'theme_' + i" 
+                                        [value]="i"
+                                        (click)="$event.stopPropagation(); toggleDarkMode(item)">
+                                    </mat-radio-button>
+                                </button>
+                            </div>
+                        }
+                    </mat-radio-group>
+                    <!-- Dark Theme Options -->
+                </div>
+            </div>
+            <!-- Site Theme Options -->
+
+            <!-- Site Accessibility Options -->
+            @if(settings.accessibility.items.length > 0) {
+                <button (click)="$event.stopPropagation(); toggleAccessibilitySettingState()"
+                class="transition-all duration-300 ease-in-out w-full flex flex-row justify-start gap-3 align-middle items-center py-2 px-4
+                hover:bg-menu_item_hover active:bg-menu_item_hover" 
+                [ngClass]="{'bg-menu_item_hover': settings.accessibility.state }">
+                    <mat-icon class="settings-menu-item">{{MatIcons.AccessabilitySettings}}</mat-icon>
+                    <span class="font-inter select-none"> {{ 'ui.accessibility' | translate }} </span>
+                </button>
+
+                <div class="overflow-hidden">
+                    <div class="transition-all duration-300 ease-in-out mt-[-100%]" 
+                    [ngClass]="{
+                        'mt-[-100%]': !settings.accessibility.state,
+                        'mt-0': settings.accessibility.state 
+                    }
+                    ">
+                        @for(item of settings.accessibility.items; track item) {
+                            <button mat-menu-item (click)="$event.stopPropagation();" 
+                                class="settings-menu-item"
+                                [ngClass]="{'pointer-events-none': item.type === 'toggle'}">
+                                <div class="flex flex-row gap-5 justify-between items-center align-middle">
+                                    <div class="flex flex-row gap-2 justify-between items-center align-middle "> 
+                                        @if(item.matIcons) {
+                                            <mat-icon class="settings-menu-item">{{item.matIcons}}</mat-icon>   
+                                        }
+                                        @if(item.translationKey) {
+                                            <span class="select-none">{{item.translationKey | translate}}</span>
+                                        }
+                                    </div>            
+                                    @switch (item.type) {
+                                        @case ('toggle') {
+                                            <mat-slide-toggle [aria-label]="item.ariaLabel ?? ''" [(ngModel)]="item.state" (change)="item.changes ? item.changes($event, item) : null" [checked]="item.state"> </mat-slide-toggle>
+                                        }
+                                        @case ('radio') {
+                                            <mat-radio-button [aria-label]="item.ariaLabel ?? ''" [(ngModel)]="item.state" (change)="item.changes ? item.changes($event, item) : null"  #matRadio [checked]="item.state"> </mat-radio-button>
+                                        }
+                                        @case ('checkbox') {
+                                            <mat-checkbox [aria-label]="item.ariaLabel ?? ''" [(ngModel)]="item.state" (change)="item.changes ? item.changes($event, item) : null" #checkbox [checked]="item.state"> </mat-checkbox>
+                                        }
+                                        @default {
+                                            <mat-slide-toggle [aria-label]="item.ariaLabel ?? ''" [(ngModel)]="item.state" (change)="item.changes ? item.changes($event, item) : null" [checked]="item.state"> </mat-slide-toggle>
+                                        }
+                                    }
+                                </div>
+                            </button>
+                        }
+                    </div>
+                </div>
+            }
+            <!-- Site Accessibility Options -->
+        </mat-menu>
+        <!-- Site Settings Menues Container -->
+
+        <!-- Site Language Options -->
+
+    </div>
+} @else {
+    <button mat-icon-button [disabled]="true">
+        <mat-icon class="settings-menu-item">settings</mat-icon>
+    </button>
+}
+<!-- Site Settings -->

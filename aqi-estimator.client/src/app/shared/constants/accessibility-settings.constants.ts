@@ -1,0 +1,1 @@
+export const LARGE_TEXT_MULTIPLIER = 1.075;

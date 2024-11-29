@@ -1,11 +1,35 @@
 {
+    "ui": {
+        "language_settings": "Language",
+        "theme_settings": "Theme",
+        "accessibility": "Accessibility",
+        "dark_mode": "Dark mode",
+        "auto_theme": "Auto",
+
+        "dark_theme_smog": "Smog",
+
+        "show_more": "Show More",
+        "show_less": "Show Less",
+
+        "languages": {
+            "en": "English",
+            "mk": "Macedonian",
+            "sq": "Albanian"
+        }
+    },
+    "accessibility_settings": {
+        "high_contrast": "High contrast",
+        "monochrome": "Monochrome",
+        "invert_colors": "Invert colors",
+        "large_text": "Large text"
+    },
     "footer": {
         "version": "PRE-ALPHA",
         "caution": "This Application is in a pre-alpha build, we cannot guarantee the validity of the results for AQI estimation with full confidence. We are constantly improving the application to ensure the most accurate results. Any results from this application should be taken with a grain of salt."
     },
     "landing": {
         "hero_subtext": "CLICK TO FIND OUT",
-        "hero_text": "How Bad is The Air Today?",
+        "hero_text": "How Bad is the Air Today?",
         "camera_feed_tutorial_text": "Take a Picture Where The Sky Is Clearly Visible"
     }
 }

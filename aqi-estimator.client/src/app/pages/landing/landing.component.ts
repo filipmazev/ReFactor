@@ -11,6 +11,7 @@ import { WindowDimensions } from '../../shared/interfaces/services/window-dimens
 import * as camConsts from '../../shared/constants/camera.constants';
 import * as uiConsts from '../../shared/constants/ui.constants';
 import * as animConsts from '../../shared/constants/animation.constants';
+import { BODY_BG_BLACK, FOOTER_BG_BLACK } from '../../shared/constants/class-names.constants';
 
 @Component({
     selector: 'app-landing',
@@ -84,7 +85,7 @@ export class LandingComponent implements OnInit {
     }
     //#endregion
 
-    //#region Camera Button UI Variables
+    //#region UI Variables
     private capture_button_hold_timer?: ReturnType<typeof setInterval>;
    
     protected readonly capture_button_max_size: number = uiConsts.CAPTURE_BUTTON_SIZE;
@@ -130,6 +131,7 @@ export class LandingComponent implements OnInit {
             .then((response: MediaStream) => {
             this.live_camera_feed = response;
             this.capture_display_tutorial_message = true;
+            this.ui_toggleBlackedOutMode(true);
             setTimeout(() => {
                 this.capture_display_tutorial_message = false;
             }, animConsts.CAPTURE_TUTORIA_DURATION)
@@ -182,6 +184,16 @@ export class LandingComponent implements OnInit {
     private ui_resetCaptureButtonSize(): void {
         this.capture_button_size = this.capture_button_max_size;
         this.capture_button_center_circle_size = `${this.capture_button_size}rem`;
+    }
+
+    private ui_toggleBlackedOutMode(state?: boolean): void {
+        const footer = document.querySelector('footer');
+
+        document.body.classList.toggle(BODY_BG_BLACK, state);
+
+        if (footer) {
+            footer.classList.toggle(FOOTER_BG_BLACK, state);
+        }
     }
     //#endregion
 }

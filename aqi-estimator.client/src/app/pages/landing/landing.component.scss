@@ -33,3 +33,7 @@
 .capturing.capture_button::after {
     border: 0.2rem solid var(--capture_button_secondary);
 }
+
+body {
+    background-color: var(--body_bg);
+}

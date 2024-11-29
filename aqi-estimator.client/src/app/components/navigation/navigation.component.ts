@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { TranslateModule } from '@ngx-translate/core';
 import * as classNames from '../../shared/constants/class-names.constants';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-navigation',
@@ -13,6 +14,7 @@ import * as classNames from '../../shared/constants/class-names.constants';
     MatIconModule,
     FormsModule,
     TranslateModule,
+    SettingsComponent
 ],
   templateUrl: './navigation.component.html',
   styleUrl: './navigation.component.scss'
