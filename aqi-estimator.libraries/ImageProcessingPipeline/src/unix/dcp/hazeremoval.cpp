@@ -1,4 +1,4 @@
-#include "../../includes/dcp/hazeremoval.h"
+#include "../includes/dcp/hazeremoval.h"
 
 CHazeRemoval::CHazeRemoval()
 {
