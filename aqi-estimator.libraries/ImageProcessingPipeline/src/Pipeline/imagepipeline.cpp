@@ -7,7 +7,7 @@
 //
 // CC0 Public Domain Dedication <http://creativecommons.org/publicdomain/zero/1.0/>.
 ///
-#include "imagepipeline.h"
+#include "../../includes/pipeline/imagepipeline.h"
 
 // <summary>
 // output_folder | The output folder where the processed images will be saved.

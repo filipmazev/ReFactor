@@ -7,7 +7,7 @@
 //
 // CC0 Public Domain Dedication <http://creativecommons.org/publicdomain/zero/1.0/>.
 ///
-#include "program.h"
+#include "../../includes/pipeline/program.h"
 
 /// @brief Create a CSV of enhanced metadata from a dataset (requires a csv (that has Filepaths), the full path to your images, a full path to the output folder)
 /// @param argc | needs 3 arguments
