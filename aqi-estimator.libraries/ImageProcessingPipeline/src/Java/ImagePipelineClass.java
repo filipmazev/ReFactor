@@ -17,5 +17,6 @@ public class ImagePipelineClass {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return double[0];
     }
 }
