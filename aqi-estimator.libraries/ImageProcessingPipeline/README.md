@@ -2,16 +2,16 @@
 
 ```bash
 g++ -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    main.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp program.cpp \
-    -o ../ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
+    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
 ## Compile With Debug
 
 ```bash
 g++ -DDEBUG -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    main.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp program.cpp \
-    -o ../ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
+    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
 ## Compile for Function | Process Image Into Byte Array
@@ -21,8 +21,8 @@ g++ -DDEBUG -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/H
 
 ```bash
 g++ -DIMAGE_TO_BYTE_ARRAY -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    main.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp program.cpp \
-    -o ../ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
+    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
 ```use
@@ -35,8 +35,8 @@ g++ -DIMAGE_TO_BYTE_ARRAY -std=c++17 -fpic -I. -I/System/Library/Frameworks/Java
 
 ```bash
 g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    main.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp program.cpp \
-    -o ../ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
+    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
 ```use
@@ -50,9 +50,9 @@ g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Fra
 #### 3. full path of ouput csv (where you want to save the result)
 
 ```bash
-g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    main.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp program.cpp \
-    -o ../ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
+g++ -DCSV_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
+    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
 ```use
@@ -65,18 +65,14 @@ g++ -std=c++17 -shared -fpic \
 -I<path_to_java_headers_jni> \
 -I<path_to_java_headers_darwin> \
 -I<path_to_open_cv_headers> \
-Java/Java_ImagePipeline_ExtractEnhachedMetadata.cpp Pipeline/DCP/hazeremoval.cpp Pipeline/DCP/guidedfilter.cpp Pipeline/imagepipeline.cpp \
--o Java/libImagePipeline.so \
+./build/native/Java_ImagePipeline_ExtractEnhachedMetadata.cpp ./src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp \
+-o ./build/java/unix/libImagePipeline.so \
 `pkg-config --cflags --libs opencv4`
-
-g++ -std=c++17 -shared -fpic -I<path_to_java_headers> -I<path_to_open_cv_headers> -o \ 
-libImagePipeline.so Java/Java_ImagePipeline_ExtractEnhachedMetadata.cpp `pkg-config --cflags --libs opencv4`
 ```
 
-```MacOS
-replace <username> with your Username on your machine
+### MacOS
+#### replace <username> with your Username on your machine
 
-path_to_java_headers_jni = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include 
-path_to_java_headers_darwin = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include/darwin
-path_to_open_cv_headers = /opt/homebrew/Cellar/opencv/4.10.0_12/include/opencv4/
-```
+#### path_to_java_headers_jni = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include 
+#### path_to_java_headers_darwin = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include/darwin
+#### path_to_open_cv_headers = /opt/homebrew/Cellar/opencv/4.10.0_12/include/opencv4/

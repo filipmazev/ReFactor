@@ -10,7 +10,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#include "Pipeline/imagepipeline.h"
+#include "imagepipeline.h"
 
 #include <sys/stat.h>
 #include <fstream>
