@@ -10,7 +10,7 @@ C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProces
 C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(32,73): warning C4267: 'argument': conversion from 'size_t' to 'jsize', possible loss of data
   (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
   
-C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9): warning C4297: 'Java_ImagePipelineClass_ExtractEnhancedMetadata': function assumed not to throw an exception but does
+C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9): warning C4297: 'Java_com_codefu_refactor_api_aqiestimatorserver_imageProcessor_ImagePipelineClass_ExtractEnhancedMetadata': function assumed not to throw an exception but does
   (compiling source file '/Java_ImagePipeline_ExtractEnhachedMetadata.cpp')
       C:\Users\filip.mazev\Documents\Code\ReFactor\aqi-estimator.libraries\ImageProcessingPipeline\src\windows\ImageProcessingPipeline\Java_ImagePipeline_ExtractEnhachedMetadata.cpp(18,9):
       The function is extern "C" and /EHc was specified

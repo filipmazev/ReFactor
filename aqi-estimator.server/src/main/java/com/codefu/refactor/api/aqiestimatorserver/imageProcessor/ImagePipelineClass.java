@@ -8,7 +8,7 @@ public class ImagePipelineClass {
         System.loadLibrary("ImageProcessingPipeline");
     }
 
-    public native double[] ExtractEnhancedMetadata(byte[] inputImageBytes);
+    public static native double[] ExtractEnhancedMetadata(byte[] imageBytes);
 
     public static double[] ProcessImage(byte[] imageBytes) {
         try {

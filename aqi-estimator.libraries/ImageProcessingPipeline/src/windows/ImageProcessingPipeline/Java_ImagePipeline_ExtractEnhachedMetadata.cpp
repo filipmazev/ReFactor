@@ -4,7 +4,7 @@
 #include "imagepipeline.h"  
 
 extern "C" JNIEXPORT jdoubleArray JNICALL
-Java_ImagePipelineClass_ExtractEnhancedMetadata(JNIEnv* env, jobject obj, jbyteArray inputImageBytes) {
+Java_com_codefu_refactor_api_aqiestimatorserver_imageProcessor_ImagePipelineClass_ExtractEnhancedMetadata(JNIEnv* env, jclass clazz, jbyteArray inputImageBytes) {
     jsize byteArrayLength = env->GetArrayLength(inputImageBytes);
     jbyte* byteArray = env->GetByteArrayElements(inputImageBytes, nullptr);
 
@@ -31,5 +31,5 @@ Java_ImagePipelineClass_ExtractEnhancedMetadata(JNIEnv* env, jobject obj, jbyteA
     jdoubleArray resultArray = env->NewDoubleArray(concatenated_features.size());
     env->SetDoubleArrayRegion(resultArray, 0, concatenated_features.size(), concatenated_features.data());
 
-    return resultArray; 
+    return resultArray;
 }

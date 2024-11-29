@@ -64,7 +64,7 @@
               "RelativeDocumentMoniker": "ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
               "ToolTip": "C:\\Users\\filip.mazev\\Documents\\Code\\ReFactor\\aqi-estimator.libraries\\ImageProcessingPipeline\\src\\windows\\ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
               "RelativeToolTip": "ImageProcessingPipeline\\Java_ImagePipeline_ExtractEnhachedMetadata.cpp",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-11-29T15:48:55.778Z",
               "EditorCaption": ""
@@ -115,8 +115,7 @@
               "RelativeToolTip": "ImageProcessingPipeline\\pch.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-29T15:37:55.096Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T15:37:55.096Z"
             },
             {
               "$type": "Document",
@@ -128,8 +127,7 @@
               "RelativeToolTip": "ImageProcessingPipeline\\pch.h",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
-              "WhenOpened": "2024-11-29T15:43:31.607Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T15:43:31.607Z"
             },
             {
               "$type": "Document",
@@ -141,8 +139,7 @@
               "RelativeToolTip": "ImageProcessingPipeline\\dllmain.cpp",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-29T15:37:48.384Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-29T15:37:48.384Z"
             },
             {
               "$type": "Document",
