@@ -65,12 +65,29 @@ g++ -std=c++17 -shared -fpic \
 -I<path_to_java_headers_jni> \
 -I<path_to_java_headers_darwin> \
 -I<path_to_open_cv_headers> \
-./build/native/Java_ImagePipeline_ExtractEnhachedMetadata.cpp ./src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp \
--o ./build/java/unix/libImagePipeline.so \
+./src/unix/native/Java_ImagePipeline_ExtractEnhachedMetadata.cpp \
+./src/unix/dcp/hazeremoval.cpp \
+./src/unix/dcp/guidedfilter.cpp \
+./src/unix/pipeline/imagepipeline.cpp \
+-o ./src/unix/macOS/libImagePipeline.so \
 `pkg-config --cflags --libs opencv4`
 ```
 
-### MacOS
+## Compile .so Library Linux
+```bash
+x86_64-linux-musl-g++ -std=c++17 -shared -fPIC -z noexecstack \
+-static-libstdc++ -static-libgcc \
+-I<path_to_java_headers_jni> \
+-I<path_to_java_headers_darwin> \
+-I<path_to_open_cv_headers> \
+./src/unix/native/Java_ImagePipeline_ExtractEnhachedMetadata.cpp \
+./src/unix/dcp/hazeremoval.cpp \
+./src/unix/dcp/guidedfilter.cpp \
+./src/unix/pipeline/imagepipeline.cpp \
+-o ./src/unix/linux/libImagePipeline.so \
+`pkg-config --cflags --libs opencv4`
+```
+
 #### replace <username> with your Username on your machine
 
 #### path_to_java_headers_jni = /Users/<username>/Library/Java/JavaVirtualMachines/openjdk-23.0.1/Contents/Home/include 
@@ -83,8 +100,8 @@ g++ -std=c++17 -shared -fpic \
 cl /LD /std:c++17 ^
    /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" ^
    /IC:\opencv\build\include ^
-   /Fe:.\build\java\windows\libImagePipeline.dll .\build\native\Java_ImagePipeline_ExtractEnhencedMetadata.cpp ^
-   .\src\dcp\hazeremoval.cpp .\src\dcp\guidedfilter.cpp .\src\pipeline\imagepipeline.cpp ^
+   /Fe:.\build\java\windows\libImagePipeline.dll .\src\unix\native\Java_ImagePipeline_ExtractEnhencedMetadata.cpp ^
+   .\src\unix\dcp\hazeremoval.cpp .\src\unix\dcp\guidedfilter.cpp .\src\unix\pipeline\imagepipeline.cpp ^
    /link /LIBPATH:C:\opencv\build\x64\vc16\lib opencv_world4100.lib
 ```
 
