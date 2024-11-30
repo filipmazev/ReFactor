@@ -1,4 +1,4 @@
-# Use Maven with Amazon Corretto 17 for building the app
+# Use Maven with Amazon Corretto 21 for building the app
 FROM maven:3-amazoncorretto-21 AS build
 
 # Set the working directory inside the container
@@ -13,8 +13,16 @@ RUN mvn clean install -DskipTests
 # Now use a slim JDK image to run the app
 FROM amazoncorretto:21
 
-# Install binutils package (which includes execstack)
-# RUN apk update && apk install -y binutils
+# Install necessary libraries for JNI and OpenCV
+RUN apt-get update && apt-get install -y \
+    libc6 \
+    libstdc++6 \
+    libopencv-dev \
+    pkg-config \
+    build-essential \
+    libgcc1 \
+    libjni-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -24,9 +32,6 @@ COPY --from=build /app/target/aqi-estimator-server-0.0.1-SNAPSHOT.jar /app/
 
 # Copy native libraries (if any) to the correct location
 COPY --from=build /app/src/main/resources/native/ /app/src/main/resources/native/
-
-# Modify the ELF header of the native library (optional, for stack guard issues)
-# RUN execstack -c /app/src/main/resources/native/libImagePipeline.so
 
 # Expose the port the Spring Boot app runs on
 EXPOSE 8080
