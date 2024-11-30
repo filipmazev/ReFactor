@@ -158,7 +158,7 @@ relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
                                 : capture_sendImage())"
                     [style.--capture_button_initial_size]="capture_button_initial_size"
                     [ngClass]="{
-                        'captured': capturedImage && aqi_prediction_result && !request_failed,
+                        'captured': capturedImage && !aqi_prediction_result && !request_failed,
                         'capturing': capturing_status,
                         'opacity-50': isLoading,
                         'pointer-events-none cursor-wait': capturing_status && !live_camera_feed

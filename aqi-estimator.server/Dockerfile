@@ -13,16 +13,16 @@ RUN mvn clean install -DskipTests
 # Now use a slim JDK image to run the app
 FROM amazoncorretto:21
 
-# Install necessary libraries for JNI and OpenCV
-RUN apt-get update && apt-get install -y \
-    libc6 \
-    libstdc++6 \
-    libopencv-dev \
-    pkg-config \
-    build-essential \
-    libgcc1 \
-    libjni-dev \
-    && rm -rf /var/lib/apt/lists/*
+# Install necessary libraries for JNI and OpenCV using apk (Alpine-based package manager)
+RUN apk update && apk add --no-cache \
+    libc6-compat \
+    libstdc++ \
+    opencv-dev \
+    pkgconfig \
+    build-base \
+    libgcc \
+    jni-dev \
+    && rm -rf /var/cache/apk/*
 
 # Set the working directory inside the container
 WORKDIR /app
