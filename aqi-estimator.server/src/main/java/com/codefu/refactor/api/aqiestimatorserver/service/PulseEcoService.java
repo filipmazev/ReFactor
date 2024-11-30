@@ -4,6 +4,8 @@ import com.codefu.refactor.api.aqiestimatorserver.AQICalculator.AQICalculator;
 import com.codefu.refactor.api.aqiestimatorserver.DTO.SensorData;
 import com.codefu.refactor.api.aqiestimatorserver.DTO.clientResponses.SensorCalculatedAqiAverages;
 import com.codefu.refactor.api.aqiestimatorserver.service.inter.IPulseEcoService;
+import com.codefu.refactor.api.aqiestimatorserver.webConfig.ApplicationProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -15,7 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PulseEcoService implements IPulseEcoService {
+
+    private final ApplicationProperties properties;
 
     private final double LOCATION_RADIUS = 5.0;
     // In-memory cache to store sensor data and timestamps
@@ -25,8 +30,11 @@ public class PulseEcoService implements IPulseEcoService {
     @Override
     public Optional<List<SensorData>> getLatestSensorDataForCity(String cityName) {
         try{
-            String plainCreds = "refactorTeam" + ":" + "refactorAdmin";
-            String base64Credentials = new String(Base64.getEncoder().encode(plainCreds.getBytes()));
+            ApplicationProperties.PulseEcoProperties pulseEco = properties.getPulseEco();
+            String username = pulseEco.getUsername();
+            String password = pulseEco.getPassword();
+            String plainCredentials = String.format("%s:%s", username, password);
+            String base64Credentials = new String(Base64.getEncoder().encode(plainCredentials.getBytes()));
 
             // Create HTTP Header and RestTemplate object
             HttpHeaders headers = new HttpHeaders();
@@ -76,7 +84,7 @@ public class PulseEcoService implements IPulseEcoService {
                     .sorted(Comparator.comparingDouble(sensor ->
                             calculateDistance(userLat, userLon, parsePosition(sensor.getPosition()))))
                     .limit(3)
-                    .collect(Collectors.toList());
+                    .toList();
 
             // Calculate the average of the sensor values
             double average = sensorList.stream()

@@ -5,12 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.util.Base64;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AQIPredictionRequest {
-    byte @NonNull [] indata;
+    private String indata;
+    private Double lat;
+    private Double lon;
 
-    Double lat;
-    Double lon;
+    public byte[] getIndataAsBytes() {
+        return Base64.getDecoder().decode(indata);
+    }
 }

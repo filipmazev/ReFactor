@@ -17,6 +17,7 @@ import { AQIResultDiscrepencyCategory } from '../../shared/enums/ui/discrepency-
 import * as camConsts from '../../shared/constants/camera.constants';
 import * as uiConsts from '../../shared/constants/ui.constants';
 import * as animConsts from '../../shared/constants/animation.constants';
+import { LocationService } from '../../shared/services/location.service';
 
 @Component({
     selector: 'app-landing',
@@ -128,6 +129,7 @@ export class LandingComponent implements OnInit {
         private windowDimensionService: WindowDimensionsService,
         private dataService: DataService,
         private spinnerService: SpinnerService,
+        private locationService: LocationService,
         private predictorService: PredictorService) {
     }
 
@@ -187,21 +189,33 @@ export class LandingComponent implements OnInit {
     protected async capture_sendImage() {
         if (this.capturedImage) {
             this.request_failed = false;
+    
+            const position = await this.locationService.get_userLocation();
 
-            const formData = new FormData();
+            let latitude: number | null = null; 
+            let longitude: number | null = null;
+
+            if(position) {
+                latitude = position.coords.latitude;
+                longitude = position.coords.longitude;
+            }
 
             const imageBlob = this.dataService.convertBase64ToBlob(this.capturedImage);
 
-            formData.append('image', imageBlob, 'captured-image.jpg');
+            const base64Image = await this.blobToBase64(imageBlob);
 
-            var request: AQIPredictionRequest = new AQIPredictionRequest(imageBlob, undefined, undefined);
+            const request: AQIPredictionRequest = new AQIPredictionRequest(
+                base64Image,
+                latitude,
+                longitude
+            );
 
             this.spinnerService.showSpinner();
 
             await this.predictorService.predict(request).then((result: AQIPredictionResponse) => {
                 this.aqi_prediction_result = result;
                 this.determineDiscrepencyCategory(result);
-            }).catch((error: any) => {
+            }).catch((error) => {
                 console.error(error);
                 this.request_failed = true;
             }).finally(() => {
@@ -209,7 +223,16 @@ export class LandingComponent implements OnInit {
             });
         }
     }
-
+    
+    private blobToBase64(blob: Blob): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result?.toString().split(',')[1] || '');
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
+    }
+    
     protected capture_cancelCapture(softCancel?: boolean): void {
         this.live_camera_feed?.getTracks().forEach((track: MediaStreamTrack) => {
             track.stop();
@@ -270,7 +293,7 @@ export class LandingComponent implements OnInit {
     }   
 
     private determineDiscrepencyCategory(result: AQIPredictionResponse): void {
-        if(result.sensorCalculationHighestAqi) {
+        if(result.sensorCalculationHighestAqi !== undefined && result.sensorCalculationHighestAqi !== null) {
             const sensorAqi = result.sensorCalculationHighestAqi.averageAQIValue;
             const modelAqi = result.modelPredictionValue;
 

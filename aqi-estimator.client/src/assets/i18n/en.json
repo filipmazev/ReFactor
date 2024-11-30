@@ -13,8 +13,7 @@
 
         "languages": {
             "en": "English",
-            "mk": "Macedonian",
-            "sq": "Albanian"
+            "mk": "Macedonian"
         }
     },
     "accessibility_settings": {
@@ -53,6 +52,8 @@
         "aqi_description": "Air Quality Index Estimation",
         "aqi_sensor_discrepency_description": "Sensor Discrepency",
         "aqi_sensor_discrepency_none": "Sensor Verified",
+        "aqi_sensor_not_verified": "Estimation Not Verified by Sensor",
+        "aqi_sensors_result_description": "Sensor Results",
 
         "request_failed": "Request failed. Please try again."
     }

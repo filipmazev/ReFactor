@@ -13,8 +13,7 @@
 
         "languages": {
             "en": "Англиски",
-            "mk": "Македонски",
-            "sq": "Албански"
+            "mk": "Македонски"
         }
     },
     "accessibility_settings": {
@@ -53,6 +52,8 @@
         "aqi_description": "Процена на квалитет на воздухот",
         "aqi_sensor_discrepency_description": "Несогласност на сензор",
         "aqi_sensor_discrepency_none": "Верифицирано од сензор",
+        "aqi_sensor_not_verified": "Процената не е верифицирана од сензор",
+        "aqi_sensors_result_description": "Резултати од сензори",
 
         "request_failed": "Барањето не успеа. Ве молиме обидете се повторно."
     }
