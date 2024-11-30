@@ -5,3 +5,7 @@ export const DEFAULT_IMAGES_LOADING_TIMEOUT_AFTER_N_MS = 5000;
 
 export const EMPTY_STRING = '';
 export const TRUNCATE_SUFFIX = '...';
+
+export const DEFAULT_REQUEST_TIMEOUT_IN_MS = 5000;
+
+export const AQI_PREDICTION_HIGH_DISCREPENCY_LIMIT = 50;

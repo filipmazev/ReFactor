@@ -37,7 +37,23 @@
     
         "buttons": {
             "cancel_capture": "cancel",
-            "save": "save"
-        }
+            "reset": "retake",
+            "capture_send": "estimate"
+        },
+
+        "aqi_category": {
+            "GOOD": "Good",
+            "MODERATE": "Moderate",
+            "UNHEALTHY_FOR_SENSITIVE_GROUPS": "Sensitive Groups",
+            "UNHEALTHY": "Unhealthy",
+            "VERY_UNHEALTHY": "Very Unhealthy",
+            "HAZARDOUS": "Hazardous"
+        },
+
+        "aqi_description": "Air Quality Index Estimation",
+        "aqi_sensor_discrepency_description": "Sensor Discrepency",
+        "aqi_sensor_discrepency_none": "Sensor Verified",
+
+        "request_failed": "Request failed. Please try again."
     }
 }

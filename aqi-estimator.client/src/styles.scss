@@ -26,12 +26,23 @@
 
         --capture_button_text: #000000;
         --capture_button_cancel: #FFFFFF;
-        --capture_button_save: #FFC72C;
+        --capture_button_reset: #FFC72C;
 
         --text_primary: #000000;
         --text_secondary: #ffffff;
         --text_accent: #34327C;
         --text_accent_alt: #211F5E;
+
+        --aqi_category_bg_good: #3DB675;
+        --aqi_category_bg_moderate: #FFD700;
+        --aqi_category_bg_unhelthy_for_sensitive_groups: #FFA500;
+        --aqi_category_bg_unhealthy: #ed6d57;
+        --aqi_category_bg_very_unhealthy: #6f518c;
+        --aqi_category_bg_hazardous: #974444;
+
+        --discrepency_category_bg_low: #3DB675;
+        --discrepency_category_bg_high: #FFA66F;
+        --discrepency_category_bg_unknown: #e07d6c;
 
         --scroll_bg: #706dc4;
         --scroll_thumb: linear-gradient(278deg, #5d59c1 -10.44%, #34327C 100%);
@@ -61,13 +72,23 @@
    
     --capture_button_text: #000000;
     --capture_button_cancel: #FFFFFF;
-    --capture_button_save: #FFC72C;
+    --capture_button_reset: #FFC72C;
 
     --text_primary: #ffffff;
     --text_secondary: #000000;
     --text_accent: #211F5E;
     --text_accent_alt: #34327C;
 
+    --aqi_category_bg_good: #3DB675;
+    --aqi_category_bg_moderate: #FFD700;
+    --aqi_category_bg_unhelthy_for_sensitive_groups: #FFA500;
+    --aqi_category_bg_unhealthy: #ed6d57;
+    --aqi_category_bg_very_unhealthy: #6f518c;
+    --aqi_category_bg_hazardous: #974444;
+
+    --discrepency_category_bg_low: #3DB675;
+    --discrepency_category_bg_high: #FFA66F;
+    --discrepency_category_bg_unknown: #e07d6c;
 
     --scroll_bg: #34327C;
     --scroll_thumb: linear-gradient(278deg, #211F5E -10.44%, #5d59c1 100%);

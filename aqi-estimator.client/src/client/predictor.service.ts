@@ -1,7 +1,10 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { take } from "rxjs";
+import { take, timeout } from "rxjs";
 import { environment } from "../environments/environment";
+import { AQIPredictionResponse } from "../app/shared/classes/models/incoming/AQIPredictionResponse";
+import { AQIPredictionRequest } from "../app/shared/classes/models/outgoing/AQIPredictionRequest";
+import { DEFAULT_REQUEST_TIMEOUT_IN_MS } from "../app/shared/constants/common.constants";
 
 @Injectable({
     providedIn: 'root'
@@ -13,16 +16,20 @@ export class PredictorService {
 
     }
 
-    public predict(data: Blob): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            try {
-                this.httpClient.post(this.BASE_PATH + "/aqi/process", data).pipe(take(1))
-                .subscribe((response: any) => {
-                    resolve(response);
+    public predict(data: AQIPredictionRequest): Promise<AQIPredictionResponse> {
+        return new Promise<AQIPredictionResponse>((resolve, reject) => {
+            this.httpClient.post<AQIPredictionResponse>(this.BASE_PATH + "/process", data)
+                .pipe(take(1), timeout(DEFAULT_REQUEST_TIMEOUT_IN_MS))
+                .subscribe({
+                    next: (response: AQIPredictionResponse) => resolve(response),
+                    error: (error: HttpErrorResponse) => {
+                        if (error.name === 'HttpErrorResponse') {
+                            reject(new Error('Request timed out.'));
+                        } else {
+                            reject(error);
+                        }
+                    }
                 });
-            } catch (error) {
-                reject(error);
-            }
         });
     }
 }

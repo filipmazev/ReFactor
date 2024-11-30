@@ -28,7 +28,14 @@
     border: 0.2rem solid var(--capture_button_primary);
     border-radius: 50%;
     box-sizing: border-box;
+
+    opacity: 0;
+    transition: all 0.2s ease-in-out;
 }
+
+.capture_button:not(.captured)::after {
+    opacity: 1;
+} 
 
 .capturing.capture_button::after {
     border: 0.2rem solid var(--capture_button_secondary);
@@ -36,4 +43,88 @@
 
 body {
     background-color: var(--body_bg);
+}
+
+.good .glow-text {
+    text-shadow: 
+        0 0 10px rgba(152, 255, 175, 0.5), 
+        0 0 20px rgba(75, 255, 93, 0.3), 
+        0 0 30px rgba(117, 255, 241, 0.1); 
+}
+
+.moderate .glow-text {
+    text-shadow: 
+        0 0 10px rgba(255, 255, 152, 0.5), 
+        0 0 20px rgba(255, 255, 75, 0.3), 
+        0 0 30px rgba(255, 255, 117, 0.1); 
+}
+
+.unhelthy_for_sensitive_groups .glow-text {
+    text-shadow: 
+        0 0 10px rgba(255, 152, 152, 0.5), 
+        0 0 20px rgba(255, 75, 75, 0.3), 
+        0 0 30px rgba(255, 117, 117, 0.1); 
+}
+
+.unhealthy .glow-text {
+    text-shadow: 
+        0 0 10px rgba(255, 152, 152, 0.5), 
+        0 0 20px rgba(255, 75, 75, 0.3), 
+        0 0 30px rgba(255, 117, 117, 0.1); 
+}
+
+.very_unhealthy .glow-text {
+    text-shadow: 
+        0 0 10px rgba(255, 152, 255, 0.5), 
+        0 0 20px rgba(255, 75, 255, 0.3), 
+        0 0 30px rgba(255, 117, 255, 0.1); 
+}
+
+.hazardous .glow-text {
+    text-shadow: 
+        0 0 10px rgba(255, 152, 255, 0.5), 
+        0 0 20px rgba(255, 75, 255, 0.3), 
+        0 0 30px rgba(255, 117, 255, 0.1); 
+}
+
+.good .aqi_category {
+    background-color: var(--aqi_category_bg_good);
+    box-shadow: 0 0 10px var(--aqi_category_bg_good);
+}
+
+.moderate .aqi_category {
+    background-color: var(--aqi_category_bg_moderate);
+    box-shadow: 0 0 10px var(--aqi_category_bg_moderate);
+}
+
+.unhelthy_for_sensitive_groups .aqi_category {
+    background-color: var(--aqi_category_bg_unhelthy_for_sensitive_groups);
+    box-shadow: 0 0 10px var(--aqi_category_bg_unhelthy_for_sensitive_groups);
+}
+
+.unhealthy .aqi_category {
+    background-color: var(--aqi_category_bg_unhealthy);
+    box-shadow: 0 0 10px var(--aqi_category_bg_unhealthy);
+}
+
+.very_unhealthy .aqi_category {
+    background-color: var(--aqi_category_bg_very_unhealthy);
+    box-shadow: 0 0 10px var(--aqi_category_bg_very_unhealthy);
+}
+
+.hazardous .aqi_category {
+    background-color: var(--aqi_category_bg_hazardous);
+    box-shadow: 0 0 10px var(--aqi_category_bg_hazardous);
+}
+
+.discrepency_category_low {
+    background-color: var(--discrepency_category_bg_low);
+}
+
+.discrepency_category_high {
+    background-color: var(--discrepency_category_bg_high);
+}
+
+.discrepency_category_unknown {
+    background-color: var(--discrepency_category_bg_unknown);
 }

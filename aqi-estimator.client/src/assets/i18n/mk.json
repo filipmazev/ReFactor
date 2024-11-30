@@ -37,7 +37,23 @@
 
         "buttons": {
             "cancel_capture": "откажи",
-            "save": "зачувај"
-        }
+            "reset": "ресетирај",
+            "capture_send": "процени"
+        },
+
+        "aqi_category": {
+            "GOOD": "Добар",
+            "MODERATE": "Умерен",
+            "UNHEALTHY_FOR_SENSITIVE_GROUPS": "За Осетливи Групи",
+            "UNHEALTHY": "Нездрав",
+            "VERY_UNHEALTHY": "Многу Нездрав",
+            "HAZARDOUS": "Опасен"
+        },
+
+        "aqi_description": "Процена на квалитет на воздухот",
+        "aqi_sensor_discrepency_description": "Несогласност на сензор",
+        "aqi_sensor_discrepency_none": "Верифицирано од сензор",
+
+        "request_failed": "Барањето не успеа. Ве молиме обидете се повторно."
     }
 }

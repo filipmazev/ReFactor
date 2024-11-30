@@ -1,5 +1,5 @@
 <section class="w-full flex flex-col min-h-[70vh] xs:min-h-[65vh] sm:min-h-[75vh] justify-center align-middle items-center
-relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
+relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20 overflow-hidden">
 
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
         flex flex-col justify-center align-middle items-center z-[-1]"
@@ -15,47 +15,118 @@ relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
     
     <div class="flex flex-col justify-between align-middle w-full sm:w-fit h-[70vh] min-h-[70vh] gap-5">
 
-        @if(windowDimensions.width <= windowDimensions.threshold_sm) {
-            <div class="flex flex-row justify-between w-full align-middle items-center mt-10 opacity-0 transition-opacity duration-500 ease-in-out sm:min-w-[30vw]"
-                [ngClass]="{
-                    'opacity-100 delay-1000': capturing_status,
-                    'opacity-0 pointer-events-none touch-none select-none': !capturing_status
-                }">
+        <div class="flex flex-row justify-between w-full align-middle items-center mt-10 opacity-0 transition-opacity duration-500 ease-in-out sm:min-w-[30vw]"
+            [ngClass]="{
+                'opacity-100 delay-1000': capturing_status,
+                'opacity-0 pointer-events-none touch-none select-none': !capturing_status,
+                'opacity-30 grayscale delay-0': isLoading && capturing_status
+            }">
+            <button 
+                [disabled]="isLoading"
+                (click)="capturing_status ? capture_cancelCapture() : null"
+                class="flex flex-col justify-center align-middle items-center text-center bg-capture_button_cancel text-capture_button_text text-[.85rem] px-3 w-[4rem] rounded-full sm:hover:scale-[1.015]">
+                {{ "landing.buttons.cancel_capture" | translate }}
+            </button> 
+
+            @if(capturedImage && !request_failed && aqi_prediction_result === undefined) {
                 <button 
-                    (click)="capturing_status ? capture_cancelCapture() : null"
-                    class="flex flex-col justify-center align-middle items-center text-center bg-capture_button_cancel text-capture_button_text text-[.85rem] px-3 w-[4rem] rounded-full sm:hover:scale-[1.015]">
-                    {{ "landing.buttons.cancel_capture" | translate }}
+                    [disabled]="isLoading"
+                    (click)="capturing_status ? capture_resetCapture() : null"
+                    class="flex flex-col justify-center align-middle items-center text-center bg-capture_button_reset text-capture_button_text text-[.85rem] px-3 w-[4rem] rounded-full sm:hover:scale-[1.015]">
+                    {{ "landing.buttons.reset" | translate }}
                 </button> 
-    
-                <button 
-                    (click)="capturing_status ? capture_saveResult() : null"
-                    class="flex flex-col justify-center align-middle items-center text-center bg-capture_button_save text-capture_button_text text-[.85rem] px-3 w-[4rem] rounded-full sm:hover:scale-[1.015]">
-                    {{ "landing.buttons.save" | translate }}
-                </button> 
-            </div>
-        } @else {
-            <div> </div>
-        }
+            } @else {
+                <div> </div>
+            }
+        </div>
 
         @if(live_camera_feed || capturedImage) {
             <div class="fade-in-anim w-full flex flex-col justify-center align-middle">
                 @if(capturedImage || !live_camera_feed) {
-                    <img class="rounded-md sm:w-full h-full sm:h-[40vh]" 
-                    [src]="capturedImage" alt="Captured Image">
+                    <div class="relative">
+                        <img class="rounded-md sm:w-full h-full sm:h-[40vh]" 
+                        [src]="capturedImage" alt="Captured Image">
+
+                        @if(aqi_prediction_result !== undefined && !request_failed) {
+                            <div class="fade-in-anim absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
+                            flex flex-col justify-center align-middle items-center gap-[.75rem] text-[#ffffff] rounded-md bg-[#00000038] backdrop-blur-sm"
+                            [ngClass]="{
+                                'good': aqi_prediction_result.aqiCategory === AQICategory.GOOD,
+                                'moderate': aqi_prediction_result.aqiCategory === AQICategory.MODERATE,
+                                'unhealthy_for_sensitive_groups': aqi_prediction_result.aqiCategory === AQICategory.UNHEALTHY_FOR_SENSITIVE_GROUPS,
+                                'unhealthy': aqi_prediction_result.aqiCategory === AQICategory.UNHEALTHY,
+                                'very_unhealthy': aqi_prediction_result.aqiCategory === AQICategory.VERY_UNHEALTHY,
+                                'hazardous': aqi_prediction_result.aqiCategory === AQICategory.HAZARDOUS
+                            }">
+                                <div class="text-[6rem] font-black glow-text"> 
+                                    {{ aqi_prediction_result.modelPredictionValue }}
+                                </div>
+
+                                <div class="flex flex-col justify-center align-middle items-center text-center gap-3 mt-[-1rem]">
+                                    <div class="px-5 py-2 min-w-[7rem] rounded-full aqi_category font-semibold"> 
+                                        {{ "landing.aqi_category." + aqi_prediction_result.aqiCategory | translate }}
+                                    </div>
+
+                                    <div class="px-5 shadow-sm opacity-85 font-semibold text-[0.85rem]"> 
+                                        {{ "landing.aqi_description" | translate }}
+                                    </div>
+
+                                    @if(currentDiscrepencyCategory !== AQIResultDiscrepencyCategory.None){
+                                        <div class="flex flex-row justify-center align-middle items-center gap-[0.4rem]">
+                                            <div class="w-[.65rem] h-[.65rem] rounded-full"
+                                            [ngClass]="{
+                                                'discrepency_category_low': currentDiscrepencyCategory === AQIResultDiscrepencyCategory.Low,
+                                                'discrepency_category_high': currentDiscrepencyCategory === AQIResultDiscrepencyCategory.High,
+                                                'discrepency_category_unknown': currentDiscrepencyCategory === AQIResultDiscrepencyCategory.Unknown
+                                            }">
+    
+                                            </div>
+                                            
+                                            <div class="shadow-sm opacity-85 font-semibold text-[0.85rem]"> 
+                                                {{ "landing.aqi_sensor_discrepency_description" | translate }}
+                                            </div>
+                                        </div>
+                                    } @else {
+                                        <div class="flex flex-row justify-center align-middle items-center gap-[0.4rem]">
+                                            <div class="w-[1.15rem] h-[1.15rem]">
+                                                <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M7.5924 1.20027C7.34888 1.4078 7.22711 1.51158 7.09706 1.59874C6.79896 1.79854 6.46417 1.93721 6.1121 2.00672C5.95851 2.03705 5.79903 2.04977 5.48008 2.07522C4.6787 2.13918 4.278 2.17115 3.94371 2.28923C3.17051 2.56233 2.56233 3.17051 2.28923 3.94371C2.17115 4.278 2.13918 4.6787 2.07522 5.48008C2.04977 5.79903 2.03705 5.95851 2.00672 6.1121C1.93721 6.46417 1.79854 6.79896 1.59874 7.09706C1.51158 7.22711 1.40781 7.34887 1.20027 7.5924C0.678833 8.2043 0.418102 8.5102 0.265222 8.8301C-0.0884075 9.57 -0.0884075 10.43 0.265222 11.1699C0.418112 11.4898 0.678833 11.7957 1.20027 12.4076C1.40778 12.6511 1.51158 12.7729 1.59874 12.9029C1.79854 13.201 1.93721 13.5358 2.00672 13.8879C2.03705 14.0415 2.04977 14.201 2.07522 14.5199C2.13918 15.3213 2.17115 15.722 2.28923 16.0563C2.56233 16.8295 3.17051 17.4377 3.94371 17.7108C4.278 17.8288 4.6787 17.8608 5.48008 17.9248C5.79903 17.9502 5.95851 17.963 6.1121 17.9933C6.46417 18.0628 6.79896 18.2015 7.09706 18.4013C7.22711 18.4884 7.34887 18.5922 7.5924 18.7997C8.2043 19.3212 8.5102 19.5819 8.8301 19.7348C9.57 20.0884 10.43 20.0884 11.1699 19.7348C11.4898 19.5819 11.7957 19.3212 12.4076 18.7997C12.6511 18.5922 12.7729 18.4884 12.9029 18.4013C13.201 18.2015 13.5358 18.0628 13.8879 17.9933C14.0415 17.963 14.201 17.9502 14.5199 17.9248C15.3213 17.8608 15.722 17.8288 16.0563 17.7108C16.8295 17.4377 17.4377 16.8295 17.7108 16.0563C17.8288 15.722 17.8608 15.3213 17.9248 14.5199C17.9502 14.201 17.963 14.0415 17.9933 13.8879C18.0628 13.5358 18.2015 13.201 18.4013 12.9029C18.4884 12.7729 18.5922 12.6511 18.7997 12.4076C19.3212 11.7957 19.5819 11.4898 19.7348 11.1699C20.0884 10.43 20.0884 9.57 19.7348 8.8301C19.5819 8.5102 19.3212 8.2043 18.7997 7.5924C18.5922 7.34887 18.4884 7.22711 18.4013 7.09706C18.2015 6.79896 18.0628 6.46417 17.9933 6.1121C17.963 5.95851 17.9502 5.79903 17.9248 5.48008C17.8608 4.6787 17.8288 4.278 17.7108 3.94371C17.4377 3.17051 16.8295 2.56233 16.0563 2.28923C15.722 2.17115 15.3213 2.13918 14.5199 2.07522C14.201 2.04977 14.0415 2.03705 13.8879 2.00672C13.5358 1.93721 13.201 1.79854 12.9029 1.59874C12.7729 1.51158 12.6511 1.40781 12.4076 1.20027C11.7957 0.678833 11.4898 0.418112 11.1699 0.265222C10.43 -0.0884075 9.57 -0.0884075 8.8301 0.265222C8.5102 0.418102 8.2043 0.678833 7.5924 1.20027ZM14.3735 7.86314C14.6913 7.5453 14.6913 7.03 14.3735 6.71216C14.0557 6.39433 13.5403 6.39433 13.2225 6.71216L8.3723 11.5624L6.77746 9.9676C6.45963 9.6498 5.94432 9.6498 5.62649 9.9676C5.30866 10.2854 5.30866 10.8007 5.62649 11.1186L7.79678 13.2889C8.1146 13.6067 8.6299 13.6067 8.9478 13.2889L14.3735 7.86314Z" fill="#4EE043"/>
+                                                </svg> 
+                                            </div>
+
+                                            <div class="shadow-sm opacity-85 font-semibold text-[0.85rem]">
+                                                {{ "landing.aqi_sensor_discrepency_none" | translate }}
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        } 
+
+                        @if(request_failed && aqi_prediction_result === undefined) {
+                            <div class="fade-in-anim absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
+                                flex flex-col gap-[0.3rem] justify-center align-middle items-center rounded-md bg-[#00000038] backdrop-blur-sm">
+                                <div class="text-[4rem]"> {{"&#128533;"}} </div>
+                                <div class="text-[#ffffff] font-semibold text-[1.3rem]"> {{ "landing.request_failed" | translate }} </div>
+                            </div>
+                        }
+                    </div>
                 } @else {
                     <div class="relative">
-                        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
-                            flex flex-col justify-center align-middle items-center text-center opacity-0 transition-opacity duration-500 ease-in-out
-                            font-semibold text-[1.15rem] rounded-md z-[500] text-[#ffffff] capture_display_tutorial_message"
-                            [ngClass]="{
-                                'opacity-100 delay-500': capture_display_tutorial_message && initial_capture,
-                                'opacity-0': !capture_display_tutorial_message || !initial_capture
-                            }">
-                            <div class="h-full pb-[5rem] flex flex-col justify-end w-[70%]">
-                                {{ "landing.camera_feed_tutorial_text" | translate }}
+                        @if(!aqi_prediction_result) {
+                            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full
+                                flex flex-col justify-center align-middle items-center text-center opacity-0 transition-opacity duration-500 ease-in-out
+                                font-semibold text-[1.15rem] rounded-md z-[500] text-[#ffffff] capture_display_tutorial_message"
+                                [ngClass]="{
+                                    'opacity-100 delay-500': capture_display_tutorial_message && initial_capture,
+                                    'opacity-0': !capture_display_tutorial_message || !initial_capture
+                                }">
+                                <div class="h-full pb-[5rem] flex flex-col justify-end w-[70%]">
+                                    {{ "landing.camera_feed_tutorial_text" | translate }}
+                                </div>
                             </div>
-                        </div>
-                        
+                        }
+
                         <webcam 
                             [trigger]="$capturing_trigger" 
                             (imageCapture)="capture_handleImage($event)"
@@ -77,18 +148,27 @@ relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
             <div class="transition-colors duration-500 ease-in-out
             w-full sm:w-fit h-full rounded-md rounded-t-none sm:rounded-t-md flex flex-col justify-center align-middle items-center px-[1rem] py-[1rem]">   
                 <button 
-                    (click)="!live_camera_feed ? capture_requestCapture() : !capturedImage ? capture_takeImage() : capture_resetCapture()"
+                    (click)="!live_camera_feed 
+                        ? capture_requestCapture() 
+                        : (!capturedImage 
+                            ? capture_takeImage() 
+                            : request_failed || aqi_prediction_result !== undefined
+                                ? capture_resetCapture()
+                                : capture_sendImage())"
                     [style.--capture_button_initial_size]="capture_button_initial_size"
                     [ngClass]="{
+                        'captured': capturedImage && aqi_prediction_result && !request_failed,
                         'capturing': capturing_status,
+                        'opacity-50': isLoading,
                         'pointer-events-none cursor-wait': capturing_status && !live_camera_feed
                     }"
-                    class="capture_button" 
-                    (mousedown)="ui_startCaptureButtonShrink()" 
-                    (touchstart)="ui_startCaptureButtonShrink()" 
-                    (mouseup)="ui_stopCaptureButtonShrink()" 
-                    (mouseleave)="ui_stopCaptureButtonShrink()" 
-                    (touchend)="ui_stopCaptureButtonShrink()">
+                    [disabled]="isLoading"
+                    class="capture_button transition-all ease-in-out duration-300 cursor-not-allowed pointer-events-none touch-none" 
+                    (mousedown)="isLoading ? null : ui_startCaptureButtonShrink()" 
+                    (touchstart)="isLoading ? null : ui_startCaptureButtonShrink()" 
+                    (mouseup)="isLoading ? null : ui_stopCaptureButtonShrink()" 
+                    (mouseleave)="isLoading ? null : ui_stopCaptureButtonShrink()" 
+                    (touchend)="isLoading ? null : ui_stopCaptureButtonShrink()">
                     @if(!capturedImage)  {
                         <div class="capture_button_center_circle" 
                             [ngClass]="{
@@ -97,12 +177,151 @@ relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
                             }"
                             [ngStyle]="{'width': capture_button_center_circle_size, 'height': capture_button_center_circle_size}">
                         </div>
+                    } @else if (aqi_prediction_result === undefined && !request_failed) {
+                        @if(!isLoading) {
+                            <div class="text-[#ffffff]"> {{ "landing.buttons.capture_send" | translate }}</div>
+                            <div [ngStyle]="{'width': (capture_button_max_size * 1.3) + 'rem', 'height': (capture_button_max_size * 1.3) + 'rem'}"
+                                class="cursor-pointer rounded-full bg-[transparent] absolute top-1/2 left-1/2 transition-all duration-300 -translate-x-1/2 -translate-y-1/2 overflow-hidden">
+                                <svg viewBox="0 0 644 644" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <g filter="url(#filter0_d_16_54)">
+                                    <mask id="mask0_16_54" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="50" y="50" width="544" height="544">
+                                    <circle cx="322" cy="322" r="272" fill="black"/>
+                                    </mask>
+                                    <g mask="url(#mask0_16_54)">
+                                    <g filter="url(#filter1_f_16_54)">
+                                    <ellipse cx="-139.656" cy="836.045" rx="333.659" ry="115.91" transform="rotate(-31.6019 -139.656 836.045)" fill="#06FFE1"/>
+                                    <g filter="url(#filter3_d_16_54)">
+                                    <ellipse cx="92.9191" cy="733.189" rx="333.659" ry="115.91" transform="rotate(-31.6019 92.9191 733.189)" fill="#8DFF7B"/>
+                                    </g>
+                                    <ellipse cx="638.265" cy="115.843" rx="638.265" ry="115.843" transform="matrix(0.808654 -0.588284 0.572142 0.820155 -11.9556 706.258)" fill="#0697FF"/>
+                                    <ellipse cx="638.265" cy="115.843" rx="638.265" ry="115.843" transform="matrix(0.808654 -0.588284 0.572142 0.820155 397.204 450.946)" fill="#00FF75"/>
+                                    <g filter="url(#filter4_f_16_54)">
+                                    <g filter="url(#filter5_f_16_54)">
+                                    <ellipse cx="491.991" cy="81.9656" rx="491.991" ry="81.9656" transform="matrix(0.070934 0.997481 -0.998032 0.0627001 47.9573 -574.434)" fill="#00FF75"/>
+                                    </g>
+                                    <g filter="url(#filter6_f_16_54)">
+                                    <g filter="url(#filter7_d_16_54)">
+                                    <ellipse cx="225.196" cy="61.4459" rx="225.196" ry="61.4459" transform="matrix(-0.713136 -0.701025 -0.701025 0.713136 884.627 237.305)" fill="#06FFE1"/>
+                                    </g>
+                                    <g filter="url(#filter8_d_16_54)">
+                                    <ellipse cx="225.196" cy="61.4459" rx="225.196" ry="61.4459" transform="matrix(-0.713136 -0.701025 -0.701025 0.713136 750.608 131.037)" fill="#D5FF7B"/>
+                                    </g>
+                                    <ellipse cx="430.291" cy="61.4739" rx="430.291" ry="61.4739" transform="matrix(-0.669206 -0.743077 -0.751323 0.659934 612.077 23.119)" fill="#0697FF"/>
+                                    </g>
+                                    <g filter="url(#filter9_f_16_54)">
+                                    <g filter="url(#filter10_d_16_54)">
+                                    <ellipse cx="136.489" cy="542.347" rx="144.489" ry="115.91" fill="#06FFFF"/>
+                                    </g>
+                                    <g filter="url(#filter11_d_16_54)">
+                                    <ellipse cx="245.61" cy="576.616" rx="144.489" ry="115.91" fill="#8DFF7B"/>
+                                    </g>
+                                    <ellipse cx="279.952" cy="115.688" rx="279.952" ry="115.688" transform="matrix(0.984347 -0.176239 0.0249449 0.999689 213.04 498.723)" fill="#0697FF"/>
+                                    <ellipse cx="279.952" cy="115.688" rx="279.952" ry="115.688" transform="matrix(0.984347 -0.176239 0.0249449 0.999689 421.884 495.677)" fill="#ADFF00"/>
+                                    </g>
+                                    </g>
+                                    </g>
+                                    <circle cx="322" cy="322" r="272" fill="url(#paint0_radial_16_54)"/>
+                                    </g>
+                                    </g>
+                                    <defs>
+                                    <filter id="filter0_d_16_54" x="0" y="0" width="644" height="644" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset/>
+                                    <feGaussianBlur stdDeviation="25"/>
+                                    <feComposite in2="hardAlpha" operator="out"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0.284213 0 0 0 0 0.654622 0 0 0 0 0.454601 0 0 0 0.7 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_16_54"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_16_54" result="shape"/>
+                                    </filter>
+                                    <filter id="filter1_f_16_54" x="-580.315" y="-1490" width="2230.36" height="2676.87" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                    <feGaussianBlur stdDeviation="75" result="effect1_foregroundBlur_16_54"/>
+                                    </filter>
+                                    <filter id="filter3_d_16_54" x="-201.74" y="532.366" width="589.318" height="409.646" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset dy="4"/>
+                                    <feGaussianBlur stdDeviation="2"/>
+                                    <feComposite in2="hardAlpha" operator="out"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_16_54"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_16_54" result="shape"/>
+                                    </filter>
+                                    <filter id="filter4_f_16_54" x="-444.733" y="-1540" width="1620.66" height="2432.53" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                    <feGaussianBlur stdDeviation="100" result="effect1_foregroundBlur_16_54"/>
+                                    </filter>
+                                    <filter id="filter5_f_16_54" x="-291.281" y="-1540" width="588.213" height="2152.24" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                    <feGaussianBlur stdDeviation="100" result="effect1_foregroundBlur_16_54"/>
+                                    </filter>
+                                    <filter id="filter6_f_16_54" x="-494.733" y="-1057.72" width="1592" height="1594.86" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                    <feGaussianBlur stdDeviation="125" result="effect1_foregroundBlur_16_54"/>
+                                    </filter>
+                                    <filter id="filter7_d_16_54" x="510.642" y="-40.6221" width="340.627" height="335.757" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset dy="4"/>
+                                    <feGaussianBlur stdDeviation="2"/>
+                                    <feComposite in2="hardAlpha" operator="out"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_16_54"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_16_54" result="shape"/>
+                                    </filter>
+                                    <filter id="filter8_d_16_54" x="376.624" y="-146.89" width="340.627" height="335.757" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset dy="4"/>
+                                    <feGaussianBlur stdDeviation="2"/>
+                                    <feComposite in2="hardAlpha" operator="out"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_16_54"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_16_54" result="shape"/>
+                                    </filter>
+                                    <filter id="filter9_f_16_54" x="-208" y="226.437" width="1383.93" height="666.089" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                                    <feGaussianBlur stdDeviation="100" result="effect1_foregroundBlur_16_54"/>
+                                    </filter>
+                                    <filter id="filter10_d_16_54" x="-12" y="426.437" width="296.978" height="239.819" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset dy="4"/>
+                                    <feGaussianBlur stdDeviation="2"/>
+                                    <feComposite in2="hardAlpha" operator="out"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_16_54"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_16_54" result="shape"/>
+                                    </filter>
+                                    <filter id="filter11_d_16_54" x="97.1206" y="460.706" width="296.978" height="239.819" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                                    <feOffset dy="4"/>
+                                    <feGaussianBlur stdDeviation="2"/>
+                                    <feComposite in2="hardAlpha" operator="out"/>
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_16_54"/>
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_16_54" result="shape"/>
+                                    </filter>
+                                    <radialGradient id="paint0_radial_16_54" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(322 322) rotate(90) scale(272)">
+                                    <stop stop-color="#737373" stop-opacity="0"/>
+                                    <stop offset="0.425" stop-color="#9E9E9E" stop-opacity="0.15"/>
+                                    <stop offset="1" stop-color="#D9D9D9" stop-opacity="0.55"/>
+                                    </radialGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        } 
                     } @else {
-                        <div [ngStyle]="{'width': capture_button_center_circle_size, 'height': capture_button_center_circle_size}"
-                            class="cursor-pointer rounded-full p-[1rem] bg-[#ffffffdb] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <div class="p-[1.15rem] bg-[#fffffff3] rounded-full" [ngStyle]="{'width': capture_button_initial_size, 'height': capture_button_initial_size}">
                             <svg viewBox="0 0 67 70" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M63.1102 34.8918C65.4 35.2271 66.992 37.4105 66.6667 39.7686C65.6709 46.9788 62.485 53.68 57.5656 58.9119C52.6457 64.1434 46.2447 67.6378 39.2787 68.8941C32.3128 70.1503 25.1396 69.1041 18.7864 65.9051C15.8009 64.4021 13.0684 62.4598 10.6664 60.1552L7.14852 63.7781C4.51052 66.495 0 64.5708 0 60.7288V43.536H16.6944C20.4251 43.536 22.2934 48.1811 19.6554 50.898L16.5934 54.0513C18.3415 55.6892 20.3158 57.0748 22.4649 58.1568C27.2298 60.5558 32.6097 61.3403 37.8341 60.3984C43.0584 59.4561 47.8594 56.8354 51.549 52.9115C55.239 48.9876 57.6284 43.9622 58.375 38.5542C58.7008 36.1962 60.8209 34.5565 63.1102 34.8918ZM48.2136 3.91709C51.2043 5.4229 53.9409 7.36931 56.3462 9.67891L59.8515 6.06883C62.4896 3.35209 67 5.27619 67 9.11824V26.2862H50.3296C46.5989 26.2862 44.7305 21.641 47.3686 18.9243L50.4192 15.7826C48.668 14.1398 46.6894 12.7503 44.5353 11.6656C39.7702 9.26651 34.3903 8.4818 29.1659 9.424C23.9415 10.3661 19.1406 12.9869 15.4509 16.9107C11.7611 20.8345 9.37171 25.8603 8.62495 31.2681C8.29933 33.6261 6.17924 35.2658 3.88959 34.9304C1.59994 34.5951 0.00777137 32.4117 0.333386 30.0537C1.32907 22.8433 4.51488 16.1424 9.43456 10.9106C14.3542 5.67876 20.7554 2.18451 27.7213 0.928272C34.6872 -0.327959 41.8604 0.71826 48.2136 3.91709Z" 
-                                fill="#000000"/>
+                                <path d="M63.1102 34.8918C65.4 35.2271 66.992 37.4105 66.6667 39.7686C65.6709 46.9788 62.485 53.68 57.5656 58.9119C52.6457 64.1434 46.2447 67.6378 39.2787 68.8941C32.3128 70.1503 25.1396 69.1041 18.7864 65.9051C15.8009 64.4021 13.0684 62.4598 10.6664 60.1552L7.14852 63.7781C4.51052 66.495 0 64.5708 0 60.7288V43.536H16.6944C20.4251 43.536 22.2934 48.1811 19.6554 50.898L16.5934 54.0513C18.3415 55.6892 20.3158 57.0748 22.4649 58.1568C27.2298 60.5558 32.6097 61.3403 37.8341 60.3984C43.0584 59.4561 47.8594 56.8354 51.549 52.9115C55.239 48.9876 57.6284 43.9622 58.375 38.5542C58.7008 36.1962 60.8209 34.5565 63.1102 34.8918ZM48.2136 3.91709C51.2043 5.4229 53.9409 7.36931 56.3462 9.67891L59.8515 6.06883C62.4896 3.35209 67 5.27619 67 9.11824V26.2862H50.3296C46.5989 26.2862 44.7305 21.641 47.3686 18.9243L50.4192 15.7826C48.668 14.1398 46.6894 12.7503 44.5353 11.6656C39.7702 9.26651 34.3903 8.4818 29.1659 9.424C23.9415 10.3661 19.1406 12.9869 15.4509 16.9107C11.7611 20.8345 9.37171 25.8603 8.62495 31.2681C8.29933 33.6261 6.17924 35.2658 3.88959 34.9304C1.59994 34.5951 0.00777137 32.4117 0.333386 30.0537C1.32907 22.8433 4.51488 16.1424 9.43456 10.9106C14.3542 5.67876 20.7554 2.18451 27.7213 0.928272C34.6872 -0.327959 41.8604 0.71826 48.2136 3.91709Z" fill="#1A1A1A"/>
                             </svg>
                         </div>
                     }
