@@ -25,7 +25,7 @@ import * as animConsts from '../../shared/constants/animation.constants';
         TranslateModule,
         NgClass,
         NgStyle,
-        WebcamModule
+        WebcamModule,
     ],
     templateUrl: './landing.component.html',
     styleUrls: ['./landing.component.scss']
