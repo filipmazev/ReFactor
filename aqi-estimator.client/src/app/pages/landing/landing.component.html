@@ -67,7 +67,7 @@ relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
                                         {{ "landing.aqi_category." + aqi_prediction_result.aqiCategory | translate }}
                                     </div>
 
-                                    <div class="px-5 shadow-sm opacity-85 font-semibold text-[0.85rem]"> 
+                                    <div class="px-5 opacity-85 font-semibold text-[0.85rem]"> 
                                         {{ "landing.aqi_description" | translate }}
                                     </div>
 
@@ -82,10 +82,24 @@ relative text-primary select-none lg:px-[15rem] md:px-[10rem] px-5 xl:pt-20">
     
                                             </div>
                                             
-                                            <div class="shadow-sm opacity-85 font-semibold text-[0.85rem]"> 
-                                                {{ "landing.aqi_sensor_discrepency_description" | translate }}
+                                            <div class="opacity-85 font-semibold text-[0.85rem]"> 
+                                                {{ 
+                                                    (currentDiscrepencyCategory !==  AQIResultDiscrepencyCategory.Unknown ? "landing.aqi_sensor_discrepency_description" : "landing.aqi_sensor_not_verified") | translate 
+                                                }}
                                             </div>
                                         </div>
+
+                                        @if(currentDiscrepencyCategory === AQIResultDiscrepencyCategory.High && aqi_prediction_result.sensorCalculationHighestAqi !== undefined) {
+                                            <div class="flex flex-row gap-3 justify-center align-middle items-center text-center">
+                                                <div class="opacity-85 font-semibold text-[0.85rem]">
+                                                    {{ "landing.aqi_sensors_result_description" | translate }} :
+                                                </div>
+
+                                                <div class="text-[1.25rem] font-bold">
+                                                    {{ aqi_prediction_result.sensorCalculationHighestAqi!.averageAQIValue }}
+                                                </div>
+                                            </div>
+                                        }
                                     } @else {
                                         <div class="flex flex-row justify-center align-middle items-center gap-[0.4rem]">
                                             <div class="w-[1.15rem] h-[1.15rem]">

@@ -16,6 +16,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class AQIController {
 
     private final IPulseEcoService pulseEcoService;
@@ -55,9 +56,9 @@ public class AQIController {
     }
 
     @PostMapping("/process")
-    public ResponseEntity<AQIPredictionResponse> process(@RequestBody byte[] image){
-        Double userLat = 41.98390993402405;
-        Double userLon = 21.451233146520536;
+    public ResponseEntity<AQIPredictionResponse> process(@RequestBody AQIPredictionRequest request){
+        Double userLat = request.getLat();
+        Double userLon = request.getLon();
 
         // Prepare the response
         AQIPredictionResponse result = new AQIPredictionResponse();
@@ -81,7 +82,7 @@ public class AQIController {
 
         double[] imageFeatures;
         try {
-            imageFeatures = ImagePipelineClass.ProcessImage(image);
+            imageFeatures = ImagePipelineClass.ProcessImage(request.getIndataAsBytes());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

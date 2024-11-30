@@ -2,7 +2,7 @@ package com.codefu.refactor.api.aqiestimatorserver.imageProcessor;
 
 public class ImagePipelineClass {
     static {
-        System.load("/app/src/main/resources/native/libImagePipeline.so");
+        System.loadLibrary("ImageProcessingPipeline");
     }
 
     public static native double[] ExtractEnhancedMetadata(byte[] imageBytes);
