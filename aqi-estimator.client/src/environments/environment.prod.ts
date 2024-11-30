@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
     i18nPath: '/assets/i18n/',
-    apiPath: 'http://localhost:8080/api',
+    apiPath: 'https://leading-tapir-violently.ngrok-free.app/api',
     dbVersion: 2,
 };
