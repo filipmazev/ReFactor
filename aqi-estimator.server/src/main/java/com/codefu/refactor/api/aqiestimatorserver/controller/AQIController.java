@@ -10,8 +10,8 @@ import com.codefu.refactor.api.aqiestimatorserver.service.inter.IPulseEcoService
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalTime;
 import java.util.*;
 
 @RestController
@@ -55,9 +55,9 @@ public class AQIController {
     }
 
     @PostMapping("/process")
-    public ResponseEntity<AQIPredictionResponse> process(@RequestBody AQIPredictionRequest request){
-        Double userLat = request.getLat();
-        Double userLon = request.getLon();
+    public ResponseEntity<AQIPredictionResponse> process(@RequestBody byte[] image){
+        Double userLat = 41.98390993402405;
+        Double userLon = 21.451233146520536;
 
         // Prepare the response
         AQIPredictionResponse result = new AQIPredictionResponse();
@@ -81,7 +81,7 @@ public class AQIController {
 
         double[] imageFeatures;
         try {
-            imageFeatures = ImagePipelineClass.ProcessImage(request.getIndata());
+            imageFeatures = ImagePipelineClass.ProcessImage(image);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

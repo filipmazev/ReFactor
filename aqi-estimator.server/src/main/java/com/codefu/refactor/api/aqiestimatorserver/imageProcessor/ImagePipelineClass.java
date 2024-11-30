@@ -1,11 +1,8 @@
 package com.codefu.refactor.api.aqiestimatorserver.imageProcessor;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 public class ImagePipelineClass {
     static {
-        System.loadLibrary("ImageProcessingPipeline");
+        System.load("/app/src/main/resources/native/libImagePipeline.so");
     }
 
     public static native double[] ExtractEnhancedMetadata(byte[] imageBytes);
