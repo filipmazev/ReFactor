@@ -125,3 +125,243 @@ events:
         
       exitCode: 2
 ...
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /opt/homebrew/bin/x86_64-w64-mingw32-gcc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.exe"
+      
+      The C compiler identification is GNU, found in:
+        /Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/3.31.1/CompilerIdC/a.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /opt/homebrew/bin/x86_64-w64-mingw32-g++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
+      
+      The CXX compiler identification is GNU, found in:
+        /Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/3.31.1/CompilerIdCXX/a.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-nGcZWk"
+      binary: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-nGcZWk"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-nGcZWk'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_128d7/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_128d7.dir/build.make CMakeFiles/cmTC_128d7.dir/build
+        Building C object CMakeFiles/cmTC_128d7.dir/CMakeCCompilerABI.c.o
+        /opt/homebrew/bin/x86_64-w64-mingw32-gcc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk   -v -Wl,-v -o CMakeFiles/cmTC_128d7.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/opt/homebrew/bin/x86_64-w64-mingw32-gcc
+        x86_64-w64-mingw32-gcc: error: unrecognized command-line option '-arch'
+        Target: x86_64-w64-mingw32
+        Configured with: ../configure --target=x86_64-w64-mingw32 --with-sysroot=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64 --prefix=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64 --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --enable-languages=c,c++,objc,obj-c++,fortran --with-ld=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64/bin/x86_64-w64-mingw32-ld --with-as=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64/bin/x86_64-w64-mingw32-as --with-gmp=/opt/homebrew/opt/gmp --with-mpfr=/opt/homebrew/opt/mpfr --with-mpc=/opt/homebrew/opt/libmpc --with-isl=/opt/homebrew/opt/isl --with-system-zlib --with-zstd --disable-multilib --disable-nls --enable-threads=posix
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.0 (GCC) 
+        make[1]: *** [CMakeFiles/cmTC_128d7.dir/CMakeCCompilerABI.c.o] Error 1
+        make: *** [cmTC_128d7/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:56 (try_compile)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Check for working C compiler: /opt/homebrew/bin/x86_64-w64-mingw32-gcc"
+    directories:
+      source: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-JWyV93"
+      binary: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-JWyV93"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk"
+    buildResult:
+      variable: "CMAKE_C_COMPILER_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-JWyV93'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_3a89c/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_3a89c.dir/build.make CMakeFiles/cmTC_3a89c.dir/build
+        Building C object CMakeFiles/cmTC_3a89c.dir/testCCompiler.c.o
+        /opt/homebrew/bin/x86_64-w64-mingw32-gcc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk -o CMakeFiles/cmTC_3a89c.dir/testCCompiler.c.o -c /Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-JWyV93/testCCompiler.c
+        x86_64-w64-mingw32-gcc: error: unrecognized command-line option '-arch'
+        make[1]: *** [CMakeFiles/cmTC_3a89c.dir/testCCompiler.c.o] Error 1
+        make: *** [cmTC_3a89c/fast] Error 2
+        
+      exitCode: 2
+...
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /opt/homebrew/bin/x86_64-w64-mingw32-gcc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "a.exe"
+      
+      The C compiler identification is GNU, found in:
+        /Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/3.31.1/CompilerIdC/a.exe
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /opt/homebrew/bin/x86_64-w64-mingw32-g++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "a.exe"
+      
+      The CXX compiler identification is GNU, found in:
+        /Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/3.31.1/CompilerIdCXX/a.exe
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeDetermineCompilerABI.cmake:74 (try_compile)"
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-uhstAN"
+      binary: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-uhstAN"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-uhstAN'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_0a7f3/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_0a7f3.dir/build.make CMakeFiles/cmTC_0a7f3.dir/build
+        Building C object CMakeFiles/cmTC_0a7f3.dir/CMakeCCompilerABI.c.o
+        /opt/homebrew/bin/x86_64-w64-mingw32-gcc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk   -v -Wl,-v -o CMakeFiles/cmTC_0a7f3.dir/CMakeCCompilerABI.c.o -c /opt/homebrew/share/cmake/Modules/CMakeCCompilerABI.c
+        Using built-in specs.
+        COLLECT_GCC=/opt/homebrew/bin/x86_64-w64-mingw32-gcc
+        x86_64-w64-mingw32-gcc: error: unrecognized command-line option '-arch'
+        Target: x86_64-w64-mingw32
+        Configured with: ../configure --target=x86_64-w64-mingw32 --with-sysroot=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64 --prefix=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64 --with-bugurl=https://github.com/Homebrew/homebrew-core/issues --enable-languages=c,c++,objc,obj-c++,fortran --with-ld=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64/bin/x86_64-w64-mingw32-ld --with-as=/opt/homebrew/Cellar/mingw-w64/12.0.0_1/toolchain-x86_64/bin/x86_64-w64-mingw32-as --with-gmp=/opt/homebrew/opt/gmp --with-mpfr=/opt/homebrew/opt/mpfr --with-mpc=/opt/homebrew/opt/libmpc --with-isl=/opt/homebrew/opt/isl --with-system-zlib --with-zstd --disable-multilib --disable-nls --enable-threads=posix
+        Thread model: posix
+        Supported LTO compression algorithms: zlib zstd
+        gcc version 14.2.0 (GCC) 
+        make[1]: *** [CMakeFiles/cmTC_0a7f3.dir/CMakeCCompilerABI.c.o] Error 1
+        make: *** [cmTC_0a7f3/fast] Error 2
+        
+      exitCode: 2
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/opt/homebrew/share/cmake/Modules/CMakeTestCCompiler.cmake:56 (try_compile)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Check for working C compiler: /opt/homebrew/bin/x86_64-w64-mingw32-gcc"
+    directories:
+      source: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-9mzZnK"
+      binary: "/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-9mzZnK"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk"
+    buildResult:
+      variable: "CMAKE_C_COMPILER_WORKS"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-9mzZnK'
+        
+        Run Build Command(s): /opt/homebrew/bin/cmake -E env VERBOSE=1 /usr/bin/make -f Makefile cmTC_95cf9/fast
+        /Library/Developer/CommandLineTools/usr/bin/make  -f CMakeFiles/cmTC_95cf9.dir/build.make CMakeFiles/cmTC_95cf9.dir/build
+        Building C object CMakeFiles/cmTC_95cf9.dir/testCCompiler.c.o
+        /opt/homebrew/bin/x86_64-w64-mingw32-gcc   -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX15.1.sdk -o CMakeFiles/cmTC_95cf9.dir/testCCompiler.c.o -c /Users/filipmazev/Documents/Code/ReFactor/aqi-estimator.libraries/ImageProcessingPipeline/build/CMakeFiles/CMakeScratch/TryCompile-9mzZnK/testCCompiler.c
+        x86_64-w64-mingw32-gcc: error: unrecognized command-line option '-arch'
+        make[1]: *** [CMakeFiles/cmTC_95cf9.dir/testCCompiler.c.o] Error 1
+        make: *** [cmTC_95cf9/fast] Error 2
+        
+      exitCode: 2
+...

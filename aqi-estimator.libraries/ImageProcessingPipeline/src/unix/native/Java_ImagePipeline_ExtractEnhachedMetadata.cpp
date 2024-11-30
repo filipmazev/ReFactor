@@ -3,7 +3,7 @@
 #include <vector>
 #include <jni.h>
 
-extern "C" JNIEXPORT jdoubleArray JNICALL Java_ImagePipelineClass_ExtractEnhancedMetadata(JNIEnv* env, jobject obj, jbyteArray inputImageBytes) {
+extern "C" JNIEXPORT jdoubleArray JNICALL Java_com_codefu_refactor_api_aqiestimatorserver_imageProcessor_ImagePipelineClass_ExtractEnhancedMetadata(JNIEnv* env, jobject obj, jbyteArray inputImageBytes) {
     jsize byteArrayLength = env->GetArrayLength(inputImageBytes);
     jbyte* byteArray = env->GetByteArrayElements(inputImageBytes, nullptr);
 
