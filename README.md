@@ -28,3 +28,17 @@ Documentation for the backend application can be found [here](backend/README.md)
 ## Getting Started
 
 To learn how to set up the full project, refer to the individual component documentation linked above.
+
+To start the backend application, you need to change the following properties in `aqi-estamation.server/src/main/resources/application.properties`:
+
+refactor.pulse-eco.username=<YOUR_PULSE_ECO_USERNAME>
+refactor.pulse-eco.password=<YOUR_PULSE_ECO_PASSWORD>
+
+Then, execute 
+```bash
+mvn clean install
+```
+and 
+```bash
+java -jar aqi-estimator-server-0.0.1-SNAPSHOT.jar
+```
