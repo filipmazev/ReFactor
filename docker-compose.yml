@@ -1,0 +1,31 @@
+services:
+  angular:
+    build:
+      context: ./aqi-estimator.client
+    ports:
+      - "4200:80"
+    networks:
+      - app-network
+    depends_on:
+      - flask
+      - spring-boot
+  
+  spring-boot:
+    build:
+      context: ./aqi-estimator.server
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+  
+  flask:
+    build:
+      context: ./aqi-estimator.microservices\aqi-estimator.regressor
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
