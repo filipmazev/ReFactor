@@ -70,6 +70,7 @@
         "variant": "cpp",
         "vector": "cpp",
         "algorithm": "cpp",
-        "filesystem": "cpp"
+        "filesystem": "cpp",
+        "csignal": "cpp"
     }
 }

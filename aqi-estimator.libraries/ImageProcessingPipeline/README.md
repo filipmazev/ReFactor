@@ -69,7 +69,7 @@ g++ -std=c++17 -shared -fpic \
 ./src/unix/dcp/hazeremoval.cpp \
 ./src/unix/dcp/guidedfilter.cpp \
 ./src/unix/pipeline/imagepipeline.cpp \
--o ./src/unix/macOS/libImagePipeline.so \
+-o ./lib/macOS/libImagePipeline.so \
 `pkg-config --cflags --libs opencv4`
 ```
 
@@ -84,7 +84,7 @@ x86_64-linux-musl-g++ -std=c++17 -shared -fPIC -z noexecstack \
 ./src/unix/dcp/hazeremoval.cpp \
 ./src/unix/dcp/guidedfilter.cpp \
 ./src/unix/pipeline/imagepipeline.cpp \
--o ./src/unix/linux/libImagePipeline.so \
+-o ./lib/linux/libImagePipeline.so \
 `pkg-config --cflags --libs opencv4`
 ```
 
@@ -95,7 +95,8 @@ x86_64-linux-musl-g++ -std=c++17 -shared -fPIC -z noexecstack \
 #### path_to_open_cv_headers = /opt/homebrew/Cellar/opencv/4.10.0_12/include/opencv4/
 
 ## Compile .dll Library Windows 
-### Try the following command bellow or build from the windows VS solution
+## RECOMENDED: Use Visual Studio to build the library and copy the DLL from x64 -> Release (or Debug) 
+### Alternative: Try the following command bellow 
 ```bash
 cl /LD /std:c++17 ^
    /I"%JAVA_HOME%\include" /I"%JAVA_HOME%\include\win32" ^
