@@ -37,6 +37,9 @@ const std::vector<std::string> OUTPUT_COLUMN_NAMES = {
     "d_r_mean", "d_r_variance", "d_r_skewness",
     "d_g_mean", "d_g_variance", "d_g_skewness",
     "d_b_mean", "d_b_variance", "d_b_skewness"};
+
+const int MIN_PROGRESS_PERCENT_FOR_TIME_REMAINING_CALC = 5;
+const int MIN_IMAGES_FOR_TIME_REMAINING_CALC = 50;
 #pragma endregion
 
 bool process_CSV_to_enhanced_metadata(int argc, char **args);

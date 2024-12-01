@@ -72,6 +72,13 @@ bool process_CSV_to_enhanced_metadata(int argc, char **args)
 
     cout << "Starting Processing @" << startDateTime << endl;
 
+    double time_taken_total = 0.0;
+    static int processed_count = 0;
+    static int total_count = std::count(std::istreambuf_iterator<char>(inputCsv), std::istreambuf_iterator<char>(), '\n');
+    inputCsv.clear();
+    inputCsv.seekg(0, std::ios::beg);
+    std::getline(inputCsv, line);
+
     while (std::getline(inputCsv, line))
     {
         std::istringstream ss(line);
@@ -108,8 +115,38 @@ bool process_CSV_to_enhanced_metadata(int argc, char **args)
 
         Mat in_img = fs_load_image(imagePath);
 
-        std::vector<double> metadata = pipeline.ExtractEnhancedMetadata(in_img);
-        if (metadata.empty())
+        ExtractEnhancedMetadataResult result = pipeline.ExtractEnhancedMetadataWithTimeTakenResult(in_img);
+      
+        time_taken_total += (result.time_taken_in_ms / 1000);
+
+        processed_count++;
+        double average_time_taken = time_taken_total / processed_count;
+        double estimated_time_remaining = average_time_taken * (total_count - processed_count);
+
+        auto finish_time = std::chrono::system_clock::now() + std::chrono::seconds(static_cast<int>(estimated_time_remaining));
+        std::time_t finish_time_t = std::chrono::system_clock::to_time_t(finish_time);
+
+        int progress = static_cast<int>((static_cast<double>(processed_count) / total_count) * 100);
+
+        std::cout << "\033[2J\033[1;1H";
+        std::cout << "Total images to process: " << total_count << " | Processed: " << processed_count << " | Remaining: " << total_count - processed_count << "\n";
+        std::cout << "Processing: " << "[" << std::string(progress / 2, '=') << std::string(50 - progress / 2, ' ') << "] " << progress << "%\n";
+      
+        if(progress <= MIN_PROGRESS_PERCENT_FOR_TIME_REMAINING_CALC && processed_count <= MIN_PROGRESS_PERCENT_FOR_TIME_REMAINING_CALC)
+        {
+            std::cout<< "Estimated time remaining: Calculating...\n";
+        }
+        else 
+        {
+            int hours = static_cast<int>(estimated_time_remaining) / 3600;
+            int minutes = (static_cast<int>(estimated_time_remaining) % 3600) / 60;
+            int seconds = static_cast<int>(estimated_time_remaining) % 60;
+            std::cout << "Estimated time remaining: " << hours << " hours " << minutes << " minutes " << seconds << " seconds\n";
+            std::cout << "Estimated finish time: " << std::put_time(std::localtime(&finish_time_t), "%Y-%m-%d %H:%M:%S") << "\n";
+        }
+
+
+        if (result.data.empty())
         {
             cerr << "Error processing image: " << imagePath << endl;
             continue;
@@ -121,10 +158,10 @@ bool process_CSV_to_enhanced_metadata(int argc, char **args)
 
         outputCsv << aqi << "," << aqiClass << "," << hour << ",";
 
-        for (size_t i = 0; i < metadata.size(); ++i)
+        for (size_t i = 0; i < result.data.size(); ++i)
         {
-            outputCsv << metadata[i];
-            if (i != metadata.size() - 1)
+            outputCsv << result.data[i];
+            if (i != result.data.size() - 1)
                 outputCsv << ",";
         }
 

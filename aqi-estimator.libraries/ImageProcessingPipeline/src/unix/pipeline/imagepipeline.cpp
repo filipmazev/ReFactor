@@ -119,6 +119,21 @@ std::vector<double> ImagePipeline::ExtractEnhancedMetadata(cv::Mat &in_img)
     return concatenated_features;
 }
 
+ExtractEnhancedMetadataResult ImagePipeline::ExtractEnhancedMetadataWithTimeTakenResult(cv::Mat &in_img)
+{
+    auto start = std::chrono::high_resolution_clock::now();
+    std::vector<double> data = this->ExtractEnhancedMetadata(in_img);
+    auto end = std::chrono::high_resolution_clock::now();
+
+    double time_taken_in_ms = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+
+    ExtractEnhancedMetadataResult result;
+    result.data = data;
+    result.time_taken_in_ms = time_taken_in_ms;
+
+    return result;
+}
+
 #pragma region Image Processing Pipeline
 Mat ipp_alpha_adjust(Mat image, int rows, int cols, int pixelValueAverageUpperBound)
 {

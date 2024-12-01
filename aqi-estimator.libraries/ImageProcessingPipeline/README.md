@@ -2,7 +2,7 @@
 
 ```bash
 g++ -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+     ./src/unix/main.cpp ./src/unix/dcp/hazeremoval.cpp ./src/unix/dcp/guidedfilter.cpp ./src/unix/pipeline/imagepipeline.cpp ./src/unix/pipeline/program.cpp \
     -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
@@ -10,7 +10,7 @@ g++ -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
 
 ```bash
 g++ -DDEBUG -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    ./src/unix/main.cpp ./src/unix/dcp/hazeremoval.cpp ./src/unix/dcp/guidedfilter.cpp ./src/unix/pipeline/imagepipeline.cpp ./src/unix/pipeline/program.cpp \
     -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
@@ -21,7 +21,7 @@ g++ -DDEBUG -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/H
 
 ```bash
 g++ -DIMAGE_TO_BYTE_ARRAY -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    ./src/unix/main.cpp ./src/unix/dcp/hazeremoval.cpp ./src/unix/dcp/guidedfilter.cpp ./src/unix/pipeline/imagepipeline.cpp ./src/unix/pipeline/program.cpp \
     -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
@@ -35,7 +35,7 @@ g++ -DIMAGE_TO_BYTE_ARRAY -std=c++17 -fpic -I. -I/System/Library/Frameworks/Java
 
 ```bash
 g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    ./src/unix/main.cpp ./src/unix/dcp/hazeremoval.cpp ./src/unix/dcp/guidedfilter.cpp ./src/unix/pipeline/imagepipeline.cpp ./src/unix/pipeline/program.cpp \
     -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 
@@ -51,7 +51,7 @@ g++ -DBYTE_ARRAY_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Fra
 
 ```bash
 g++ -DCSV_TO_ENHANCED_METADATA -std=c++17 -fpic -I. -I/System/Library/Frameworks/JavaVM.framework/Headers \
-    ./src/main.cpp src/dcp/hazeremoval.cpp ./src/dcp/guidedfilter.cpp ./src/pipeline/imagepipeline.cpp ./src/pipeline/program.cpp \
+    ./src/unix/main.cpp ./src/unix/dcp/hazeremoval.cpp ./src/unix/dcp/guidedfilter.cpp ./src/unix/pipeline/imagepipeline.cpp ./src/unix/pipeline/program.cpp \
     -o ImageProcessingPipeline `pkg-config --libs --cflags opencv4`
 ```
 

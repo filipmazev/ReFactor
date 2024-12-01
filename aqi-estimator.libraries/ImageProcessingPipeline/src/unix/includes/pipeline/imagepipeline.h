@@ -49,6 +49,11 @@ typedef struct _channel_intensity_ratio
 } ChannelIntensityRatio;
 #pragma endregion
 
+typedef struct _extract_enhanced_metadata_result {
+    std::vector<double> data;
+    double time_taken_in_ms;
+} ExtractEnhancedMetadataResult;
+
 class ImagePipeline
 {
 public:
@@ -57,6 +62,7 @@ public:
 
 public:
     std::vector<double> ExtractEnhancedMetadata(cv::Mat &in_img);
+    ExtractEnhancedMetadataResult ExtractEnhancedMetadataWithTimeTakenResult(cv::Mat &in_img);
 
 private:
     int image_pixels_w_max{0};
